@@ -7,4 +7,4 @@ run: node_modules
 
 .PHONY: clean
 clean:
-	rm -rf node_modules
+	rm -rf node_modules release

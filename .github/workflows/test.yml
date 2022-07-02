@@ -29,7 +29,6 @@ jobs:
         run: |
           npm run package
           npm run lint
-          npm run ts
 
 # Failing beacuse virtual framebuffer not installed
 #          npm run build-e2e

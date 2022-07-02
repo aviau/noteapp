@@ -13,6 +13,12 @@ run: node_modules
 test: node_modules
 	npm run test
 
+.PHONY: package
+package: node_modules
+	npm run package
+
 .PHONY: clean
 clean:
-	rm -rf node_modules release
+	rm -rf node_modules \
+			release/build \
+			release/app/dist \

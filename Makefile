@@ -26,3 +26,4 @@ clean:
 	rm -rf node_modules \
 			release/build \
 			release/app/dist \
+			.erb/dll/*.js

@@ -239,8 +239,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "aviau",
+      "repo": "noteapp"
     }
   },
   "collective": {

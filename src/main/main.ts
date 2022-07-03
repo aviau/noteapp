@@ -14,7 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { IPCMainConnection } from './IPCMainConnection';
+import { IpcMainConnection } from './ipcMainConnection';
 
 class AppUpdater {
   constructor() {
@@ -26,7 +26,7 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-const ipcMainConnection = new IPCMainConnection(ipcMain);
+const ipcMainConnection = new IpcMainConnection(ipcMain);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

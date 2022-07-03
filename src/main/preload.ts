@@ -1,20 +1,20 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { IPCChannel, IPCChannelMessage } from '../common/IPCChannel';
+import { IpcChannel, IpcChannelMessage } from '../common/ipc';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
-    sendMessage<T extends IPCChannel>(
+    sendMessage<T extends IpcChannel>(
       channel: T,
-      message: IPCChannelMessage<T>
+      message: IpcChannelMessage<T>
     ) {
       ipcRenderer.send(channel, [message]);
     },
-    on<T extends IPCChannel>(
+    on<T extends IpcChannel>(
       channel: T,
-      callback: (message: IPCChannelMessage<T>) => void
+      callback: (message: IpcChannelMessage<T>) => void
     ) {
       const subscription = (_event: IpcRendererEvent, args: unknown[]) => {
-        const message = args[0] as IPCChannelMessage<T>;
+        const message = args[0] as IpcChannelMessage<T>;
         callback(message);
       };
       ipcRenderer.on(channel, subscription);

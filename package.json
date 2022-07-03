@@ -1,6 +1,8 @@
 {
   "description": "note-taking app",
-  "keywords": ["markdown"],
+  "keywords": [
+    "markdown"
+  ],
   "homepage": "https://github.com/aviau/noteapp",
   "bugs": {
     "url": "https://github.com/aviau/noteapp/issues"
@@ -99,8 +101,6 @@
     }
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.6",
     "electron-debug": "^3.2.0",

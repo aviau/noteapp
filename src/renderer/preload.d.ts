@@ -1,15 +1,17 @@
-import { Channels } from 'main/preload';
+import { IPCChannel, IPCChannelMessage } from '../common/IPCChannel';
 
 declare global {
   interface Window {
     electron: {
       ipcRenderer: {
-        sendMessage(channel: Channels, args: unknown[]): void;
-        on(
-          channel: string,
-          func: (...args: unknown[]) => void
+        sendMessage<T extends IPCChannel>(
+          channel: T,
+          message: IPCChannelMessage<T>
+        ): void;
+        on<T extends IPCChannel>(
+          channel: T,
+          callback: (message: IPCChannelMessage<T>) => void
         ): (() => void) | undefined;
-        once(channel: string, func: (...args: unknown[]) => void): void;
       };
     };
   }

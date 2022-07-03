@@ -1,3 +1,5 @@
+import Electron from 'electron';
+
 import { IpcChannel, IpcChannelMessage } from '../../common/ipc';
 import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
 

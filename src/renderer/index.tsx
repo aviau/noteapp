@@ -1,9 +1,15 @@
+import { BrowserRouter } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
-import App from './App';
+
+import App from './foundation/App';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
-root.render(<App />);
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
 
 // calling IPC exposed from preload script
 window.electron.ipcRenderer.once('ipc-example', (arg) => {

@@ -27,7 +27,9 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-const noteApplication = new NoteApplication(new IpcMainConnection(ipcMain));
+export const noteApplication = new NoteApplication(
+  new IpcMainConnection(ipcMain)
+);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

@@ -6,7 +6,7 @@ import { IpcChannel, IpcChannelMessage } from '../common/ipc';
 export class IpcRendererConnection {
   constructor() {
     window.electron.ipcRenderer.on(
-      IpcChannel.MAIN_PING_REPLY,
+      IpcChannel.MAIN_UTILS_PING_REPLY,
       this.onMainPingReply
     );
   }
@@ -19,11 +19,11 @@ export class IpcRendererConnection {
   }
 
   mainPing(): void {
-    this.sendMessage(IpcChannel.MAIN_PING, { data: { message: 'ping' } });
+    this.sendMessage(IpcChannel.MAIN_UTILS_PING, { data: { message: 'ping' } });
   }
 
   private onMainPingReply(
-    message: IpcChannelMessage<IpcChannel.MAIN_PING_REPLY>
+    message: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING_REPLY>
   ): void {
     console.log(`Got Ping Reply: ${message.data.reply}`);
   }

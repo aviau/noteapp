@@ -4,16 +4,16 @@
  */
 export enum IpcChannel {
   /* Ping the Main thread */
-  MAIN_PING = 'main:utils:ping',
-  MAIN_PING_REPLY = 'renderer:utils:pong',
+  MAIN_UTILS_PING = 'main:utils:ping',
+  MAIN_UTILS_PING_REPLY = 'main:utils:ping:reply',
 }
 
 export interface IpcChannelMessage<T extends IpcChannel> {
-  data: T extends IpcChannel.MAIN_PING
+  data: T extends IpcChannel.MAIN_UTILS_PING
     ? {
         message: string;
       }
-    : T extends IpcChannel.MAIN_PING_REPLY
+    : T extends IpcChannel.MAIN_UTILS_PING_REPLY
     ? {
         reply: string;
       }

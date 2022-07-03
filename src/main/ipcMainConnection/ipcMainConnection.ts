@@ -32,7 +32,7 @@ export class IpcMainConnection {
     this.ipcMain = ipcMain;
   }
 
-  onPing(callback: IpcMainConnectionCallback<IpcChannel.MAIN_PING>) {
-    on(this.ipcMain, IpcChannel.MAIN_PING, callback);
+  onPing(callback: IpcMainConnectionCallback<IpcChannel.MAIN_UTILS_PING>) {
+    on(this.ipcMain, IpcChannel.MAIN_UTILS_PING, callback);
   }
 }

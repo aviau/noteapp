@@ -1,26 +1,33 @@
 import { IpcMainConnection, IpcMainConnectionEvent } from './ipcMainConnection';
 import { IpcChannel, IpcChannelMessage } from '../common/ipc';
+import { ConfigurationService } from './configuration/configurationService';
 
 /*
  * NoteApplication contains all of the application's state and logic.
  */
 export class NoteApplication {
-  constructor(ipcMainConnection: IpcMainConnection) {
-    // TODO(aviau): Load the config and store it here.
+  configurationService: ConfigurationService;
 
-    ipcMainConnection.onPing(this.onPing);
+  constructor(electronApp: Electron.App, ipcMainConnection: IpcMainConnection) {
+    this.configurationService = new ConfigurationService(
+      electronApp.getPath('userData')
+    );
+    ipcMainConnection.onPing((e, m) => this.onPing(e, m));
   }
 
-  private onPing(
+  private async onPing(
     event: IpcMainConnectionEvent,
-    message: IpcChannelMessage<IpcChannel.MAIN_PING>
+    message: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING>
   ) {
     console.log(`NoteApplication got Pinged: ${message.data.message}`);
-    const replyMessage: IpcChannelMessage<IpcChannel.MAIN_PING_REPLY> = {
+    const currentVault = (
+      await this.configurationService.getVaultConfiguration()
+    ).data.current;
+    const replyMessage: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING_REPLY> = {
       data: {
-        reply: 'pong',
+        reply: `pong, config is at ${this.configurationService.userDataPath} and my current vault is ${currentVault}`,
       },
     };
-    event.reply(IpcChannel.MAIN_PING_REPLY, replyMessage);
+    event.reply(IpcChannel.MAIN_UTILS_PING_REPLY, replyMessage);
   }
 }

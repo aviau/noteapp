@@ -28,6 +28,7 @@ class AppUpdater {
 let mainWindow: BrowserWindow | null = null;
 
 export const noteApplication = new NoteApplication(
+  app,
   new IpcMainConnection(ipcMain)
 );
 

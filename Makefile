@@ -5,6 +5,10 @@ node_modules: package-lock.json
 lint: node_modules
 	npm run lint
 
+.PHONY: lint-fix
+lint-fix: node_modules
+	npm run lint:fix
+
 .PHONY: run
 run: node_modules
 	npm run start

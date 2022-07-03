@@ -1,16 +1,16 @@
-import { IPCChannel, IPCChannelMessage } from '../common/IPCChannel';
+import { IpcChannel, IpcChannelMessage } from '../common/ipc';
 
 declare global {
   interface Window {
     electron: {
       ipcRenderer: {
-        sendMessage<T extends IPCChannel>(
+        sendMessage<T extends IpcChannel>(
           channel: T,
-          message: IPCChannelMessage<T>
+          message: IpcChannelMessage<T>
         ): void;
-        on<T extends IPCChannel>(
+        on<T extends IpcChannel>(
           channel: T,
-          callback: (message: IPCChannelMessage<T>) => void
+          callback: (message: IpcChannelMessage<T>) => void
         ): (() => void) | undefined;
       };
     };

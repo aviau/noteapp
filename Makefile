@@ -13,8 +13,18 @@ lint-fix: node_modules
 run: node_modules
 	npm run start
 
+.PHONY: build-main
+build-main: node_modules
+	npm run build:main
+
+.PHONY: build-renderer
+build-renderer: node_modules
+	npm run build:renderer
+
 .PHONY: test
-test: node_modules
+test: node_modules \
+		build-main \
+		build-renderer
 	npm run test
 
 .PHONY: package

@@ -1,2 +1,2 @@
-export { default as HelloWorld } from './HelloWorld';
-export { default as NotFound } from './NotFound';
+export { HelloWorld } from './HelloWorld';
+export { NotFound } from './NotFound';

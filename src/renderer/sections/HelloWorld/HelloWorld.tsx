@@ -4,7 +4,7 @@ interface Props {
   name: string;
 }
 
-export default function HelloWorld({ name }: Props) {
+export function HelloWorld({ name }: Props) {
   const [enabled, setEnabled] = useState<boolean>(false);
 
   const doSomething = () => {

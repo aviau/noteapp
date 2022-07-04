@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { fireEvent, render } from '@testing-library/react';
 
-import HelloWorld from '../HelloWorld';
+import { HelloWorld } from '../HelloWorld';
 
 const defaultProps = {
   name: 'copain',

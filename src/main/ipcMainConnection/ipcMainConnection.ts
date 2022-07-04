@@ -34,7 +34,19 @@ export class IpcMainConnection {
     this.ipcMain = ipcMain;
   }
 
-  onPing(callback: IpcMainConnectionCallback<IpcChannel.MAIN_UTILS_PING>) {
+  onPing(
+    callback: IpcMainConnectionCallback<IpcChannel.MAIN_UTILS_PING>
+  ): void {
     on(this.ipcMain, IpcChannel.MAIN_UTILS_PING, callback);
+  }
+
+  onRequestChannelRefresh(
+    callback: IpcMainConnectionCallback<IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
+  ): void {
+    on(this.ipcMain, IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, callback);
+  }
+
+  onLog(callback: IpcMainConnectionCallback<IpcChannel.MAIN_UTILS_LOG>): void {
+    on(this.ipcMain, IpcChannel.MAIN_UTILS_LOG, callback);
   }
 }

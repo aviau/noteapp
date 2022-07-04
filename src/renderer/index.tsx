@@ -1,5 +1,6 @@
-import { BrowserRouter } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
+import { MemoryRouter } from 'react-router-dom';
+
 import App from './foundation/App';
 import { UiMain } from './uiMain';
 import { IpcRendererConnection } from './ipcRendererConnection';
@@ -8,9 +9,9 @@ import { IpcRendererConnection } from './ipcRendererConnection';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
-  <BrowserRouter>
+  <MemoryRouter>
     <App />
-  </BrowserRouter>
+  </MemoryRouter>
 );
 
 const uiMain = new UiMain(new IpcRendererConnection());

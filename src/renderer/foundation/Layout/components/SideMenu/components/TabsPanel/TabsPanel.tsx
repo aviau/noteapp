@@ -2,7 +2,9 @@ import React, { useState, ReactNode } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 
 export type TabItem = {
-  label: string;
+  id: string;
+  label?: string;
+  icon?: React.ReactElement;
   children: ReactNode;
 };
 
@@ -20,13 +22,13 @@ export function TabsPanel({ tabItems }: Props) {
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={tabIndex} onChange={handleChange}>
-        {tabItems.map(({ label }, index) => (
-          <Tab key={label} label={label} value={index} />
+        {tabItems.map(({ id, label, icon }, index) => (
+          <Tab key={id} icon={icon} label={label} value={index} />
         ))}
       </Tabs>
 
-      {tabItems.map(({ label, children }, index) => (
-        <Box key={label} hidden={tabIndex !== index} sx={{ p: 3 }}>
+      {tabItems.map(({ id, children }, index) => (
+        <Box key={id} hidden={tabIndex !== index} sx={{ p: 3 }}>
           {children}
         </Box>
       ))}

@@ -1,3 +1,5 @@
+import Electron from 'electron';
+
 import { IpcChannel, IpcChannelMessage } from '../../common/ipc';
 
 function reply<T extends IpcChannel>(

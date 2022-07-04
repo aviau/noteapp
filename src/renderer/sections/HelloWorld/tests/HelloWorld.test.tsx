@@ -9,8 +9,7 @@ const defaultProps = {
 
 function mount(overrides = {}) {
   const props = { ...defaultProps, ...overrides };
-  const { name } = props; // NOTE: grrr no props spreading lint rule
-  const wrapper = <HelloWorld name={name} />;
+  const wrapper = <HelloWorld {...props} />;
 
   return wrapper;
 }

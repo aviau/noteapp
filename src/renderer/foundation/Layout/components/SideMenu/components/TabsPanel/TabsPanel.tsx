@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 
 export type TabItem = {

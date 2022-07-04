@@ -1,3 +1,5 @@
+import Electron from 'electron';
+
 import {
   IpcMainConnection,
   IpcMainConnectionEvent,

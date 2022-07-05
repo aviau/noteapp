@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
+import { HelloWorld, Editor, NotFound } from '../sections';
 import Layout from './Layout';
-import { HelloWorld, NotFound } from '../sections';
 
 const routes = () => [
   {
@@ -9,14 +9,18 @@ const routes = () => [
     element: <Layout />,
     children: [
       { path: '', element: <HelloWorld name="copain" /> },
+      {
+        path: 'pages',
+        element: <Editor />,
+      },
       { path: '404', element: <NotFound /> },
       { path: '*', element: <Navigate to="/404" /> },
     ],
   },
   {
-    path: '/index.html', // TODO: redirect default path on startup
-    element: <Layout />,
-    children: [{ path: '', element: <HelloWorld name="copinet" /> }],
+    // TODO: redirect default path on startup
+    path: '/index.html',
+    element: <Navigate to="/" />,
   },
 ];
 

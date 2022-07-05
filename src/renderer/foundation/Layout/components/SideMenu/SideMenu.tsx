@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
@@ -19,13 +19,15 @@ import { TabItem, TabsPanel } from './components';
 export type MenuItem = {
   label: string;
   to: string;
-  icon: ReactNode;
+  icon: React.ReactElement;
 };
 
-const drawerWidth = 500;
+const drawerWidth = '30vw';
+const minDrawerWidth = 300;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
+  minWidth: minDrawerWidth,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -49,6 +51,7 @@ const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   width: drawerWidth,
+  minWidth: minDrawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
@@ -105,7 +108,7 @@ export function SideMenu({
         </Grid>
         <Divider orientation="vertical" flexItem />
         {open && (
-          <Grid item xs={9}>
+          <Grid item xs>
             <TabsPanel tabItems={tabItems} />
           </Grid>
         )}

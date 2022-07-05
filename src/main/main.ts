@@ -8,10 +8,7 @@
  */
 import { app, ipcMain } from 'electron';
 import { IpcMainConnection } from './ipcMainConnection';
-import { NoteApplication } from './application';
+import { NoteMain } from './noteMain';
 
-const noteApplication = new NoteApplication(
-  app,
-  new IpcMainConnection(ipcMain)
-);
-noteApplication.start();
+const noteMain = new NoteMain(app, new IpcMainConnection(ipcMain));
+noteMain.main();

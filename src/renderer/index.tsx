@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import App from './foundation/App';
+import { UiMain } from './uiMain';
 import { IpcRendererConnection } from './ipcRendererConnection';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -12,5 +13,5 @@ root.render(
   </BrowserRouter>
 );
 
-const ipcRendererConnection = new IpcRendererConnection();
-ipcRendererConnection.mainPing();
+const uiMain = new UiMain(new IpcRendererConnection());
+uiMain.main();

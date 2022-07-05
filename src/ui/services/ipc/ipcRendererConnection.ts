@@ -1,4 +1,4 @@
-import { IpcChannel, IpcChannelMessage } from '../common/ipc';
+import { IpcChannel, IpcChannelMessage } from '../../../common/ipc';
 
 /*
  * Responsible for all communications with the main process.

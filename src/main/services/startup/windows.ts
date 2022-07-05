@@ -3,7 +3,7 @@ import { App, BrowserWindow, shell } from 'electron';
 import path from 'path';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { srcPath } from '../../utils';
+import { srcPath } from '../../../utils';
 
 async function installExtensions(): Promise<void> {
   const installer = require('electron-devtools-installer');

@@ -5,8 +5,8 @@ import fs from 'fs';
 import webpackPaths from '../configs/webpack.paths';
 
 const mainPath = path.join(webpackPaths.distMainPath, 'main.js');
-const uiPath = path.join(webpackPaths.distRendererPath, 'index.prod.js');
-const workerPath = path.join(webpackPaths.distRendererPath, 'worker.prod.js');
+const uiPath = path.join(webpackPaths.distUiPath, 'index.prod.js');
+const workerPath = path.join(webpackPaths.distUiPath, 'worker.prod.js');
 
 if (!fs.existsSync(mainPath)) {
   throw new Error(

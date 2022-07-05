@@ -7,7 +7,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import { app, ipcMain } from 'electron';
-import { IpcMainConnection } from './ipcMainConnection';
+import { IpcMainConnection } from './services/ipc';
 import { NoteMain } from './noteMain';
 
 const noteMain = new NoteMain(app, new IpcMainConnection(ipcMain));

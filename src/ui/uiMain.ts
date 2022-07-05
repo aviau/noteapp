@@ -1,5 +1,5 @@
 import { IpcChannel } from '../common/ipc';
-import { IpcRendererConnection } from './ipcRendererConnection';
+import { IpcRendererConnection } from './services/ipc/ipcRendererConnection';
 
 export class UiMain {
   ipcRendererConnection: IpcRendererConnection;

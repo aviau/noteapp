@@ -26,12 +26,12 @@ const configuration: webpack.Configuration = {
   target: ['web', 'electron-renderer'],
 
   entry: {
-    index: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
+    index: [path.join(webpackPaths.srcUiPath, 'index.tsx')],
     worker: [path.join(webpackPaths.srcWorkerPath, 'index.ts')],
   },
 
   output: {
-    path: webpackPaths.distRendererPath,
+    path: webpackPaths.distUiPath,
     publicPath: './',
     filename: '[name].prod.js',
     library: {
@@ -110,7 +110,7 @@ const configuration: webpack.Configuration = {
 
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+      template: path.join(webpackPaths.srcUiPath, 'index.ejs'),
       chunks: ['index'],
       minify: {
         collapseWhitespace: true,

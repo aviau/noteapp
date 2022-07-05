@@ -1,9 +1,9 @@
 import Electron, { MessageChannelMain } from 'electron';
 
-import { IpcMainConnection, IpcMainConnectionEvent } from './ipcMainConnection';
+import { IpcMainConnection, IpcMainConnectionEvent } from './services/ipc';
 import { IpcChannel, IpcChannelMessage } from '../common/ipc';
-import { ConfigurationService } from './configuration/configurationService';
-import { createWindows } from './startup/windows';
+import { ConfigurationService } from './services/configuration/configurationService';
+import { createWindows } from './services/startup/windows';
 
 /*
  * NoteMain controls the main process and coordinates the others.

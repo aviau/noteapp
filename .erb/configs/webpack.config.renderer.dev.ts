@@ -50,7 +50,7 @@ const configuration: webpack.Configuration = {
     index: [
       `webpack-dev-server/client?http://localhost:${port}/dist`,
       'webpack/hot/only-dev-server',
-      path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+      path.join(webpackPaths.srcUiPath, 'index.tsx'),
     ],
     worker: [
       `webpack-dev-server/client?http://localhost:${port}/dist`,
@@ -60,7 +60,7 @@ const configuration: webpack.Configuration = {
   },
 
   output: {
-    path: webpackPaths.distRendererPath,
+    path: webpackPaths.distUiPath,
     publicPath: '/',
     filename: '[name].dev.js',
     library: {
@@ -140,7 +140,7 @@ const configuration: webpack.Configuration = {
 
     new HtmlWebpackPlugin({
       filename: path.join('index.html'),
-      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+      template: path.join(webpackPaths.srcUiPath, 'index.ejs'),
       chunks: ['index'],
       minify: {
         collapseWhitespace: true,

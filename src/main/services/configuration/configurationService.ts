@@ -1,7 +1,7 @@
 import lodash from 'lodash';
 import fs from 'fs/promises';
 import path from 'path';
-import { assertUnreachable } from '../../common/asserts';
+import { assertUnreachable } from '../../../common/asserts';
 import {
   ConfigurationItem,
   ConfigurationKey,

@@ -1,5 +1,5 @@
 import React, { useState, ReactNode } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs, useTheme } from '@mui/material';
 
 export type TabItem = {
   id: string;
@@ -13,6 +13,7 @@ interface Props {
 }
 
 export function TabsPanel({ tabItems }: Props) {
+  const theme = useTheme();
   const [tabIndex, setTabIndex] = useState<number>(0);
 
   const handleChange = (_event: React.SyntheticEvent, newIndex: number) => {
@@ -21,7 +22,11 @@ export function TabsPanel({ tabItems }: Props) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Tabs value={tabIndex} onChange={handleChange}>
+      <Tabs
+        value={tabIndex}
+        onChange={handleChange}
+        sx={{ backgroundColor: theme.palette.secondary.dark }}
+      >
         {tabItems.map(({ id, label, icon }, index) => (
           <Tab key={id} icon={icon} label={label} value={index} />
         ))}

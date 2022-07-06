@@ -1,7 +1,3 @@
-import React, { useState } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
-
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   Divider,
   Drawer as MuiDrawer,
@@ -11,7 +7,12 @@ import {
   ListItem,
   ListItemIcon,
   Toolbar,
+  useTheme,
 } from '@mui/material';
+import React, { useState } from 'react';
+import { NavLink as RouterLink } from 'react-router-dom';
+
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { CSSObject, styled, Theme } from '@mui/material/styles';
 
 import { TabItem, TabsPanel } from './components';
@@ -79,6 +80,7 @@ export function SideMenu({
   defaultOpen = false,
 }: Props) {
   const [open, setOpen] = useState<boolean>(defaultOpen);
+  const theme = useTheme();
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -87,12 +89,20 @@ export function SideMenu({
   // TODO: Fix Chevron direction based on the anchor
   return (
     <Drawer variant="permanent" anchor={anchor} open={open}>
+      <Toolbar variant="dense" />
       <Grid
         container
         direction={anchor === 'left' ? 'row' : 'row-reverse'}
         sx={{ height: '100%' }}
       >
-        <Grid item xs={open ? 2 : 12}>
+        <Grid
+          item
+          xs={open ? 2 : 12}
+          sx={{
+            backgroundColor: theme.palette.secondary.dark,
+            height: '100%',
+          }}
+        >
           <Toolbar sx={{ px: [1] }}>
             <IconButton onClick={toggleDrawer}>
               {open ? <ChevronLeft /> : <ChevronRight />}

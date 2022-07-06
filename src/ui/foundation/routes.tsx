@@ -1,12 +1,12 @@
 import { Navigate } from 'react-router-dom';
 
 import { Editor, HelloWorld, NotFound } from '../sections';
-import { Layout } from './components';
+import { MainLayout } from './components';
 
 const routes = () => [
   {
     path: '/',
-    element: <Layout />,
+    element: <MainLayout />,
     children: [
       { path: '', element: <HelloWorld name="copain" /> },
       {

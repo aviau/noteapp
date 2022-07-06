@@ -1,4 +1,4 @@
-import { IpcChannel } from '../common/ipcMain';
+import { IpcChannel } from '../lib/ipcMain';
 import { IpcWorkerConnection } from './services/ipc/ipcWorkerConnection';
 
 export class WorkerMain {

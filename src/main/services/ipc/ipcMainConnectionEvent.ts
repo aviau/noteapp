@@ -1,6 +1,6 @@
 import Electron from 'electron';
 
-import { IpcChannel, IpcChannelMessage } from '../../../common/ipcMain';
+import { IpcChannel, IpcChannelMessage } from '../../../lib/ipcMain';
 
 // Minimal IpcMainEvent
 export class IpcMainConnectionEvent {

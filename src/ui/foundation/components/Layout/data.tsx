@@ -3,14 +3,18 @@ import {
   Dashboard,
   ExpandMore,
   Folder,
+  LightMode,
+  DarkMode,
   Search,
   Umbrella,
 } from '@mui/icons-material';
 import { TreeItem, TreeView } from '@mui/lab';
-import { TextField, Typography } from '@mui/material';
+import { IconButton, TextField, Typography } from '@mui/material';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { paths } from '../../utilities';
+import { paths } from '../../../utilities';
+import { ThemeContext } from '../ThemeProvider';
 
 function FolderView() {
   const navigate = useNavigate();
@@ -59,9 +63,26 @@ function FolderView() {
   );
 }
 
+function ToggleThemeIcon() {
+  const { mode, toggleMode } = useContext(ThemeContext);
+
+  return (
+    <IconButton
+      edge="start"
+      color="inherit"
+      aria-label="menu"
+      onClick={() => toggleMode()}
+      sx={{ mr: 2 }}
+    >
+      {mode === 'dark' ? <LightMode /> : <DarkMode />}
+    </IconButton>
+  );
+}
+
 export const menuItems = [
-  { label: 'Dashboard', to: '/', icon: <Dashboard /> },
-  { label: 'Something', to: '/nono', icon: <Umbrella /> },
+  { id: 'Dashboard', route: '/', icon: <Dashboard /> },
+  { id: 'Something', route: '/nono', icon: <Umbrella /> },
+  { id: 'ToggleTheme', icon: <ToggleThemeIcon /> },
 ];
 
 export const leftTabItems = [

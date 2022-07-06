@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { SideMenu } from './components';
 import { leftTabItems, menuItems, rightTabItems } from './data';
 
-export default function Layout() {
+export function Layout() {
   return (
     <>
       <AppBar

@@ -17,9 +17,9 @@ import { CSSObject, styled, Theme } from '@mui/material/styles';
 import { TabItem, TabsPanel } from './components';
 
 export type MenuItem = {
-  label: string;
-  to: string;
+  id: string;
   icon: React.ReactElement;
+  route?: string;
 };
 
 const drawerWidth = '30vw';
@@ -99,11 +99,17 @@ export function SideMenu({
             </IconButton>
           </Toolbar>
           <List>
-            {menuItems.map(({ label, to, icon }) => (
-              <ListItem key={label} button component={RouterLink} to={to}>
-                <ListItemIcon>{icon}</ListItemIcon>
-              </ListItem>
-            ))}
+            {menuItems.map(({ id, icon, route }) =>
+              route ? (
+                <ListItem key={id} button component={RouterLink} to={route}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                </ListItem>
+              ) : (
+                <ListItem key={id} button>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                </ListItem>
+              )
+            )}
           </List>
         </Grid>
         <Divider orientation="vertical" flexItem />

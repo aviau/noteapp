@@ -1,16 +1,15 @@
-import { useRoutes } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useRoutes } from 'react-router-dom';
 
-import theme from './theme';
 import routes from './routes';
+import { ThemeProvider } from './components';
 
 export default function App() {
   const routing = useRoutes(routes(), '');
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         {routing}

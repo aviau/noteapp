@@ -2,7 +2,7 @@ import {
   IpcChannel,
   IpcChannelMessage,
   IpcChannelResponse,
-} from '../../../common/ipcMain';
+} from '../../../lib/ipcMain';
 
 /*
  * Responsible for all communications with the main process.

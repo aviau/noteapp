@@ -9,7 +9,7 @@ import {
   IpcChannel,
   IpcChannelMessage,
   IpcChannelResponse,
-} from '../common/ipcMain';
+} from '../lib/ipcMain';
 import { ConfigurationService } from './services/configuration/configurationService';
 import { createWindows } from './services/startup/windows';
 

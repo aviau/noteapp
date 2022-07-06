@@ -3,7 +3,7 @@ import {
   IpcChannel,
   IpcChannelMessage,
   IpcChannelResponse,
-} from '../common/ipcMain';
+} from '../lib/ipcMain';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

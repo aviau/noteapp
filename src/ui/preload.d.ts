@@ -1,4 +1,8 @@
-import { IpcChannel, IpcChannelMessage } from '../common/ipc';
+import {
+  IpcChannel,
+  IpcChannelMessage,
+  IpcChannelResponse,
+} from '../common/ipcMain';
 
 declare global {
   interface Window {
@@ -12,6 +16,10 @@ declare global {
           channel: T,
           callback: (message: IpcChannelMessage<T>) => void
         ): (() => void) | undefined;
+        invoke<T extends IpcChannel>(
+          channel: T,
+          message: IpcChannelMessage<T>
+        ): Promise<IpcChannelResponse<T>>;
       };
     };
   }

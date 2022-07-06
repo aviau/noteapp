@@ -1,4 +1,3 @@
-import { IpcMainConnection } from './ipcMainConnection';
-import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
-
-export { IpcMainConnection, IpcMainConnectionEvent };
+export { IpcMainConnection } from './ipcMainConnection';
+export { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
+export { IpcMainConnectionInvokeEvent } from './ipcMainConnectionInvokeEvent';

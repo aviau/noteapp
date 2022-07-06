@@ -1,9 +1,18 @@
+// This file describes the MAIN <--> RENDERER IPC.
+//
+// It has type definitions for:
+// - Channels
+// - Messages
+// - Responses
+//
+// The IPC is used to communicate with the main process from
+// the two renderer processes: Worker and Ui.
+
 // Channels for communications between processes. For clarity,
 // channels are one-way and prefixed by the original destination.
 export enum IpcChannel {
   // Ping the main process
   MAIN_UTILS_PING = 'main:utils:ping',
-  MAIN_UTILS_PING_REPLY = 'main:utils:ping:reply',
 
   // Send logs to the main process. Mostly for debugging.
   MAIN_UTILS_LOG = 'main:utils:log',
@@ -16,18 +25,24 @@ export enum IpcChannel {
   RENDERER_IPC_SET_CHANNEL = 'renderer:ipc:set-channel',
 }
 
+// Message interfaces for each of the channels.
 export interface IpcChannelMessage<T extends IpcChannel> {
   data: T extends IpcChannel.MAIN_UTILS_PING
     ? {
         message: string;
       }
-    : T extends IpcChannel.MAIN_UTILS_PING_REPLY
-    ? {
-        reply: string;
-      }
     : T extends IpcChannel.MAIN_UTILS_LOG
     ? {
         message: string;
+      }
+    : null;
+}
+
+// Some channels can have responses.
+export interface IpcChannelResponse<T extends IpcChannel> {
+  data: T extends IpcChannel.MAIN_UTILS_PING
+    ? {
+        reply: string;
       }
     : null;
 }

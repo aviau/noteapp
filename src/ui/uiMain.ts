@@ -1,4 +1,4 @@
-import { IpcChannel } from '../common/ipc';
+import { IpcChannel } from '../common/ipcMain';
 import { IpcRendererConnection } from './services/ipc/ipcRendererConnection';
 
 export class UiMain {

@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { IpcChannel, IpcChannelMessage } from '../common/ipc';
+import {
+  IpcChannel,
+  IpcChannelMessage,
+  IpcChannelResponse,
+} from '../common/ipcMain';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
@@ -7,18 +11,24 @@ contextBridge.exposeInMainWorld('electron', {
       channel: T,
       message: IpcChannelMessage<T>
     ) {
-      ipcRenderer.send(channel, [message]);
+      ipcRenderer.send(channel, message);
     },
     on<T extends IpcChannel>(
       channel: T,
       callback: (message: IpcChannelMessage<T>) => void
     ) {
-      const subscription = (event: IpcRendererEvent, args: unknown[]) => {
-        const message = args[0] as IpcChannelMessage<T>;
+      const subscription = (event: IpcRendererEvent, arg: unknown) => {
+        const message = arg as IpcChannelMessage<T>;
         callback(message);
       };
       ipcRenderer.on(channel, subscription);
       return () => ipcRenderer.removeListener(channel, subscription);
+    },
+    async invoke<T extends IpcChannel>(
+      channel: T,
+      message: IpcChannelMessage<T>
+    ): Promise<IpcChannelResponse<T>> {
+      return ipcRenderer.invoke(channel, message);
     },
   },
 });

@@ -1,7 +1,15 @@
 import Electron, { MessageChannelMain } from 'electron';
 
-import { IpcMainConnection, IpcMainConnectionEvent } from './services/ipc';
-import { IpcChannel, IpcChannelMessage } from '../common/ipc';
+import {
+  IpcMainConnection,
+  IpcMainConnectionEvent,
+  IpcMainConnectionInvokeEvent,
+} from './services/ipc';
+import {
+  IpcChannel,
+  IpcChannelMessage,
+  IpcChannelResponse,
+} from '../common/ipcMain';
 import { ConfigurationService } from './services/configuration/configurationService';
 import { createWindows } from './services/startup/windows';
 
@@ -9,15 +17,15 @@ import { createWindows } from './services/startup/windows';
  * NoteMain controls the main process and coordinates the others.
  */
 export class NoteMain {
-  ipcMainConnection: IpcMainConnection;
+  private ipcMainConnection: IpcMainConnection;
 
-  electronApp: Electron.App;
+  private electronApp: Electron.App;
 
-  configurationService: ConfigurationService;
+  private configurationService: ConfigurationService;
 
-  uiWindow: Electron.BrowserWindow | null;
+  private uiWindow: Electron.BrowserWindow | null;
 
-  workerWindow: Electron.BrowserWindow | null;
+  private workerWindow: Electron.BrowserWindow | null;
 
   constructor(electronApp: Electron.App, ipcMainConnection: IpcMainConnection) {
     this.ipcMainConnection = ipcMainConnection;
@@ -39,7 +47,7 @@ export class NoteMain {
 
   private async startup(): Promise<void> {
     // Listen to messages from other proceses.
-    this.ipcMainConnection.onPing((e, m) => this.onPing(e, m));
+    this.ipcMainConnection.handlePing((e, m) => this.handlePing(e, m));
     this.ipcMainConnection.onRequestChannelRefresh(() =>
       this.onRequestChannelRefresh()
     );
@@ -54,20 +62,20 @@ export class NoteMain {
     this.workerWindow = workerWindow;
   }
 
-  private async onPing(
-    event: IpcMainConnectionEvent,
+  private async handlePing(
+    _event: IpcMainConnectionInvokeEvent,
     message: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING>
-  ): Promise<void> {
+  ): Promise<IpcChannelResponse<IpcChannel.MAIN_UTILS_PING>> {
     console.log(`[NoteMain] got Pinged: ${message.data.message}`);
     const currentVault = (
       await this.configurationService.getVaultConfiguration()
     ).data.current;
-    const replyMessage: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING_REPLY> = {
+    const replyMessage: IpcChannelResponse<IpcChannel.MAIN_UTILS_PING> = {
       data: {
         reply: `pong, config is at ${this.configurationService.userDataPath} and my current vault is ${currentVault}`,
       },
     };
-    event.reply(IpcChannel.MAIN_UTILS_PING_REPLY, replyMessage);
+    return replyMessage;
   }
 
   private async onLog(

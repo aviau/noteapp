@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { SideMenu, TopBar } from './components';
 import { leftTabItems, menuItems, rightTabItems } from './data';
 
-export function Layout() {
+export function MainLayout() {
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
       <TopBar />

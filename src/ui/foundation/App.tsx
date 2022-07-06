@@ -1,8 +1,8 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { useRoutes } from 'react-router-dom';
 
-import routes from './routes';
 import { ThemeProvider } from './components';
+import routes from './routes';
 
 export default function App() {
   const routing = useRoutes(routes(), '');

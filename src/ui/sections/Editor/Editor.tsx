@@ -1,7 +1,9 @@
 import { Breadcrumbs, Divider, Typography } from '@mui/material';
 import CodeMirror from '@uiw/react-codemirror';
+import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { ThemeContext } from 'ui/foundation/components/ThemeProvider';
 import { fetchMarkdown } from './data';
 
 interface FileBreadcrumbProps {
@@ -25,6 +27,7 @@ function FileBreadcrumb({ filepath }: FileBreadcrumbProps) {
 // TODO: External markdown links should open in browser
 export function Editor() {
   const [searchParams] = useSearchParams();
+  const { mode } = useContext(ThemeContext);
 
   const filepath = searchParams.get('filepath');
 
@@ -34,7 +37,7 @@ export function Editor() {
     <>
       {filepath && <FileBreadcrumb filepath={filepath} />}
       <Divider />
-      <CodeMirror value={markdown} />
+      <CodeMirror value={markdown} theme={mode} />
     </>
   );
 }

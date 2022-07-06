@@ -3,7 +3,12 @@ import React, { createContext, useState } from 'react';
 
 import theme from './theme';
 
-export const ThemeContext = createContext({
+type ThemeMode = 'light' | 'dark';
+
+export const ThemeContext = createContext<{
+  mode: ThemeMode;
+  toggleMode: () => void;
+}>({
   mode: 'dark',
   toggleMode: () => {},
 });
@@ -13,7 +18,7 @@ interface Props {
 }
 
 export function ThemeProvider({ children }: Props) {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
+  const [mode, setMode] = useState<ThemeMode>('dark');
 
   const toggleMode = () => {
     setMode(mode === 'dark' ? 'light' : 'dark');

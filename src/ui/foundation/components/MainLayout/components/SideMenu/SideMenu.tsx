@@ -1,70 +1,34 @@
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
+  Box,
+  Collapse,
   Divider,
-  Drawer as MuiDrawer,
-  Grid,
   IconButton,
   List,
   ListItem,
-  ListItemIcon,
-  Toolbar,
   useTheme,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
-
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { CSSObject, styled, Theme } from '@mui/material/styles';
 
 import { TabItem, TabsPanel } from './components';
+
+const ListDynamicColor = styled(List, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{ open: boolean }>(({ theme, open }) => ({
+  height: '100%',
+  backgroundColor: open
+    ? theme.palette.secondary.dark
+    : theme.palette.secondary.main,
+  transition: theme.transitions.create(['background-color'], {
+    duration: theme.transitions.duration.short,
+  }),
+}));
 
 export type MenuItem = {
   id: string;
   icon: React.ReactElement;
-  route?: string;
 };
-
-const drawerWidth = '30vw';
-const minDrawerWidth = 300;
-
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  minWidth: minDrawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  minWidth: minDrawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
-}));
 
 interface Props {
   menuItems: MenuItem[];
@@ -79,56 +43,47 @@ export function SideMenu({
   anchor,
   defaultOpen = false,
 }: Props) {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
   const theme = useTheme();
+  const [open, setOpen] = useState<boolean>(defaultOpen);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  // TODO: Fix Chevron direction based on the anchor
+  const renderChevron = () => {
+    if (anchor === 'left') {
+      return open ? <ChevronLeft /> : <ChevronRight />;
+    }
+    return open ? <ChevronRight /> : <ChevronLeft />;
+  };
+
   return (
-    <Drawer variant="permanent" anchor={anchor} open={open}>
-      <Toolbar variant="dense" />
-      <Grid
-        container
-        direction={anchor === 'left' ? 'row' : 'row-reverse'}
-        sx={{ height: '100%' }}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: anchor === 'left' ? 'row' : 'row-reverse',
+      }}
+    >
+      <ListDynamicColor open={open}>
+        <ListItem disablePadding>
+          <IconButton onClick={toggleDrawer}>{renderChevron()}</IconButton>
+        </ListItem>
+        {menuItems.map(({ id, icon }) => (
+          <ListItem key={id} disablePadding>
+            {icon}
+          </ListItem>
+        ))}
+      </ListDynamicColor>
+      <Collapse
+        in={open}
+        orientation="horizontal"
+        sx={{ backgroundColor: theme.palette.secondary.main }}
       >
-        <Grid
-          item
-          xs={open ? 2 : 12}
-          sx={{
-            backgroundColor: theme.palette.secondary.dark,
-            height: '100%',
-          }}
-        >
-          <Toolbar sx={{ px: [1] }}>
-            <IconButton onClick={toggleDrawer}>
-              {open ? <ChevronLeft /> : <ChevronRight />}
-            </IconButton>
-          </Toolbar>
-          <List>
-            {menuItems.map(({ id, icon, route }) =>
-              route ? (
-                <ListItem key={id} button component={RouterLink} to={route}>
-                  <ListItemIcon>{icon}</ListItemIcon>
-                </ListItem>
-              ) : (
-                <ListItem key={id} button>
-                  <ListItemIcon>{icon}</ListItemIcon>
-                </ListItem>
-              )
-            )}
-          </List>
-        </Grid>
-        <Divider orientation="vertical" flexItem />
-        {open && (
-          <Grid item xs>
-            <TabsPanel tabItems={tabItems} />
-          </Grid>
-        )}
-      </Grid>
-    </Drawer>
+        <Box sx={{ minWidth: 400 }}>
+          <TabsPanel tabItems={tabItems} />
+        </Box>
+      </Collapse>
+      <Divider orientation="vertical" flexItem />
+    </Box>
   );
 }

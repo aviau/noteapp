@@ -1,12 +1,5 @@
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
-import {
-  AppBar,
-  Grid,
-  IconButton,
-  Toolbar,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export function TopBar() {
@@ -19,39 +12,27 @@ export function TopBar() {
   const handleForward = () => navigate(1);
 
   return (
-    <AppBar
-      component="nav"
-      sx={{
-        zIndex: theme.zIndex.drawer + 1,
-        background: theme.palette.secondary.dark,
-      }}
-    >
-      <Toolbar variant="dense">
-        <Grid container alignItems="center">
-          <Grid item xs={3}>
-            <IconButton onClick={handleBack}>
-              <ArrowBack
-                fontSize="small"
-                sx={{ color: theme.palette.text.secondary }}
-              />
-            </IconButton>
-            <IconButton onClick={handleForward}>
-              <ArrowForward
-                fontSize="small"
-                sx={{ color: theme.palette.text.secondary }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography
-              align="center"
-              sx={{ color: theme.palette.text.secondary }}
-            >
-              Note App
-            </Typography>
-          </Grid>
-        </Grid>
-      </Toolbar>
-    </AppBar>
+    <Toolbar sx={{ background: theme.palette.secondary.dark, minHeight: 30 }}>
+      <IconButton onClick={handleBack}>
+        <ArrowBack
+          fontSize="small"
+          sx={{ color: theme.palette.text.secondary }}
+        />
+      </IconButton>
+      <IconButton onClick={handleForward}>
+        <ArrowForward
+          fontSize="small"
+          sx={{ color: theme.palette.text.secondary }}
+        />
+      </IconButton>
+      <Typography
+        variant="subtitle2"
+        align="center"
+        component="p"
+        sx={{ flex: 1, color: theme.palette.text.secondary }}
+      >
+        Note App
+      </Typography>
+    </Toolbar>
   );
 }

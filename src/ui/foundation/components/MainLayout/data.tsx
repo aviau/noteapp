@@ -11,7 +11,7 @@ import {
 import { TreeItem, TreeView } from '@mui/lab';
 import { IconButton, TextField, Typography } from '@mui/material';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 import { paths } from '../../../utilities';
 import { ThemeContext } from '../ThemeProvider';
@@ -67,21 +67,29 @@ function ToggleThemeIcon() {
   const { mode, toggleMode } = useContext(ThemeContext);
 
   return (
-    <IconButton
-      edge="start"
-      color="inherit"
-      aria-label="menu"
-      onClick={() => toggleMode()}
-      sx={{ mr: 2 }}
-    >
+    <IconButton onClick={() => toggleMode()}>
       {mode === 'dark' ? <LightMode /> : <DarkMode />}
     </IconButton>
   );
 }
 
 export const menuItems = [
-  { id: 'Dashboard', route: '/', icon: <Dashboard /> },
-  { id: 'Something', route: '/nono', icon: <Umbrella /> },
+  {
+    id: 'Dashboard',
+    icon: (
+      <IconButton component={NavLink} to="/">
+        <Dashboard />
+      </IconButton>
+    ),
+  },
+  {
+    id: 'Something',
+    icon: (
+      <IconButton component={NavLink} to="/nono">
+        <Umbrella />
+      </IconButton>
+    ),
+  },
   { id: 'ToggleTheme', icon: <ToggleThemeIcon /> },
 ];
 

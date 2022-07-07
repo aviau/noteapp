@@ -1,24 +1,44 @@
-import { Box, Container, Toolbar } from '@mui/material';
+import { Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { Outlet } from 'react-router-dom';
 
-import { SideMenu, TopBar } from './components';
+import { BottomBar, SideMenu, TopBar } from './components';
 import { leftTabItems, menuItems, rightTabItems } from './data';
+
+const AppContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh',
+  width: '100vw',
+}));
+
+const MainContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  flex: 1,
+}));
 
 export function MainLayout() {
   return (
-    <Box sx={{ display: 'flex', height: '100%' }}>
+    <AppContainer>
       <TopBar />
-      <SideMenu
-        menuItems={menuItems}
-        tabItems={leftTabItems}
-        anchor="left"
-        defaultOpen
-      />
-      <Container>
-        <Toolbar />
-        <Outlet />
-      </Container>
-      <SideMenu menuItems={menuItems} tabItems={rightTabItems} anchor="right" />
-    </Box>
+      <MainContainer>
+        <SideMenu
+          menuItems={menuItems}
+          tabItems={leftTabItems}
+          anchor="left"
+          defaultOpen
+        />
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Outlet />
+        </Box>
+        <SideMenu
+          menuItems={menuItems}
+          tabItems={rightTabItems}
+          anchor="right"
+        />
+      </MainContainer>
+      <BottomBar />
+    </AppContainer>
   );
 }

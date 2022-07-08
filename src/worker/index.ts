@@ -1,5 +1,5 @@
-import { IpcWorkerConnection } from './services/ipc/ipcWorkerConnection';
+import { ipcRenderer } from 'electron';
 import { WorkerMain } from './workerMain';
 
-const workerMain = new WorkerMain(new IpcWorkerConnection());
+const workerMain = new WorkerMain(ipcRenderer);
 workerMain.main();

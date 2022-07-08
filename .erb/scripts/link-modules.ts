@@ -1,8 +1,8 @@
 import fs from 'fs';
-import webpackPaths from '../configs/webpack.paths';
+import webpackVars from '../configs/webpack.vars';
 
-const { srcNodeModulesPath } = webpackPaths;
-const { appNodeModulesPath } = webpackPaths;
+const { srcNodeModulesPath } = webpackVars;
+const { appNodeModulesPath } = webpackVars;
 
 if (!fs.existsSync(srcNodeModulesPath) && fs.existsSync(appNodeModulesPath)) {
   fs.symlinkSync(appNodeModulesPath, srcNodeModulesPath, 'junction');

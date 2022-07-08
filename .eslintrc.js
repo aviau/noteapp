@@ -11,6 +11,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
+    'no-await-in-loop': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

@@ -11,7 +11,7 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths';
+import webpackVars from './webpack.vars';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
 
@@ -25,15 +25,12 @@ const configuration: webpack.Configuration = {
 
   target: ['web', 'electron-renderer'],
 
-  entry: {
-    index: [path.join(webpackPaths.srcUiPath, 'index.tsx')],
-    worker: [path.join(webpackPaths.srcWorkerPath, 'index.ts')],
-  },
+  entry: [path.join(webpackVars.srcUiPath, 'index.tsx')],
 
   output: {
-    path: webpackPaths.distUiPath,
+    path: webpackVars.distUiPath,
     publicPath: './',
-    filename: '[name].prod.js',
+    filename: 'ui.prod.js',
     library: {
       type: 'umd',
     },
@@ -109,22 +106,8 @@ const configuration: webpack.Configuration = {
     }),
 
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.join(webpackPaths.srcUiPath, 'index.ejs'),
-      chunks: ['index'],
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true,
-      },
-      isBrowser: false,
-      isDevelopment: process.env.NODE_ENV !== 'production',
-    }),
-
-    new HtmlWebpackPlugin({
-      filename: 'worker.html',
-      template: path.join(webpackPaths.srcWorkerPath, 'index.ejs'),
-      chunks: ['worker'],
+      filename: 'ui.html',
+      template: path.join(webpackVars.srcUiPath, 'index.ejs'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,

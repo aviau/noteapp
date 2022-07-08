@@ -43,24 +43,25 @@ export async function createWindows(app: App) {
   const workerWindow = new BrowserWindow({
     show: false,
     webPreferences: {
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(srcPath, '../.erb/dll/preload.js'),
+      contextIsolation: false,
+      nodeIntegration: true,
+      sandbox: false,
     },
   });
-  workerWindow.loadURL(resolveHtmlPath('worker.html'));
+  workerWindow.loadURL(resolveHtmlPath('worker/worker.html'));
 
   const mainWindow = new BrowserWindow({
     show: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      nodeIntegration: true,
+      contextIsolation: true,
+      nodeIntegration: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(srcPath, '../.erb/dll/preload.js'),
     },
   });
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  mainWindow.loadURL(resolveHtmlPath('ui/ui.html'));
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {

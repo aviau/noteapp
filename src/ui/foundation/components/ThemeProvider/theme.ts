@@ -13,7 +13,7 @@ const lightTheme = {
     secondary: '#3b4045',
   },
   background: {
-    default: '#f2f3f5',
+    default: '#ffffff',
   },
 };
 
@@ -23,14 +23,14 @@ const darkTheme = {
   },
   secondary: {
     main: '#161616',
-    dark: '#000000',
+    dark: '#060606',
   },
   text: {
     primary: '#dcddde',
     secondary: '#8e8e8e',
   },
   background: {
-    default: '#161616',
+    default: '#202020',
   },
 };
 
@@ -39,6 +39,13 @@ const theme = (mode: 'light' | 'dark') => {
     palette: {
       mode,
       ...(mode === 'light' ? lightTheme : darkTheme),
+    },
+    components: {
+      MuiToolbar: {
+        defaultProps: {
+          variant: 'dense',
+        },
+      },
     },
   });
 };

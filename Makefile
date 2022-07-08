@@ -21,9 +21,14 @@ build-main: node_modules
 build-renderer: node_modules
 	npm run build:renderer
 
+.PHONY: build-worker
+build-worker: node_modules
+	npm run build:worker
+
 .PHONY: test
 test: node_modules \
 		build-main \
+		build-worker \
 		build-renderer
 	npm run test
 

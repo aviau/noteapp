@@ -1,12 +1,12 @@
 import rimraf from 'rimraf';
 import process from 'process';
-import webpackPaths from '../configs/webpack.paths';
+import webpackVars from '../configs/webpack.vars';
 
 const args = process.argv.slice(2);
 const commandMap = {
-  dist: webpackPaths.distPath,
-  release: webpackPaths.releasePath,
-  dll: webpackPaths.dllPath,
+  dist: webpackVars.distPath,
+  release: webpackVars.releasePath,
+  dll: webpackVars.dllPath,
 };
 
 args.forEach((x) => {

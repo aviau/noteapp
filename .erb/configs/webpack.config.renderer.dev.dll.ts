@@ -6,16 +6,16 @@ import webpack from 'webpack';
 import path from 'path';
 import { merge } from 'webpack-merge';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths';
+import webpackVars from './webpack.vars';
 import { dependencies } from '../../package.json';
 import checkNodeEnv from '../scripts/check-node-env';
 
 checkNodeEnv('development');
 
-const dist = webpackPaths.dllPath;
+const dist = webpackVars.dllPath;
 
 const configuration: webpack.Configuration = {
-  context: webpackPaths.rootPath,
+  context: webpackVars.rootPath,
 
   devtool: 'eval',
 
@@ -65,9 +65,9 @@ const configuration: webpack.Configuration = {
     new webpack.LoaderOptionsPlugin({
       debug: true,
       options: {
-        context: webpackPaths.srcPath,
+        context: webpackVars.srcPath,
         output: {
-          path: webpackPaths.dllPath,
+          path: webpackVars.dllPath,
         },
       },
     }),

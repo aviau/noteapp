@@ -1,12 +1,13 @@
 /**
- * Webpack config for production electron main process
+ * Build config for electron worker process
  */
 
 import path from 'path';
 import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
 import webpackVars from './webpack.vars';
 import checkNodeEnv from '../scripts/check-node-env';
@@ -20,19 +21,21 @@ const configuration: webpack.Configuration = {
 
   mode: 'production',
 
-  target: 'electron-main',
+  target: ['electron-preload'],
 
-  entry: {
-    main: path.join(webpackVars.srcMainPath, 'main.ts'),
-    preload: path.join(webpackVars.srcMainPath, 'preload.ts'),
-  },
+  entry: [path.join(webpackVars.srcWorkerPath, 'index.ts')],
 
   output: {
-    path: webpackVars.distMainPath,
-    filename: '[name].js',
+    path: webpackVars.distWorkerPath,
+    publicPath: './',
+    filename: 'worker.prod.js',
+    library: {
+      type: 'umd',
+    },
   },
 
   optimization: {
+    minimize: true,
     minimizer: [
       new TerserPlugin({
         parallel: true,
@@ -41,10 +44,6 @@ const configuration: webpack.Configuration = {
   },
 
   plugins: [
-    new BundleAnalyzerPlugin({
-      analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
-    }),
-
     /**
      * Create global constants which can be configured at compile time.
      *
@@ -57,19 +56,24 @@ const configuration: webpack.Configuration = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
       DEBUG_PROD: false,
-      START_MINIMIZED: false,
+    }),
+
+    new BundleAnalyzerPlugin({
+      analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
+    }),
+
+    new HtmlWebpackPlugin({
+      filename: 'worker.html',
+      template: path.join(webpackVars.srcWorkerPath, 'index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      isDevelopment: process.env.NODE_ENV !== 'production',
     }),
   ],
-
-  /**
-   * Disables webpack processing of __dirname and __filename.
-   * If you run the bundle in node.js it falls back to these values of node.js.
-   * https://github.com/webpack/webpack/issues/2010
-   */
-  node: {
-    __dirname: false,
-    __filename: false,
-  },
 };
 
 export default merge(baseConfig, configuration);

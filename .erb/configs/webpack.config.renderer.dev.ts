@@ -7,8 +7,9 @@ import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { execSync, spawn } from 'child_process';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import detectPort from 'detect-port';
 import baseConfig from './webpack.config.base';
-import webpackPaths from './webpack.paths';
+import webpackVars from './webpack.vars';
 import checkNodeEnv from '../scripts/check-node-env';
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
@@ -17,8 +18,9 @@ if (process.env.NODE_ENV === 'production') {
   checkNodeEnv('development');
 }
 
-const port = process.env.PORT || 1212;
-const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
+const port = webpackVars.uiPort;
+
+const manifest = path.resolve(webpackVars.dllPath, 'renderer.json');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const requiredByDLLConfig = module.parent!.filename.includes(
   'webpack.config.renderer.dev.dll'
@@ -29,7 +31,7 @@ const requiredByDLLConfig = module.parent!.filename.includes(
  */
 if (
   !requiredByDLLConfig &&
-  !(fs.existsSync(webpackPaths.dllPath) && fs.existsSync(manifest))
+  !(fs.existsSync(webpackVars.dllPath) && fs.existsSync(manifest))
 ) {
   console.log(
     chalk.black.bgYellow.bold(
@@ -46,23 +48,16 @@ const configuration: webpack.Configuration = {
 
   target: ['web', 'electron-renderer'],
 
-  entry: {
-    index: [
-      `webpack-dev-server/client?http://localhost:${port}/dist`,
-      'webpack/hot/only-dev-server',
-      path.join(webpackPaths.srcUiPath, 'index.tsx'),
-    ],
-    worker: [
-      `webpack-dev-server/client?http://localhost:${port}/dist`,
-      'webpack/hot/only-dev-server',
-      path.join(webpackPaths.srcWorkerPath, 'index.ts'),
-    ],
-  },
+  entry: [
+    `webpack-dev-server/client?http://localhost:${port}/dist`,
+    'webpack/hot/only-dev-server',
+    path.join(webpackVars.srcUiPath, 'index.tsx'),
+  ],
 
   output: {
-    path: webpackPaths.distUiPath,
-    publicPath: '/',
-    filename: '[name].dev.js',
+    path: webpackVars.distUiPath,
+    publicPath: '/ui/',
+    filename: 'ui.dev.js',
     library: {
       type: 'umd',
     },
@@ -108,7 +103,7 @@ const configuration: webpack.Configuration = {
       ? []
       : [
           new webpack.DllReferencePlugin({
-            context: webpackPaths.dllPath,
+            context: webpackVars.dllPath,
             manifest: require(manifest),
             sourceType: 'var',
           }),
@@ -139,9 +134,8 @@ const configuration: webpack.Configuration = {
     new ReactRefreshWebpackPlugin(),
 
     new HtmlWebpackPlugin({
-      filename: path.join('index.html'),
-      template: path.join(webpackPaths.srcUiPath, 'index.ejs'),
-      chunks: ['index'],
+      filename: path.join('ui.html'),
+      template: path.join(webpackVars.srcUiPath, 'index.ejs'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
@@ -150,22 +144,7 @@ const configuration: webpack.Configuration = {
       isBrowser: false,
       env: process.env.NODE_ENV,
       isDevelopment: process.env.NODE_ENV !== 'production',
-      nodeModules: webpackPaths.appNodeModulesPath,
-    }),
-
-    new HtmlWebpackPlugin({
-      filename: path.join('worker.html'),
-      template: path.join(webpackPaths.srcWorkerPath, 'index.ejs'),
-      chunks: ['worker'],
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true,
-      },
-      isBrowser: false,
-      env: process.env.NODE_ENV,
-      isDevelopment: process.env.NODE_ENV !== 'production',
-      nodeModules: webpackPaths.appNodeModulesPath,
+      nodeModules: webpackVars.appNodeModulesPath,
     }),
   ],
 
@@ -195,23 +174,46 @@ const configuration: webpack.Configuration = {
         .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
 
-      console.log('Starting Main Process...');
-      let args = ['run', 'start:main'];
-      if (process.env.MAIN_ARGS) {
-        args = args.concat(
-          ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat()
-        );
-      }
-      spawn('npm', args, {
+      console.log('Starting worker.js builder...');
+      const workerProcess = spawn('npm', ['run', 'start:worker'], {
         shell: true,
         stdio: 'inherit',
       })
-        .on('close', (code: number) => {
-          preloadProcess.kill();
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          process.exit(code!);
-        })
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
+
+      (async () => {
+        console.log('Starting Main Process...');
+
+        for (;;) {
+          const detected = await detectPort(webpackVars.workerPort);
+          if (detected !== webpackVars.workerPort) {
+            break;
+          }
+          console.log('Waiting for worker dev server to be up...');
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+
+        let args = ['run', 'start:main'];
+        if (process.env.MAIN_ARGS) {
+          args = args.concat(
+            ['--', ...process.env.MAIN_ARGS.matchAll(/"[^"]+"|[^\s"]+/g)].flat()
+          );
+        }
+        spawn('npm', args, {
+          shell: true,
+          stdio: 'inherit',
+        })
+          .on('close', (code: number) => {
+            preloadProcess.kill();
+            workerProcess.kill();
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            process.exit(code!);
+          })
+          .on('error', (spawnError) => console.error(spawnError));
+      })();
+
       return middlewares;
     },
   },

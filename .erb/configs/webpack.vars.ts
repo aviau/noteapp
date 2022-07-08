@@ -18,8 +18,12 @@ const srcNodeModulesPath = path.join(srcPath, 'node_modules');
 const distPath = path.join(appPath, 'dist');
 const distMainPath = path.join(distPath, 'main');
 const distUiPath = path.join(distPath, 'ui');
+const distWorkerPath = path.join(distPath, 'worker');
 
 const buildPath = path.join(releasePath, 'build');
+
+const workerPort = 1213;
+const uiPort = 1212;
 
 export default {
   rootPath,
@@ -36,5 +40,8 @@ export default {
   distPath,
   distMainPath,
   distUiPath,
+  distWorkerPath,
   buildPath,
+  workerPort,
+  uiPort,
 };

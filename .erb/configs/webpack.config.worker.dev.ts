@@ -1,5 +1,7 @@
+import 'webpack-dev-server';
 import path from 'path';
 import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { merge } from 'webpack-merge';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
@@ -12,6 +14,8 @@ if (process.env.NODE_ENV === 'production') {
   checkNodeEnv('development');
 }
 
+const port = webpackVars.workerPort;
+
 const configuration: webpack.Configuration = {
   devtool: 'inline-source-map',
 
@@ -19,11 +23,16 @@ const configuration: webpack.Configuration = {
 
   target: 'electron-preload',
 
-  entry: path.join(webpackVars.srcMainPath, 'preload.ts'),
+  entry: [
+    `webpack-dev-server/client?http://localhost:${port}/dist`,
+    'webpack/hot/only-dev-server',
+    path.join(webpackVars.srcWorkerPath, 'index.ts'),
+  ],
 
   output: {
-    path: webpackVars.dllPath,
-    filename: 'preload.js',
+    path: webpackVars.distWorkerPath,
+    publicPath: '/worker/',
+    filename: 'worker.dev.js',
   },
 
   plugins: [
@@ -50,6 +59,20 @@ const configuration: webpack.Configuration = {
     new webpack.LoaderOptionsPlugin({
       debug: true,
     }),
+
+    new HtmlWebpackPlugin({
+      filename: path.join('worker.html'),
+      template: path.join(webpackVars.srcWorkerPath, 'index.ejs'),
+      minify: {
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeComments: true,
+      },
+      isBrowser: false,
+      env: process.env.NODE_ENV,
+      isDevelopment: process.env.NODE_ENV !== 'production',
+      nodeModules: webpackVars.appNodeModulesPath,
+    }),
   ],
 
   /**
@@ -62,7 +85,18 @@ const configuration: webpack.Configuration = {
     __filename: false,
   },
 
-  watch: true,
+  devServer: {
+    port,
+    compress: true,
+    hot: true,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    static: {
+      publicPath: '/',
+    },
+    historyApiFallback: {
+      verbose: true,
+    },
+  },
 };
 
 export default merge(baseConfig, configuration);

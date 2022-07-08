@@ -2,11 +2,11 @@
 import path from 'path';
 import chalk from 'chalk';
 import fs from 'fs';
-import webpackPaths from '../configs/webpack.paths';
+import webpackVars from '../configs/webpack.vars';
 
-const mainPath = path.join(webpackPaths.distMainPath, 'main.js');
-const uiPath = path.join(webpackPaths.distUiPath, 'index.prod.js');
-const workerPath = path.join(webpackPaths.distUiPath, 'worker.prod.js');
+const mainPath = path.join(webpackVars.distMainPath, 'main.js');
+const uiPath = path.join(webpackVars.distUiPath, 'ui.prod.js');
+const workerPath = path.join(webpackVars.distWorkerPath, 'worker.prod.js');
 
 if (!fs.existsSync(mainPath)) {
   throw new Error(
@@ -27,7 +27,7 @@ if (!fs.existsSync(uiPath)) {
 if (!fs.existsSync(workerPath)) {
   throw new Error(
     chalk.whiteBright.bgRed.bold(
-      'The renderer process is not built yet. Build it by running "npm run build:renderer"'
+      'The worker process is not built yet. Build it by running "npm run build:worker"'
     )
   );
 }

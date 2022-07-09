@@ -1,23 +1,23 @@
 import Electron from 'electron';
-import { IpcWorkerConnection } from './services/ipc/ipcWorkerConnection';
+import { IpcWorkerService } from './services/ipc';
 
 export class WorkerMain {
-  ipcWorkerConnection: IpcWorkerConnection;
+  ipcWorkerService: IpcWorkerService;
 
   constructor(ipcRenderer: Electron.IpcRenderer) {
-    this.ipcWorkerConnection = new IpcWorkerConnection(ipcRenderer);
+    this.ipcWorkerService = new IpcWorkerService(ipcRenderer);
   }
 
   main(): void {
     try {
       this.startup();
     } catch (error) {
-      this.ipcWorkerConnection.mainLog((error as any).message);
+      this.ipcWorkerService.mainLog((error as any).message);
     }
   }
 
   private async startup(): Promise<void> {
-    this.ipcWorkerConnection.mainLog('Started.');
-    this.ipcWorkerConnection.start();
+    this.ipcWorkerService.mainLog('Started.');
+    this.ipcWorkerService.start();
   }
 }

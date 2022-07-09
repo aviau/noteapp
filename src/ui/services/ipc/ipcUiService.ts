@@ -7,7 +7,7 @@ import {
 /*
  * Responsible for all communications with the main process.
  */
-export class IpcRendererConnection {
+export class IpcUiService {
   private sendMessage<T extends IpcChannel>(
     channel: T,
     message: IpcChannelMessage<T>

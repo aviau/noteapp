@@ -8,12 +8,12 @@ import {
 import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
 import { IpcMainConnectionInvokeEvent } from './ipcMainConnectionInvokeEvent';
 
-export type IpcMainConnectionCallback<T extends IpcChannel> = (
+export type IpcMainServiceCallback<T extends IpcChannel> = (
   event: IpcMainConnectionEvent,
   message: IpcChannelMessage<T>
 ) => void;
 
-export type IpcMainConnectionHandler<T extends IpcChannel> = (
+export type IpcMainServiceHandler<T extends IpcChannel> = (
   event: IpcMainConnectionInvokeEvent,
   message: IpcChannelMessage<T>
 ) => Promise<IpcChannelResponse<T>>;
@@ -24,7 +24,7 @@ export type IpcMainConnectionHandler<T extends IpcChannel> = (
  *
  * No application logic goes here, just passing messages.
  */
-export class IpcMainConnection {
+export class IpcMainService {
   private ipcMain: Electron.IpcMain;
 
   constructor(ipcMain: Electron.IpcMain) {
@@ -67,18 +67,18 @@ export class IpcMainConnection {
   }
 
   handlePing(
-    callback: IpcMainConnectionHandler<IpcChannel.MAIN_UTILS_PING>
+    callback: IpcMainServiceHandler<IpcChannel.MAIN_UTILS_PING>
   ): void {
     this.handle(IpcChannel.MAIN_UTILS_PING, callback);
   }
 
   onRequestChannelRefresh(
-    callback: IpcMainConnectionCallback<IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
+    callback: IpcMainServiceCallback<IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
   ): void {
     this.on(IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, callback);
   }
 
-  onLog(callback: IpcMainConnectionCallback<IpcChannel.MAIN_UTILS_LOG>): void {
+  onLog(callback: IpcMainServiceCallback<IpcChannel.MAIN_UTILS_LOG>): void {
     this.on(IpcChannel.MAIN_UTILS_LOG, callback);
   }
 }

@@ -29,7 +29,7 @@ const configuration: webpack.Configuration = {
 
   output: {
     path: webpackVars.distMainPath,
-    filename: '[name].js',
+    filename: '[name].prod.js',
   },
 
   optimization: {

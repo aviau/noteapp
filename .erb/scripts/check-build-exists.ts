@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import webpackVars from '../configs/webpack.vars';
 
-const mainPath = path.join(webpackVars.distMainPath, 'main.js');
+const mainPath = path.join(webpackVars.distMainPath, 'main.prod.js');
 const uiPath = path.join(webpackVars.distUiPath, 'ui.prod.js');
 const workerPath = path.join(webpackVars.distWorkerPath, 'worker.prod.js');
 

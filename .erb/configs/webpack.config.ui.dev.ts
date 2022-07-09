@@ -1,11 +1,9 @@
 import 'webpack-dev-server';
 import path from 'path';
-import fs from 'fs';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import chalk from 'chalk';
 import { merge } from 'webpack-merge';
-import { execSync, spawn } from 'child_process';
+import { spawn } from 'child_process';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import detectPort from 'detect-port';
 import baseConfig from './webpack.config.base';
@@ -19,27 +17,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const port = webpackVars.uiPort;
-
-const manifest = path.resolve(webpackVars.dllPath, 'renderer.json');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const requiredByDLLConfig = module.parent!.filename.includes(
-  'webpack.config.renderer.dev.dll'
-);
-
-/**
- * Warn if the DLL is not built
- */
-if (
-  !requiredByDLLConfig &&
-  !(fs.existsSync(webpackVars.dllPath) && fs.existsSync(manifest))
-) {
-  console.log(
-    chalk.black.bgYellow.bold(
-      'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
-    )
-  );
-  execSync('npm run postinstall');
-}
 
 const configuration: webpack.Configuration = {
   devtool: 'inline-source-map',
@@ -99,16 +76,6 @@ const configuration: webpack.Configuration = {
     ],
   },
   plugins: [
-    ...(requiredByDLLConfig
-      ? []
-      : [
-          new webpack.DllReferencePlugin({
-            context: webpackVars.dllPath,
-            manifest: require(manifest),
-            sourceType: 'var',
-          }),
-        ]),
-
     new webpack.NoEmitOnErrorsPlugin(),
 
     /**

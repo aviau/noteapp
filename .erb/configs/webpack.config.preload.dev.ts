@@ -22,8 +22,8 @@ const configuration: webpack.Configuration = {
   entry: path.join(webpackVars.srcMainPath, 'preload.ts'),
 
   output: {
-    path: webpackVars.dllPath,
-    filename: 'preload.js',
+    path: webpackVars.distMainPath,
+    filename: 'preload.dev.js',
   },
 
   plugins: [

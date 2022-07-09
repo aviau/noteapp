@@ -57,8 +57,8 @@ export async function createWindows(app: App) {
       contextIsolation: true,
       nodeIntegration: false,
       preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(srcPath, '../.erb/dll/preload.js'),
+        ? path.join(__dirname, 'preload.prod.js')
+        : path.join(srcPath, '../release/app/dist/main/preload.dev.js'),
     },
   });
   mainWindow.loadURL(resolveHtmlPath('ui/ui.html'));

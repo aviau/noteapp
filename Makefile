@@ -17,9 +17,9 @@ run: node_modules
 build-main: node_modules
 	npm run build:main
 
-.PHONY: build-renderer
-build-renderer: node_modules
-	npm run build:renderer
+.PHONY: build-ui
+build-ui: node_modules
+	npm run build:ui
 
 .PHONY: build-worker
 build-worker: node_modules
@@ -29,7 +29,7 @@ build-worker: node_modules
 test: node_modules \
 		build-main \
 		build-worker \
-		build-renderer
+		build-ui
 	npm run test
 
 .PHONY: package
@@ -40,6 +40,4 @@ package: node_modules
 clean:
 	rm -rf node_modules \
 			release/build \
-			release/app/dist \
-			.erb/dll/*.js \
-			.erb/dll/*.json
+			release/app/dist

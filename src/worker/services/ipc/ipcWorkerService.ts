@@ -6,7 +6,7 @@ import { IpcChannel, IpcChannelMessage } from '../../../lib/ipcMain';
  * - The main process.
  * - The UI process.
  */
-export class IpcWorkerConnection {
+export class IpcWorkerService {
   private readonly ipcRenderer: Electron.IpcRenderer;
 
   private uiChannel: MessagePort | null;

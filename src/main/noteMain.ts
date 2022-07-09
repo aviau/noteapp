@@ -1,7 +1,7 @@
 import Electron, { MessageChannelMain } from 'electron';
 
 import {
-  IpcMainConnection,
+  IpcMainService,
   IpcMainConnectionEvent,
   IpcMainConnectionInvokeEvent,
 } from './services/ipc';
@@ -17,7 +17,7 @@ import { createWindows } from './services/startup/windows';
  * NoteMain controls the main process and coordinates the others.
  */
 export class NoteMain {
-  private ipcMainConnection: IpcMainConnection;
+  private ipcMainService: IpcMainService;
 
   private electronApp: Electron.App;
 
@@ -27,8 +27,8 @@ export class NoteMain {
 
   private workerWindow: Electron.BrowserWindow | null;
 
-  constructor(electronApp: Electron.App, ipcMainConnection: IpcMainConnection) {
-    this.ipcMainConnection = ipcMainConnection;
+  constructor(electronApp: Electron.App, ipcMainService: IpcMainService) {
+    this.ipcMainService = ipcMainService;
     this.electronApp = electronApp;
     this.configurationService = new ConfigurationService(
       electronApp.getPath('userData')
@@ -47,11 +47,11 @@ export class NoteMain {
 
   private async startup(): Promise<void> {
     // Listen to messages from other proceses.
-    this.ipcMainConnection.handlePing((e, m) => this.handlePing(e, m));
-    this.ipcMainConnection.onRequestChannelRefresh(() =>
+    this.ipcMainService.handlePing((e, m) => this.handlePing(e, m));
+    this.ipcMainService.onRequestChannelRefresh(() =>
       this.onRequestChannelRefresh()
     );
-    this.ipcMainConnection.onLog((e, m) => this.onLog(e, m));
+    this.ipcMainService.onLog((e, m) => this.onLog(e, m));
 
     // Create windows
     await this.electronApp.whenReady();

@@ -1,0 +1,1 @@
+export { IpcWorkerService } from './ipcWorkerService';

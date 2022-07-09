@@ -1,13 +1,13 @@
 import { IpcChannel } from '../lib/ipcMain';
-import { IpcRendererConnection } from './services/ipc/ipcRendererConnection';
+import { IpcUiService } from './services/ipc/ipcUiService';
 
 export class UiMain {
-  ipcRendererConnection: IpcRendererConnection;
+  ipcUiService: IpcUiService;
 
   workerChannel: MessagePort | null;
 
-  constructor(ipcRendererConnection: IpcRendererConnection) {
-    this.ipcRendererConnection = ipcRendererConnection;
+  constructor(ipcUiService: IpcUiService) {
+    this.ipcUiService = ipcUiService;
     this.workerChannel = null;
   }
 
@@ -32,19 +32,19 @@ export class UiMain {
     };
 
     // Say hi and ask the main process for new channels.
-    this.ipcRendererConnection.mainLog('Started.');
-    this.ipcRendererConnection.mainPing();
-    this.ipcRendererConnection.refreshChannels();
+    this.ipcUiService.mainLog('Started.');
+    this.ipcUiService.mainPing();
+    this.ipcUiService.refreshChannels();
   }
 
   private async onSetWorkerChannel(workerChannel: MessagePort): Promise<void> {
     // Save the new channel.
-    this.ipcRendererConnection.mainLog('Got new worker channel.');
+    this.ipcUiService.mainLog('Got new worker channel.');
     this.workerChannel = workerChannel;
 
     // Listen for messages
     workerChannel.onmessage = (event) => {
-      this.ipcRendererConnection.mainLog(`Got port message: ${event.data}`);
+      this.ipcUiService.mainLog(`Got port message: ${event.data}`);
     };
 
     // Start the port

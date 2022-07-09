@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import App from './foundation/App';
 import { UiMain } from './uiMain';
-import { IpcRendererConnection } from './services/ipc/ipcRendererConnection';
+import { IpcUiService } from './services/ipc/ipcUiService';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container = document.getElementById('root')!;
@@ -14,5 +14,5 @@ root.render(
   </MemoryRouter>
 );
 
-const uiMain = new UiMain(new IpcRendererConnection());
+const uiMain = new UiMain(new IpcUiService());
 uiMain.main();

@@ -1,5 +1,6 @@
 import Electron from 'electron';
 import { IpcWorkerService } from './services/ipc';
+import { ConfigurationService } from './services/configuration';
 
 export class WorkerMain {
   ipcWorkerService: IpcWorkerService;
@@ -19,5 +20,14 @@ export class WorkerMain {
   private async startup(): Promise<void> {
     this.ipcWorkerService.mainLog('Started.');
     this.ipcWorkerService.start();
+
+    const configurationService = new ConfigurationService(
+      await this.ipcWorkerService.mainUtilsGetUserDataPath()
+    );
+    this.ipcWorkerService.mainLog(
+      `ConfigurationService loaded with vault at ${
+        (await configurationService.getVaultConfiguration()).data.current
+      }.`
+    );
   }
 }

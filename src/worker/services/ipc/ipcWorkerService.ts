@@ -1,5 +1,9 @@
 import Electron, { IpcRendererEvent } from 'electron';
-import { IpcChannel, IpcChannelMessage } from 'src/lib/ipcMain';
+import {
+  IpcChannel,
+  IpcChannelMessage,
+  IpcChannelResponse,
+} from 'src/lib/ipcMain';
 
 /*
  * Responsible for all communications with:
@@ -39,6 +43,13 @@ export class IpcWorkerService {
     this.ipcRenderer.on(channel, subscription);
   }
 
+  private async invoke<T extends IpcChannel>(
+    channel: T,
+    message: IpcChannelMessage<T>
+  ): Promise<IpcChannelResponse<T>> {
+    return this.ipcRenderer.invoke(channel, message);
+  }
+
   mainLog(message: string): void {
     this.sendMessage(IpcChannel.MAIN_UTILS_LOG, { data: { message } });
   }
@@ -65,5 +76,12 @@ export class IpcWorkerService {
 
     // Say hi.
     uiChannel.postMessage('Hello from worker.');
+  }
+
+  async mainUtilsGetUserDataPath(): Promise<string> {
+    const resp = await this.invoke(IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH, {
+      data: null,
+    });
+    return resp.data.path;
   }
 }

@@ -44,27 +44,33 @@ export enum IpcMainChannel {
 }
 
 // Message interfaces for each of the channels.
-export interface IpcMainChannelMessage<T extends IpcMainChannel> {
-  data: T extends IpcMainChannel.MAIN_UTILS_PING
+export type IpcMainChannelMessage<T extends IpcMainChannel> =
+  T extends IpcMainChannel.MAIN_UTILS_PING
     ? {
-        message: string;
+        data: {
+          message: string;
+        };
       }
     : T extends IpcMainChannel.MAIN_UTILS_LOG
     ? {
-        message: string;
+        data: {
+          message: string;
+        };
       }
     : null;
-}
 
 // Some channels can have responses.
-export interface IpcMainChannelResponse<T extends IpcMainChannel> {
-  data: T extends IpcMainChannel.MAIN_UTILS_PING
+export type IpcMainChannelResponse<T extends IpcMainChannel> =
+  T extends IpcMainChannel.MAIN_UTILS_PING
     ? {
-        reply: string;
+        data: {
+          reply: string;
+        };
       }
     : T extends IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH
     ? {
-        path: string;
+        data: {
+          path: string;
+        };
       }
     : null;
-}

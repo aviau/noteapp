@@ -54,9 +54,7 @@ export class IpcUiService {
   }
 
   private refreshChannels(): void {
-    this.mainSendMessage(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, {
-      data: null,
-    });
+    this.mainSendMessage(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, null);
   }
 
   private async onSetWorkerChannel(workerChannel: MessagePort): Promise<void> {

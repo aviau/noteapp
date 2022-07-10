@@ -67,13 +67,11 @@ export class IpcWorkerService {
   }
 
   mainQuit(): void {
-    this.mainSendMessage(IpcMainChannel.MAIN_UTILS_QUIT, { data: null });
+    this.mainSendMessage(IpcMainChannel.MAIN_UTILS_QUIT, null);
   }
 
   mainRefreshChannels(): void {
-    this.mainSendMessage(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, {
-      data: null,
-    });
+    this.mainSendMessage(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, null);
   }
 
   private async onSetUiChannel(event: IpcRendererEvent): Promise<void> {
@@ -116,9 +114,7 @@ export class IpcWorkerService {
   async mainUtilsGetUserDataPath(): Promise<string> {
     const resp = await this.mainInvoke(
       IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH,
-      {
-        data: null,
-      }
+      null
     );
     return resp.data.path;
   }

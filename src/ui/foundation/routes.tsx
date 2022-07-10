@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
 import { Editor, HelloWorld, NotFound } from '../sections';
-import { MainLayout } from './components';
+import { MainLayout } from './MainLayout';
 
 const routes = () => [
   {

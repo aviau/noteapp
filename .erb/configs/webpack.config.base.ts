@@ -3,6 +3,8 @@
  */
 
 import webpack from 'webpack';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import path from 'path';
 import webpackVars from './webpack.vars';
 import { dependencies as externals } from '../../release/app/package.json';
 
@@ -38,6 +40,11 @@ const configuration: webpack.Configuration = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     modules: [webpackVars.srcPath, 'node_modules'],
+    plugins: [
+      new TsconfigPathsPlugin({
+        configFile: path.join(webpackVars.rootPath, 'tsconfig.json'),
+      }),
+    ],
   },
 
   plugins: [

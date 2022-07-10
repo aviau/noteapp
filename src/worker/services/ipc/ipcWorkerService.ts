@@ -1,9 +1,13 @@
 import Electron, { IpcRendererEvent } from 'electron';
 import {
-  IpcChannel,
-  IpcChannelMessage,
-  IpcChannelResponse,
+  IpcMainChannel,
+  IpcMainChannelMessage,
+  IpcMainChannelResponse,
 } from 'src/lib/ipcMain';
+import { IpcWorkerMessage } from 'src/lib/ipcWorker';
+import { IpcUiMessage, IpcUiMessageType } from 'src/lib/ipcUi';
+
+type UiMessageCallback = (message: IpcWorkerMessage) => void;
 
 /*
  * Responsible for all communications with:
@@ -15,47 +19,59 @@ export class IpcWorkerService {
 
   private uiChannel: MessagePort | null;
 
+  onUiMessage: UiMessageCallback | null;
+
   constructor(ipcRenderer: Electron.IpcRenderer) {
     this.ipcRenderer = ipcRenderer;
     this.uiChannel = null;
+    this.onUiMessage = null;
   }
 
   start() {
-    this.on(IpcChannel.RENDERER_IPC_SET_CHANNEL, (e) => this.onSetUiChannel(e));
-    this.refreshChannels();
+    this.mainOn(IpcMainChannel.RENDERER_IPC_SET_CHANNEL, (e) =>
+      this.onSetUiChannel(e)
+    );
+    this.mainRefreshChannels();
   }
 
-  private sendMessage<T extends IpcChannel>(
+  private mainSendMessage<T extends IpcMainChannel>(
     channel: T,
-    message: IpcChannelMessage<T>
+    message: IpcMainChannelMessage<T>
   ): void {
     this.ipcRenderer.send(channel, message);
   }
 
-  private on<T extends IpcChannel>(
+  private mainOn<T extends IpcMainChannel>(
     channel: T,
-    callback: (event: IpcRendererEvent, message: IpcChannelMessage<T>) => void
+    callback: (
+      event: IpcRendererEvent,
+      message: IpcMainChannelMessage<T>
+    ) => void
   ): void {
     const subscription = (event: IpcRendererEvent, arg: unknown) => {
-      const message = arg as IpcChannelMessage<T>;
+      const message = arg as IpcMainChannelMessage<T>;
       callback(event, message);
     };
     this.ipcRenderer.on(channel, subscription);
   }
 
-  private async invoke<T extends IpcChannel>(
+  private async mainInvoke<T extends IpcMainChannel>(
     channel: T,
-    message: IpcChannelMessage<T>
-  ): Promise<IpcChannelResponse<T>> {
+    message: IpcMainChannelMessage<T>
+  ): Promise<IpcMainChannelResponse<T>> {
     return this.ipcRenderer.invoke(channel, message);
   }
 
   mainLog(message: string): void {
-    this.sendMessage(IpcChannel.MAIN_UTILS_LOG, { data: { message } });
+    this.mainSendMessage(IpcMainChannel.MAIN_UTILS_LOG, { data: { message } });
   }
 
-  refreshChannels(): void {
-    this.sendMessage(IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, {
+  mainQuit(): void {
+    this.mainSendMessage(IpcMainChannel.MAIN_UTILS_QUIT, { data: null });
+  }
+
+  mainRefreshChannels(): void {
+    this.mainSendMessage(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, {
       data: null,
     });
   }
@@ -68,20 +84,42 @@ export class IpcWorkerService {
 
     // Listen for messages
     uiChannel.onmessage = (uiChannelEvent) => {
-      this.mainLog(`Got port message: ${uiChannelEvent.data}`);
+      const uiMessage = uiChannelEvent.data as IpcWorkerMessage;
+      if (this.onUiMessage !== null) {
+        this.onUiMessage(uiMessage);
+        return;
+      }
+      this.mainLog(`Got unhandled UI message: ${uiMessage}`);
     };
 
     // Start the port
     uiChannel.start();
 
     // Say hi.
-    uiChannel.postMessage('Hello from worker.');
+    this.uiSendMessage({
+      type: IpcUiMessageType.PING,
+      data: {
+        message: 'Hello from worker',
+      },
+    });
+  }
+
+  private uiSendMessage(message: IpcUiMessage): void {
+    if (this.uiChannel === null) {
+      throw new Error(
+        'Tried to send message before the uiChannel was initiated'
+      );
+    }
+    this.uiChannel.postMessage(message);
   }
 
   async mainUtilsGetUserDataPath(): Promise<string> {
-    const resp = await this.invoke(IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH, {
-      data: null,
-    });
+    const resp = await this.mainInvoke(
+      IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH,
+      {
+        data: null,
+      }
+    );
     return resp.data.path;
   }
 }

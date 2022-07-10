@@ -1,14 +1,12 @@
-import { IpcChannel } from '../lib/ipcMain';
+import { assertUnreachable } from 'src/lib/asserts';
+import { IpcUiMessage, IpcUiMessageType } from 'src/lib/ipcUi';
 import { IpcUiService } from './services/ipc/ipcUiService';
 
 export class UiMain {
-  ipcUiService: IpcUiService;
-
-  workerChannel: MessagePort | null;
+  private readonly ipcUiService: IpcUiService;
 
   constructor(ipcUiService: IpcUiService) {
     this.ipcUiService = ipcUiService;
-    this.workerChannel = null;
   }
 
   main(): void {
@@ -20,37 +18,28 @@ export class UiMain {
   }
 
   private async startup(): Promise<void> {
-    // Listen to window messages.
-    window.onmessage = (event) => {
-      if (
-        event.source === window &&
-        event.data === IpcChannel.RENDERER_IPC_SET_CHANNEL
-      ) {
-        const [channel] = event.ports;
-        this.onSetWorkerChannel(channel);
-      }
-    };
-
     // Say hi and ask the main process for new channels.
     this.ipcUiService.mainLog('Started.');
+    this.ipcUiService.onWorkerMessage = (m) => {
+      this.onWorkerMessage(m);
+    };
     this.ipcUiService.mainPing();
-    this.ipcUiService.refreshChannels();
+    this.ipcUiService.start();
   }
 
-  private async onSetWorkerChannel(workerChannel: MessagePort): Promise<void> {
-    // Save the new channel.
-    this.ipcUiService.mainLog('Got new worker channel.');
-    this.workerChannel = workerChannel;
+  private async onWorkerMessage(message: IpcUiMessage): Promise<void> {
+    const messageType = message.type;
+    switch (messageType) {
+      case IpcUiMessageType.PING:
+        this.ipcUiService.mainLog(`PING: ${message.data.message}`);
+        break;
+      default:
+        this.ipcUiService.mainLog(`Unhandled Worker message: ${message}`);
+        assertUnreachable(messageType);
+    }
+  }
 
-    // Listen for messages
-    workerChannel.onmessage = (event) => {
-      this.ipcUiService.mainLog(`Got port message: ${event.data}`);
-    };
-
-    // Start the port
-    workerChannel.start();
-
-    // Say hi.
-    workerChannel.postMessage('Hello from UI.');
+  quit(): void {
+    this.ipcUiService.workerQuit();
   }
 }

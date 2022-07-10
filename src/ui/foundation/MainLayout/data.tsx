@@ -12,8 +12,7 @@ import { TreeItem, TreeView } from '@mui/lab';
 import { IconButton, TextField, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
-
-import { paths } from '../../utilities';
+import { pathFor, PathName } from 'src/ui/utilities/paths';
 import { ThemeContext } from '../ThemeProvider';
 
 function FolderView() {
@@ -30,7 +29,12 @@ function FolderView() {
           nodeId="2"
           label="day1"
           onClick={() =>
-            navigate(`${paths.markdown}?filepath=journals/day1.md`)
+            navigate(
+              pathFor({
+                path: PathName.PAGES,
+                params: { filepath: 'journals/day1.md' },
+              })
+            )
           }
         />
       </TreeItem>
@@ -40,14 +44,24 @@ function FolderView() {
             nodeId="8"
             label="Alex"
             onClick={() =>
-              navigate(`${paths.markdown}?filepath=pages/meetings/alex.md`)
+              navigate(
+                pathFor({
+                  path: PathName.PAGES,
+                  params: { filepath: 'pages/meetings/alex.md' },
+                })
+              )
             }
           />
           <TreeItem
             nodeId="9"
             label="Fidji"
             onClick={() =>
-              navigate(`${paths.markdown}?filepath=pages/meetings/fidji.md`)
+              navigate(
+                pathFor({
+                  path: PathName.PAGES,
+                  params: { filepath: 'pages/meetings/fidji.md' },
+                })
+              )
             }
           />
         </TreeItem>
@@ -55,7 +69,12 @@ function FolderView() {
           nodeId="10"
           label="How to take notes"
           onClick={() =>
-            navigate(`${paths.markdown}?filepath=pages/how-to-take-notes.md`)
+            navigate(
+              pathFor({
+                path: PathName.PAGES,
+                params: { filepath: 'pages/how-to-take-notes.md' },
+              })
+            )
           }
         />
       </TreeItem>
@@ -77,7 +96,7 @@ export const menuItems = [
   {
     id: 'Dashboard',
     icon: (
-      <IconButton component={NavLink} to="/">
+      <IconButton component={NavLink} to={pathFor({ path: PathName.HOME })}>
         <Dashboard />
       </IconButton>
     ),

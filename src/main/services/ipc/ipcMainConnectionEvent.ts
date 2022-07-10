@@ -1,6 +1,6 @@
 import Electron from 'electron';
 
-import { IpcChannel, IpcChannelMessage } from '../../../lib/ipcMain';
+import { IpcMainChannel, IpcMainChannelMessage } from '../../../lib/ipcMain';
 
 // Minimal IpcMainEvent
 export class IpcMainConnectionEvent {
@@ -15,7 +15,10 @@ export class IpcMainConnectionEvent {
   }
 
   // Just like IpcMainEvent.reply, but with typed messages.
-  reply<T extends IpcChannel>(channel: T, message: IpcChannelMessage<T>): void {
+  reply<T extends IpcMainChannel>(
+    channel: T,
+    message: IpcMainChannelMessage<T>
+  ): void {
     this.event.reply(channel, [message]);
   }
 }

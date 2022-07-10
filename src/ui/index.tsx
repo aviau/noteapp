@@ -14,5 +14,5 @@ root.render(
   </MemoryRouter>
 );
 
-const uiMain = new UiMain(new IpcUiService());
+export const uiMain = new UiMain(new IpcUiService());
 uiMain.main();

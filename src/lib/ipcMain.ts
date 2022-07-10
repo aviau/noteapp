@@ -10,7 +10,7 @@
 
 // Channels for communications between processes. For clarity,
 // channels are one-way and prefixed by the original destination.
-export enum IpcChannel {
+export enum IpcMainChannel {
   /*
    *********
    ** IPC **
@@ -38,15 +38,18 @@ export enum IpcChannel {
 
   // Obtain the directory for storing user configuration.
   MAIN_UTILS_GET_USER_DATA_PATH = 'main:utils:get-user-data-path',
+
+  // Quit the app.
+  MAIN_UTILS_QUIT = 'main:utils:quit',
 }
 
 // Message interfaces for each of the channels.
-export interface IpcChannelMessage<T extends IpcChannel> {
-  data: T extends IpcChannel.MAIN_UTILS_PING
+export interface IpcMainChannelMessage<T extends IpcMainChannel> {
+  data: T extends IpcMainChannel.MAIN_UTILS_PING
     ? {
         message: string;
       }
-    : T extends IpcChannel.MAIN_UTILS_LOG
+    : T extends IpcMainChannel.MAIN_UTILS_LOG
     ? {
         message: string;
       }
@@ -54,12 +57,12 @@ export interface IpcChannelMessage<T extends IpcChannel> {
 }
 
 // Some channels can have responses.
-export interface IpcChannelResponse<T extends IpcChannel> {
-  data: T extends IpcChannel.MAIN_UTILS_PING
+export interface IpcMainChannelResponse<T extends IpcMainChannel> {
+  data: T extends IpcMainChannel.MAIN_UTILS_PING
     ? {
         reply: string;
       }
-    : T extends IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH
+    : T extends IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH
     ? {
         path: string;
       }

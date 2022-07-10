@@ -1,9 +1,9 @@
 import Electron, { MessageChannelMain } from 'electron';
 
 import {
-  IpcChannel,
-  IpcChannelMessage,
-  IpcChannelResponse,
+  IpcMainChannel,
+  IpcMainChannelMessage,
+  IpcMainChannelResponse,
 } from 'src/lib/ipcMain';
 import {
   IpcMainService,
@@ -61,6 +61,7 @@ export class NoteMain {
     this.ipcMainService.handleGetUserDataPath(() =>
       this.handleGetUserDataPath()
     );
+    this.ipcMainService.onQuit(() => this.onQuit());
 
     // Create windows
     await this.electronApp.whenReady();
@@ -73,20 +74,21 @@ export class NoteMain {
 
   private async handlePing(
     _event: IpcMainConnectionInvokeEvent,
-    message: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING>
-  ): Promise<IpcChannelResponse<IpcChannel.MAIN_UTILS_PING>> {
+    message: IpcMainChannelMessage<IpcMainChannel.MAIN_UTILS_PING>
+  ): Promise<IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_PING>> {
     console.log(`[NoteMain] got Pinged: ${message.data.message}`);
-    const replyMessage: IpcChannelResponse<IpcChannel.MAIN_UTILS_PING> = {
-      data: {
-        reply: `pong!`,
-      },
-    };
+    const replyMessage: IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_PING> =
+      {
+        data: {
+          reply: `pong!`,
+        },
+      };
     return replyMessage;
   }
 
   private async onLog(
     event: IpcMainConnectionEvent,
-    message: IpcChannelMessage<IpcChannel.MAIN_UTILS_LOG>
+    message: IpcMainChannelMessage<IpcMainChannel.MAIN_UTILS_LOG>
   ): Promise<void> {
     let source = 'UNKNOWN';
     if (
@@ -118,31 +120,36 @@ export class NoteMain {
     // Create a new channel
     const { port1, port2 } = new MessageChannelMain();
 
-    // Provide it to the worker
-    const workerMessage: IpcChannelMessage<IpcChannel.RENDERER_IPC_SET_CHANNEL> =
+    // Provide it to the workerIpcMainChannel
+    const workerMessage: IpcMainChannelMessage<IpcMainChannel.RENDERER_IPC_SET_CHANNEL> =
       {
         data: null,
       };
     workerWindow.webContents.postMessage(
-      IpcChannel.RENDERER_IPC_SET_CHANNEL,
+      IpcMainChannel.RENDERER_IPC_SET_CHANNEL,
       workerMessage,
       [port1]
     );
 
-    // Povide it to the UI.
-    const uiMessage: IpcChannelMessage<IpcChannel.RENDERER_IPC_SET_CHANNEL> = {
-      data: null,
-    };
+    // Povide it to the UI.IpcMainChannel
+    const uiMessage: IpcMainChannelMessage<IpcMainChannel.RENDERER_IPC_SET_CHANNEL> =
+      {
+        data: null,
+      };
     uiWindow.webContents.postMessage(
-      IpcChannel.RENDERER_IPC_SET_CHANNEL,
+      IpcMainChannel.RENDERER_IPC_SET_CHANNEL,
       uiMessage,
       [port2]
     );
   }
 
   private async handleGetUserDataPath(): Promise<
-    IpcChannelResponse<IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH>
+    IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH>
   > {
     return { data: { path: this.electronApp.getPath('userData') } };
+  }
+
+  private async onQuit(): Promise<void> {
+    this.electronApp.quit();
   }
 }

@@ -1,22 +1,22 @@
 import Electron from 'electron';
 
 import {
-  IpcChannel,
-  IpcChannelMessage,
-  IpcChannelResponse,
+  IpcMainChannel,
+  IpcMainChannelMessage,
+  IpcMainChannelResponse,
 } from 'src/lib/ipcMain';
 import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
 import { IpcMainConnectionInvokeEvent } from './ipcMainConnectionInvokeEvent';
 
-export type IpcMainServiceCallback<T extends IpcChannel> = (
+export type IpcMainServiceCallback<T extends IpcMainChannel> = (
   event: IpcMainConnectionEvent,
-  message: IpcChannelMessage<T>
+  message: IpcMainChannelMessage<T>
 ) => void;
 
-export type IpcMainServiceHandler<T extends IpcChannel> = (
+export type IpcMainServiceHandler<T extends IpcMainChannel> = (
   event: IpcMainConnectionInvokeEvent,
-  message: IpcChannelMessage<T>
-) => Promise<IpcChannelResponse<T>>;
+  message: IpcMainChannelMessage<T>
+) => Promise<IpcMainChannelResponse<T>>;
 
 /*
  * The IPC connection running in the main process. Responsible for
@@ -31,33 +31,33 @@ export class IpcMainService {
     this.ipcMain = ipcMain;
   }
 
-  private on<T extends IpcChannel>(
+  private on<T extends IpcMainChannel>(
     channel: T,
     callback: (
       event: IpcMainConnectionEvent,
-      message: IpcChannelMessage<T>
+      message: IpcMainChannelMessage<T>
     ) => void
   ) {
     const subscription = (event: Electron.IpcMainEvent, arg: unknown) => {
-      const message = arg as IpcChannelMessage<T>;
+      const message = arg as IpcMainChannelMessage<T>;
       const ipcMainConnectionEvent = new IpcMainConnectionEvent(event);
       callback(ipcMainConnectionEvent, message);
     };
     this.ipcMain.on(channel, subscription);
   }
 
-  private handle<T extends IpcChannel>(
+  private handle<T extends IpcMainChannel>(
     channel: T,
     callback: (
       event: IpcMainConnectionInvokeEvent,
-      message: IpcChannelMessage<T>
-    ) => Promise<IpcChannelResponse<T>>
+      message: IpcMainChannelMessage<T>
+    ) => Promise<IpcMainChannelResponse<T>>
   ) {
     const subscription = async (
       event: Electron.IpcMainInvokeEvent,
       arg: unknown
-    ): Promise<IpcChannelResponse<T>> => {
-      const message = arg as IpcChannelMessage<T>;
+    ): Promise<IpcMainChannelResponse<T>> => {
+      const message = arg as IpcMainChannelMessage<T>;
       const ipcMainConnectionInvokeEvent = new IpcMainConnectionInvokeEvent(
         event
       );
@@ -73,9 +73,9 @@ export class IpcMainService {
    */
 
   onRequestChannelRefresh(
-    callback: IpcMainServiceCallback<IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
+    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
   ): void {
-    this.on(IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, callback);
+    this.on(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, callback);
   }
 
   /*
@@ -85,18 +85,24 @@ export class IpcMainService {
    */
 
   handlePing(
-    callback: IpcMainServiceHandler<IpcChannel.MAIN_UTILS_PING>
+    callback: IpcMainServiceHandler<IpcMainChannel.MAIN_UTILS_PING>
   ): void {
-    this.handle(IpcChannel.MAIN_UTILS_PING, callback);
+    this.handle(IpcMainChannel.MAIN_UTILS_PING, callback);
   }
 
-  onLog(callback: IpcMainServiceCallback<IpcChannel.MAIN_UTILS_LOG>): void {
-    this.on(IpcChannel.MAIN_UTILS_LOG, callback);
+  onLog(callback: IpcMainServiceCallback<IpcMainChannel.MAIN_UTILS_LOG>): void {
+    this.on(IpcMainChannel.MAIN_UTILS_LOG, callback);
   }
 
   handleGetUserDataPath(
-    callback: IpcMainServiceHandler<IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH>
+    callback: IpcMainServiceHandler<IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH>
   ): void {
-    this.handle(IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH, callback);
+    this.handle(IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH, callback);
+  }
+
+  onQuit(
+    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_UTILS_QUIT>
+  ): void {
+    this.on(IpcMainChannel.MAIN_UTILS_QUIT, callback);
   }
 }

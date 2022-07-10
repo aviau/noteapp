@@ -1,15 +1,15 @@
 import Electron, { MessageChannelMain } from 'electron';
 
 import {
+  IpcChannel,
+  IpcChannelMessage,
+  IpcChannelResponse,
+} from 'src/lib/ipcMain';
+import {
   IpcMainService,
   IpcMainConnectionEvent,
   IpcMainConnectionInvokeEvent,
 } from './services/ipc';
-import {
-  IpcChannel,
-  IpcChannelMessage,
-  IpcChannelResponse,
-} from '../lib/ipcMain';
 import { ConfigurationService } from './services/configuration/configurationService';
 import { createWindows } from './services/startup/windows';
 

@@ -185,7 +185,7 @@
   },
   "build": {
     "productName": "noteapp",
-    "appId": "net.alexandrevieu.noteapp",
+    "appId": "net.alexandreviau.noteapp",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

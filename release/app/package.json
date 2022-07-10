@@ -8,7 +8,7 @@
     "email": "sophiebmercier@hotmail.com",
     "url": "https://github.com/Shuhala"
   },
-  "main": "./dist/main/main.js",
+  "main": "./dist/main/main.prod.js",
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
     "postinstall": "npm run electron-rebuild && npm run link-modules",

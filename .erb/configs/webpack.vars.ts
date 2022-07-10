@@ -2,8 +2,6 @@ const path = require('path');
 
 const rootPath = path.join(__dirname, '../..');
 
-const dllPath = path.join(__dirname, '../dll');
-
 const srcPath = path.join(rootPath, 'src');
 const srcMainPath = path.join(srcPath, 'main');
 const srcUiPath = path.join(srcPath, 'ui');
@@ -27,7 +25,6 @@ const uiPort = 1212;
 
 export default {
   rootPath,
-  dllPath,
   srcPath,
   srcMainPath,
   srcUiPath,

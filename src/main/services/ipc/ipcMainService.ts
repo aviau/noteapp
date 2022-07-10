@@ -4,7 +4,7 @@ import {
   IpcChannel,
   IpcChannelMessage,
   IpcChannelResponse,
-} from '../../../lib/ipcMain';
+} from 'src/lib/ipcMain';
 import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
 import { IpcMainConnectionInvokeEvent } from './ipcMainConnectionInvokeEvent';
 
@@ -66,11 +66,11 @@ export class IpcMainService {
     this.ipcMain.handle(channel, subscription);
   }
 
-  handlePing(
-    callback: IpcMainServiceHandler<IpcChannel.MAIN_UTILS_PING>
-  ): void {
-    this.handle(IpcChannel.MAIN_UTILS_PING, callback);
-  }
+  /*
+   *********
+   ** IPC **
+   *********
+   */
 
   onRequestChannelRefresh(
     callback: IpcMainServiceCallback<IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
@@ -78,7 +78,25 @@ export class IpcMainService {
     this.on(IpcChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, callback);
   }
 
+  /*
+   ***********
+   ** UTILS **
+   ***********
+   */
+
+  handlePing(
+    callback: IpcMainServiceHandler<IpcChannel.MAIN_UTILS_PING>
+  ): void {
+    this.handle(IpcChannel.MAIN_UTILS_PING, callback);
+  }
+
   onLog(callback: IpcMainServiceCallback<IpcChannel.MAIN_UTILS_LOG>): void {
     this.on(IpcChannel.MAIN_UTILS_LOG, callback);
+  }
+
+  handleGetUserDataPath(
+    callback: IpcMainServiceHandler<IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH>
+  ): void {
+    this.handle(IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH, callback);
   }
 }

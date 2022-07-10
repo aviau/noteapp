@@ -10,7 +10,6 @@ import {
   IpcMainConnectionEvent,
   IpcMainConnectionInvokeEvent,
 } from './services/ipc';
-import { ConfigurationService } from './services/configuration/configurationService';
 import { createWindows } from './services/startup/windows';
 
 /*
@@ -21,8 +20,6 @@ export class NoteMain {
 
   private electronApp: Electron.App;
 
-  private configurationService: ConfigurationService;
-
   private uiWindow: Electron.BrowserWindow | null;
 
   private workerWindow: Electron.BrowserWindow | null;
@@ -30,9 +27,6 @@ export class NoteMain {
   constructor(electronApp: Electron.App, ipcMainService: IpcMainService) {
     this.ipcMainService = ipcMainService;
     this.electronApp = electronApp;
-    this.configurationService = new ConfigurationService(
-      electronApp.getPath('userData')
-    );
     this.uiWindow = null;
     this.workerWindow = null;
   }
@@ -47,11 +41,26 @@ export class NoteMain {
 
   private async startup(): Promise<void> {
     // Listen to messages from other proceses.
-    this.ipcMainService.handlePing((e, m) => this.handlePing(e, m));
+
+    /*
+     *********
+     ** IPC **
+     *********
+     */
     this.ipcMainService.onRequestChannelRefresh(() =>
       this.onRequestChannelRefresh()
     );
+
+    /*
+     ***********
+     ** UTILS **
+     ***********
+     */
+    this.ipcMainService.handlePing((e, m) => this.handlePing(e, m));
     this.ipcMainService.onLog((e, m) => this.onLog(e, m));
+    this.ipcMainService.handleGetUserDataPath(() =>
+      this.handleGetUserDataPath()
+    );
 
     // Create windows
     await this.electronApp.whenReady();
@@ -67,12 +76,9 @@ export class NoteMain {
     message: IpcChannelMessage<IpcChannel.MAIN_UTILS_PING>
   ): Promise<IpcChannelResponse<IpcChannel.MAIN_UTILS_PING>> {
     console.log(`[NoteMain] got Pinged: ${message.data.message}`);
-    const currentVault = (
-      await this.configurationService.getVaultConfiguration()
-    ).data.current;
     const replyMessage: IpcChannelResponse<IpcChannel.MAIN_UTILS_PING> = {
       data: {
-        reply: `pong, config is at ${this.configurationService.userDataPath} and my current vault is ${currentVault}`,
+        reply: `pong!`,
       },
     };
     return replyMessage;
@@ -132,5 +138,11 @@ export class NoteMain {
       uiMessage,
       [port2]
     );
+  }
+
+  private async handleGetUserDataPath(): Promise<
+    IpcChannelResponse<IpcChannel.MAIN_UTILS_GET_USER_DATA_PATH>
+  > {
+    return { data: { path: this.electronApp.getPath('userData') } };
   }
 }

@@ -29,7 +29,7 @@ export function MainLayout() {
           anchor="left"
           defaultOpen
         />
-        <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
           <Outlet />
         </Box>
         <SideMenu

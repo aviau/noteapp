@@ -13,7 +13,7 @@ import { IconButton, TextField, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 
-import { paths } from '../../../utilities';
+import { paths } from '../../utilities';
 import { ThemeContext } from '../ThemeProvider';
 
 function FolderView() {

@@ -1,5 +1,5 @@
 import Electron, { IpcRendererEvent } from 'electron';
-import { IpcChannel, IpcChannelMessage } from '../../../lib/ipcMain';
+import { IpcChannel, IpcChannelMessage } from 'src/lib/ipcMain';
 
 /*
  * Responsible for all communications with:

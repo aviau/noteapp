@@ -2,7 +2,7 @@ import {
   IpcMainChannel,
   IpcMainChannelMessage,
   IpcMainChannelResponse,
-} from 'src/lib/ipc/ipcMain';
+} from '@/lib/ipc/ipcMain';
 
 declare global {
   interface Window {

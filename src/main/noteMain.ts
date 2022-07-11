@@ -10,25 +10,22 @@ import {
   IpcMainConnectionEvent,
   IpcMainConnectionInvokeEvent,
 } from './services/ipc';
-import { createWindows } from './services/startup/windows';
+import { WindowsService } from './services/windows';
 
 /*
  * NoteMain controls the main process and coordinates the others.
  */
 export class NoteMain {
-  private ipcMainService: IpcMainService;
+  private readonly ipcMainService: IpcMainService;
 
-  private electronApp: Electron.App;
+  private readonly electronApp: Electron.App;
 
-  private uiWindow: Electron.BrowserWindow | null;
-
-  private workerWindow: Electron.BrowserWindow | null;
+  private readonly windowsService: WindowsService;
 
   constructor(electronApp: Electron.App, ipcMainService: IpcMainService) {
     this.ipcMainService = ipcMainService;
     this.electronApp = electronApp;
-    this.uiWindow = null;
-    this.workerWindow = null;
+    this.windowsService = new WindowsService(electronApp);
   }
 
   main(): void {
@@ -61,15 +58,11 @@ export class NoteMain {
     this.ipcMainService.handleGetUserDataPath(() =>
       this.handleGetUserDataPath()
     );
-    this.ipcMainService.onQuit(() => this.onQuit());
+    this.ipcMainService.onQuit(() => this.windowsService.quit());
 
     // Create windows
     await this.electronApp.whenReady();
-    const { uiWindow, workerWindow } = await createWindows(this.electronApp);
-
-    // Save references to them so that we can manage communications.
-    this.uiWindow = uiWindow;
-    this.workerWindow = workerWindow;
+    await this.windowsService.start();
   }
 
   private async handlePing(
@@ -90,15 +83,16 @@ export class NoteMain {
     event: IpcMainConnectionEvent,
     message: IpcMainChannelMessage<IpcMainChannel.MAIN_UTILS_LOG>
   ): Promise<void> {
+    const { workerWindow, uiWindow } = this.windowsService.getWindows();
     let source = 'UNKNOWN';
     if (
-      this.workerWindow !== null &&
-      event.getSenderFrame() === this.workerWindow.webContents.mainFrame
+      workerWindow !== null &&
+      event.getSenderFrame() === workerWindow.webContents.mainFrame
     ) {
       source = 'WORKER';
     } else if (
-      this.uiWindow !== null &&
-      event.getSenderFrame() === this.uiWindow.webContents.mainFrame
+      uiWindow !== null &&
+      event.getSenderFrame() === uiWindow.webContents.mainFrame
     ) {
       source = 'UI';
     }
@@ -108,8 +102,7 @@ export class NoteMain {
   private async onRequestChannelRefresh(): Promise<void> {
     // We can't respond to this unless both the worker and the
     // ui windows were loaded.
-    const { uiWindow } = this;
-    const { workerWindow } = this;
+    const { workerWindow, uiWindow } = this.windowsService.getWindows();
     if (uiWindow === null || workerWindow === null) {
       console.log('[NoteMain] was asked for a worker channel before init');
       return;
@@ -139,9 +132,5 @@ export class NoteMain {
     IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH>
   > {
     return { data: { path: this.electronApp.getPath('userData') } };
-  }
-
-  private async onQuit(): Promise<void> {
-    this.electronApp.quit();
   }
 }

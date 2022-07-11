@@ -1,5 +1,5 @@
-import { assertUnreachable } from 'src/lib/asserts';
-import { IpcUiMessage, IpcUiMessageType } from 'src/lib/ipc/ipcUi';
+import { assertUnreachable } from '@/lib/asserts';
+import { IpcUiMessage, IpcUiMessageType } from '@/lib/ipc/ipcUi';
 import { IpcUiService } from './services/ipc/ipcUiService';
 
 export class UiMain {

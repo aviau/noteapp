@@ -1,7 +1,7 @@
 import { ArrowBack, ArrowForward, Close, Minimize } from '@mui/icons-material';
 import { IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { uiMain } from 'src/ui/index';
+import { uiMain } from '@/ui/index';
 
 export function TopBar() {
   const theme = useTheme();

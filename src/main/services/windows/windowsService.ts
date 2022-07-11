@@ -1,7 +1,7 @@
 /* eslint global-require: off, promise/always-return: off */
 import Electron, { BrowserWindow, shell } from 'electron';
 import path from 'path';
-import { srcPath } from 'src/utils';
+import { srcPath } from '@/utils';
 import { resolveHtmlPath } from './util';
 import { MenuBuilder } from './menu';
 

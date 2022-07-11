@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
-import { PathName } from 'src/ui/utilities/paths';
+import { PathName } from '@/ui/utilities/paths';
 import { Editor, HelloWorld, NotFound } from '../sections';
 import { MainLayout } from './MainLayout';
 

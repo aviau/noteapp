@@ -12,7 +12,7 @@ import { TreeItem, TreeView } from '@mui/lab';
 import { IconButton, TextField, Typography } from '@mui/material';
 import { useContext } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
-import { pathFor, PathName } from 'src/ui/utilities/paths';
+import { pathFor, PathName } from '@/ui/utilities/paths';
 import { ThemeContext } from '../ThemeProvider';
 
 function FolderView() {

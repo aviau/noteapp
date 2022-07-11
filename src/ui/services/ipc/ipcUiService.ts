@@ -2,9 +2,9 @@ import {
   IpcMainChannel,
   IpcMainChannelMessage,
   IpcMainChannelResponse,
-} from 'src/lib/ipc/ipcMain';
-import { IpcUiMessage } from 'src/lib/ipc/ipcUi';
-import { IpcWorkerMessage, IpcWorkerMessageType } from 'src/lib/ipc/ipcWorker';
+} from '@/lib/ipc/ipcMain';
+import { IpcUiMessage } from '@/lib/ipc/ipcUi';
+import { IpcWorkerMessage, IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
 
 type WorkerMessageCallback = (message: IpcUiMessage) => void;
 

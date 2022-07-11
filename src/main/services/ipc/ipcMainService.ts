@@ -4,7 +4,7 @@ import {
   IpcMainChannel,
   IpcMainChannelMessage,
   IpcMainChannelResponse,
-} from 'src/lib/ipc/ipcMain';
+} from '@/lib/ipc/ipcMain';
 import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
 import { IpcMainConnectionInvokeEvent } from './ipcMainConnectionInvokeEvent';
 

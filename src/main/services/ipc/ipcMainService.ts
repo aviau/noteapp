@@ -72,7 +72,7 @@ export class IpcMainService {
    *********
    */
 
-  onRequestChannelRefresh(
+  onIpcRequestChannelRefresh(
     callback: IpcMainServiceCallback<IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH>
   ): void {
     this.on(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, callback);
@@ -84,25 +84,39 @@ export class IpcMainService {
    ***********
    */
 
-  handlePing(
+  handleUtilsPing(
     callback: IpcMainServiceHandler<IpcMainChannel.MAIN_UTILS_PING>
   ): void {
     this.handle(IpcMainChannel.MAIN_UTILS_PING, callback);
   }
 
-  onLog(callback: IpcMainServiceCallback<IpcMainChannel.MAIN_UTILS_LOG>): void {
+  onUtilsLog(
+    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_UTILS_LOG>
+  ): void {
     this.on(IpcMainChannel.MAIN_UTILS_LOG, callback);
   }
 
-  handleGetUserDataPath(
+  handleUtilsGetUserDataPath(
     callback: IpcMainServiceHandler<IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH>
   ): void {
     this.handle(IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH, callback);
   }
 
-  onQuit(
-    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_UTILS_QUIT>
+  /*
+   *************
+   ** WINDOWS **
+   *************
+   */
+
+  onWindowsMinimize(
+    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_WINDOWS_MINIMIZE>
   ): void {
-    this.on(IpcMainChannel.MAIN_UTILS_QUIT, callback);
+    this.on(IpcMainChannel.MAIN_WINDOWS_MINIMIZE, callback);
+  }
+
+  onWindowsQuit(
+    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_WINDOWS_QUIT>
+  ): void {
+    this.on(IpcMainChannel.MAIN_WINDOWS_QUIT, callback);
   }
 }

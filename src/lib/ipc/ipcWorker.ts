@@ -2,19 +2,21 @@
 // It is mostly invoked by the UI.
 
 export enum IpcWorkerMessageType {
-  QUIT = 'quit',
-  PING = 'ping',
+  UTILS_PING = 'utils:ping',
+  WINDOWS_MINIMIZE = 'windows:minimize',
+  WINDOWS_QUIT = 'windows:quit',
 }
 
-export type IpcWorkerMessage = IpcWorkerMessageQuit | IpcWorkerMessagePing;
-
-export interface IpcWorkerMessageQuit {
-  type: IpcWorkerMessageType.QUIT;
-}
-
-export interface IpcWorkerMessagePing {
-  type: IpcWorkerMessageType.PING;
-  data: {
-    message: string;
-  };
-}
+export type IpcWorkerMessage =
+  | {
+      type: IpcWorkerMessageType.UTILS_PING;
+      data: {
+        message: string;
+      };
+    }
+  | {
+      type: IpcWorkerMessageType.WINDOWS_MINIMIZE;
+    }
+  | {
+      type: IpcWorkerMessageType.WINDOWS_QUIT;
+    };

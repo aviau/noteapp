@@ -108,6 +108,10 @@ export class WindowsService {
     };
   }
 
+  minimize(): void {
+    this.uiWindow?.minimize();
+  }
+
   quit(): void {
     this.app.quit();
   }

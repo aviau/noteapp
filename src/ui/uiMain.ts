@@ -30,7 +30,7 @@ export class UiMain {
   private async onWorkerMessage(message: IpcUiMessage): Promise<void> {
     const messageType = message.type;
     switch (messageType) {
-      case IpcUiMessageType.PING:
+      case IpcUiMessageType.UTILS_PING:
         this.ipcUiService.mainLog(`PING: ${message.data.message}`);
         break;
       default:
@@ -39,7 +39,11 @@ export class UiMain {
     }
   }
 
-  quit(): void {
-    this.ipcUiService.workerQuit();
+  workerMinimize(): void {
+    this.ipcUiService.workerWindowsMinimize();
+  }
+
+  workerQuit(): void {
+    this.ipcUiService.workerWindowsQuit();
   }
 }

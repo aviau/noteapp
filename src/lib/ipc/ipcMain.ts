@@ -39,8 +39,14 @@ export enum IpcMainChannel {
   // Obtain the directory for storing user configuration.
   MAIN_UTILS_GET_USER_DATA_PATH = 'main:utils:get-user-data-path',
 
-  // Quit the app.
-  MAIN_UTILS_QUIT = 'main:utils:quit',
+  /*
+   *************
+   ** WINDOWS **
+   *************
+   */
+
+  MAIN_WINDOWS_MINIMIZE = 'main:windows:minimize',
+  MAIN_WINDOWS_QUIT = 'main:windows:quit',
 }
 
 // Message interfaces for each of the channels.

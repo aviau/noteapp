@@ -121,24 +121,16 @@ export class NoteMain {
     const { port1, port2 } = new MessageChannelMain();
 
     // Provide it to the workerIpcMainChannel
-    const workerMessage: IpcMainChannelMessage<IpcMainChannel.RENDERER_IPC_SET_CHANNEL> =
-      {
-        data: null,
-      };
     workerWindow.webContents.postMessage(
       IpcMainChannel.RENDERER_IPC_SET_CHANNEL,
-      workerMessage,
+      null,
       [port1]
     );
 
     // Povide it to the UI.IpcMainChannel
-    const uiMessage: IpcMainChannelMessage<IpcMainChannel.RENDERER_IPC_SET_CHANNEL> =
-      {
-        data: null,
-      };
     uiWindow.webContents.postMessage(
       IpcMainChannel.RENDERER_IPC_SET_CHANNEL,
-      uiMessage,
+      null,
       [port2]
     );
   }

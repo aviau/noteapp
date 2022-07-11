@@ -1,5 +1,5 @@
 import Electron from 'electron';
-import { IpcWorkerMessage, IpcWorkerMessageType } from 'src/lib/ipcWorker';
+import { IpcWorkerMessage, IpcWorkerMessageType } from 'src/lib/ipc/ipcWorker';
 import { assertUnreachable } from 'src/lib/asserts';
 import { IpcWorkerService } from './services/ipc';
 import { ConfigurationService } from './services/configuration';

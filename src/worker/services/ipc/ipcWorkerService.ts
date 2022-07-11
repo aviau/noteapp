@@ -3,9 +3,9 @@ import {
   IpcMainChannel,
   IpcMainChannelMessage,
   IpcMainChannelResponse,
-} from 'src/lib/ipcMain';
-import { IpcWorkerMessage } from 'src/lib/ipcWorker';
-import { IpcUiMessage, IpcUiMessageType } from 'src/lib/ipcUi';
+} from 'src/lib/ipc/ipcMain';
+import { IpcWorkerMessage } from 'src/lib/ipc/ipcWorker';
+import { IpcUiMessage, IpcUiMessageType } from 'src/lib/ipc/ipcUi';
 
 type UiMessageCallback = (message: IpcWorkerMessage) => void;
 

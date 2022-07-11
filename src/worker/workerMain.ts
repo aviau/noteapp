@@ -39,11 +39,14 @@ export class WorkerMain {
   private async onUiMessage(message: IpcWorkerMessage): Promise<void> {
     const messageType = message.type;
     switch (messageType) {
-      case IpcWorkerMessageType.PING:
+      case IpcWorkerMessageType.UTILS_PING:
         this.ipcWorkerService.mainLog(`PING: ${message.data.message}`);
         break;
-      case IpcWorkerMessageType.QUIT:
-        this.ipcWorkerService.mainQuit();
+      case IpcWorkerMessageType.WINDOWS_MINIMIZE:
+        this.ipcWorkerService.mainWindowsMinimize();
+        break;
+      case IpcWorkerMessageType.WINDOWS_QUIT:
+        this.ipcWorkerService.mainWindowsQuit();
         break;
       default:
         this.ipcWorkerService.mainLog(`Unhandled UI message: ${message}`);

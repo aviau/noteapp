@@ -2,14 +2,12 @@
 // It is mostly invoked by the Worker.
 
 export enum IpcUiMessageType {
-  PING = 'ping',
+  UTILS_PING = 'utils:ping',
 }
 
-export type IpcUiMessage = IpcUiMessagePing;
-
-export interface IpcUiMessagePing {
-  type: IpcUiMessageType.PING;
+export type IpcUiMessage = {
+  type: IpcUiMessageType.UTILS_PING;
   data: {
     message: string;
   };
-}
+};

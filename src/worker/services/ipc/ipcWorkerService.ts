@@ -66,8 +66,12 @@ export class IpcWorkerService {
     this.mainSendMessage(IpcMainChannel.MAIN_UTILS_LOG, { data: { message } });
   }
 
-  mainQuit(): void {
-    this.mainSendMessage(IpcMainChannel.MAIN_UTILS_QUIT, null);
+  mainWindowsMinimize(): void {
+    this.mainSendMessage(IpcMainChannel.MAIN_WINDOWS_MINIMIZE, null);
+  }
+
+  mainWindowsQuit(): void {
+    this.mainSendMessage(IpcMainChannel.MAIN_WINDOWS_QUIT, null);
   }
 
   mainRefreshChannels(): void {
@@ -95,7 +99,7 @@ export class IpcWorkerService {
 
     // Say hi.
     this.uiSendMessage({
-      type: IpcUiMessageType.PING,
+      type: IpcUiMessageType.UTILS_PING,
       data: {
         message: 'Hello from worker',
       },

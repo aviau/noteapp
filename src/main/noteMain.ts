@@ -44,7 +44,7 @@ export class NoteMain {
      ** IPC **
      *********
      */
-    this.ipcMainService.onRequestChannelRefresh(() =>
+    this.ipcMainService.onIpcRequestChannelRefresh(() =>
       this.onRequestChannelRefresh()
     );
 
@@ -53,12 +53,19 @@ export class NoteMain {
      ** UTILS **
      ***********
      */
-    this.ipcMainService.handlePing((e, m) => this.handlePing(e, m));
-    this.ipcMainService.onLog((e, m) => this.onLog(e, m));
-    this.ipcMainService.handleGetUserDataPath(() =>
+    this.ipcMainService.handleUtilsPing((e, m) => this.handlePing(e, m));
+    this.ipcMainService.onUtilsLog((e, m) => this.onLog(e, m));
+    this.ipcMainService.handleUtilsGetUserDataPath(() =>
       this.handleGetUserDataPath()
     );
-    this.ipcMainService.onQuit(() => this.windowsService.quit());
+
+    /*
+     *************
+     ** WINDOWS **
+     *************
+     */
+    this.ipcMainService.onWindowsMinimize(() => this.windowsService.minimize());
+    this.ipcMainService.onWindowsQuit(() => this.windowsService.quit());
 
     // Create windows
     await this.electronApp.whenReady();

@@ -11,11 +11,9 @@
 // Channels for communications between processes. For clarity,
 // channels are one-way and prefixed by the original destination.
 export enum IpcMainChannel {
-  /*
-   *********
-   ** IPC **
-   *********
-   */
+  // *********
+  // ** IPC **
+  // *********
 
   // Somebody asked for channels to be refreshed.
   MAIN_IPC_REQUEST_CHANNEL_REFRESH = 'main:ipc:request-channel-refresh',
@@ -24,11 +22,9 @@ export enum IpcMainChannel {
   // It could be the UI or the worker process.
   RENDERER_IPC_SET_CHANNEL = 'renderer:ipc:set-channel',
 
-  /*
-   ***********
-   ** UTILS **
-   ***********
-   */
+  // ***********
+  // ** UTILS **
+  // ***********
 
   // Ping the main process
   MAIN_UTILS_PING = 'main:utils:ping',
@@ -39,44 +35,81 @@ export enum IpcMainChannel {
   // Obtain the directory for storing user configuration.
   MAIN_UTILS_GET_USER_DATA_PATH = 'main:utils:get-user-data-path',
 
-  /*
-   *************
-   ** WINDOWS **
-   *************
-   */
-
+  // *************
+  // ** WINDOWS **
+  // *************
   MAIN_WINDOWS_MINIMIZE = 'main:windows:minimize',
   MAIN_WINDOWS_QUIT = 'main:windows:quit',
 }
 
-// Message interfaces for each of the channels.
-export type IpcMainChannelMessage<T extends IpcMainChannel> =
-  T extends IpcMainChannel.MAIN_UTILS_PING
-    ? {
-        data: {
-          message: string;
-        };
-      }
-    : T extends IpcMainChannel.MAIN_UTILS_LOG
-    ? {
-        data: {
-          message: string;
-        };
-      }
-    : null;
+export type IpcMainChannelMessage = IpcMainMessages['request'];
+export type IpcMainChannelResponse = IpcMainMessages['response'];
 
-// Some channels can have responses.
-export type IpcMainChannelResponse<T extends IpcMainChannel> =
-  T extends IpcMainChannel.MAIN_UTILS_PING
-    ? {
+export type IpcMainChannelMessageOf<T extends IpcMainMessages['type']> =
+  Extract<IpcMainMessages, { type: T }>['request'];
+export type IpcMainChannelResponseOf<T extends IpcMainMessages['type']> =
+  Extract<IpcMainMessages, { type: T }>['response'];
+
+export type IpcMainMessages =
+  // *********
+  // ** IPC **
+  // *********
+  | {
+      type: IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH;
+      request: null;
+      response: null;
+    }
+  | {
+      type: IpcMainChannel.RENDERER_IPC_SET_CHANNEL;
+      request: null;
+      response: null;
+    }
+
+  // ***********
+  // ** UTILS **
+  // ***********
+  | {
+      type: IpcMainChannel.MAIN_UTILS_PING;
+      request: {
+        data: {
+          message: string;
+        };
+      };
+      response: {
         data: {
           reply: string;
         };
-      }
-    : T extends IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH
-    ? {
+      };
+    }
+  | {
+      type: IpcMainChannel.MAIN_UTILS_LOG;
+      request: {
+        data: {
+          message: string;
+        };
+      };
+      response: null;
+    }
+  | {
+      type: IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH;
+      request: null;
+      response: {
         data: {
           path: string;
         };
-      }
-    : null;
+      };
+    }
+
+  // *************
+  // ** WINDOWS **
+  // *************
+  | {
+      type: IpcMainChannel.MAIN_WINDOWS_MINIMIZE;
+      request: null;
+      response: null;
+    }
+  | {
+      type: IpcMainChannel.MAIN_WINDOWS_QUIT;
+      request: null;
+      response: null;
+    };

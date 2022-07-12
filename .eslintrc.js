@@ -12,6 +12,9 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
     'no-await-in-loop': 'off',
+    // Allow unused vars if they are prefixed by an underscore
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
   parserOptions: {
     ecmaVersion: 2020,

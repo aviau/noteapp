@@ -109,7 +109,7 @@ export type IpcMainMessages =
       request: null;
       response: null;
     }
-    | {
+  | {
       type: IpcMainChannel.MAIN_WINDOWS_MAXIMIZE;
       request: null;
       response: null;

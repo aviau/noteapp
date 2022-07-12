@@ -108,6 +108,10 @@ export class IpcUiService {
     this.workerSendMessage({ type: IpcWorkerMessageType.WINDOWS_MINIMIZE });
   }
 
+  workerWindowsMaximize(): void {
+    this.workerSendMessage({ type: IpcWorkerMessageType.WINDOWS_MAXIMIZE });
+  }
+
   workerWindowsQuit(): void {
     this.workerSendMessage({ type: IpcWorkerMessageType.WINDOWS_QUIT });
   }

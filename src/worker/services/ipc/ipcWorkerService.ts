@@ -70,6 +70,10 @@ export class IpcWorkerService {
     this.mainSendMessage(IpcMainChannel.MAIN_WINDOWS_MINIMIZE, null);
   }
 
+  mainWindowsMaximize(): void {
+    this.mainSendMessage(IpcMainChannel.MAIN_WINDOWS_MAXIMIZE, null);
+  }
+
   mainWindowsQuit(): void {
     this.mainSendMessage(IpcMainChannel.MAIN_WINDOWS_QUIT, null);
   }

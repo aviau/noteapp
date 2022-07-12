@@ -39,6 +39,7 @@ export enum IpcMainChannel {
   // ** WINDOWS **
   // *************
   MAIN_WINDOWS_MINIMIZE = 'main:windows:minimize',
+  MAIN_WINDOWS_MAXIMIZE = 'main:windows:maximize',
   MAIN_WINDOWS_QUIT = 'main:windows:quit',
 }
 
@@ -105,6 +106,11 @@ export type IpcMainMessages =
   // *************
   | {
       type: IpcMainChannel.MAIN_WINDOWS_MINIMIZE;
+      request: null;
+      response: null;
+    }
+    | {
+      type: IpcMainChannel.MAIN_WINDOWS_MAXIMIZE;
       request: null;
       response: null;
     }

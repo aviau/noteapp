@@ -114,6 +114,12 @@ export class IpcMainService {
     this.on(IpcMainChannel.MAIN_WINDOWS_MINIMIZE, callback);
   }
 
+  onWindowsMaximize(
+    callback: IpcMainServiceCallback<IpcMainChannel.MAIN_WINDOWS_MAXIMIZE>
+  ): void {
+    this.on(IpcMainChannel.MAIN_WINDOWS_MAXIMIZE, callback);
+  }
+
   onWindowsQuit(
     callback: IpcMainServiceCallback<IpcMainChannel.MAIN_WINDOWS_QUIT>
   ): void {

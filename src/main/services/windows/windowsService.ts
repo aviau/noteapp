@@ -67,6 +67,9 @@ export class WindowsService {
     const uiWindow = new BrowserWindow({
       show: false,
       icon: getAssetPath('icon.png'),
+      width: 1280,
+      height: 720,
+      frame: false,
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: false,

@@ -49,6 +49,10 @@ export class UiMain {
     this.ipcUiService.workerWindowsMinimize();
   }
 
+  workerMaximize(): void {
+    this.ipcUiService.workerWindowsMaximize();
+  }
+
   workerQuit(): void {
     this.ipcUiService.workerWindowsQuit();
   }

@@ -1,34 +1,21 @@
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import React, { createContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { SettingsContext } from '../SettingsProvider/context';
 
 import theme from './theme';
-
-type ThemeMode = 'light' | 'dark';
-
-export const ThemeContext = createContext<{
-  mode: ThemeMode;
-  toggleMode: () => void;
-}>({
-  mode: 'dark',
-  toggleMode: () => {},
-});
 
 interface Props {
   children: React.ReactNode;
 }
 
 export function ThemeProvider({ children }: Props) {
-  const [mode, setMode] = useState<ThemeMode>('dark');
+  const { settings } = useContext(SettingsContext);
+  const [mode, setMode] = useState(settings.appearance.mode);
 
-  const toggleMode = () => {
-    setMode(mode === 'dark' ? 'light' : 'dark');
-  };
-
-  return (
-    <MuiThemeProvider theme={theme(mode)}>
-      <ThemeContext.Provider value={{ mode, toggleMode }}>
-        {children}
-      </ThemeContext.Provider>
-    </MuiThemeProvider>
+  useEffect(
+    () => setMode(settings.appearance.mode),
+    [settings.appearance.mode]
   );
+
+  return <MuiThemeProvider theme={theme(mode)}>{children}</MuiThemeProvider>;
 }

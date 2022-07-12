@@ -1,5 +1,9 @@
 import { assertUnreachable } from '@/lib/asserts';
-import { IpcUiMessage, IpcUiMessageType } from '@/lib/ipc/ipcUi';
+import {
+  IpcUiMessage,
+  IpcUiMessageType,
+  IpcUiMessageUtilsPing,
+} from '@/lib/ipc/ipcUi';
 import { IpcUiService } from './services/ipc/ipcUiService';
 
 export class UiMain {
@@ -30,9 +34,11 @@ export class UiMain {
   private async onWorkerMessage(message: IpcUiMessage): Promise<void> {
     const messageType = message.type;
     switch (messageType) {
-      case IpcUiMessageType.UTILS_PING:
-        this.ipcUiService.mainLog(`PING: ${message.data.message}`);
+      case IpcUiMessageType.UTILS_PING: {
+        const msgPing: IpcUiMessageUtilsPing = message;
+        this.ipcUiService.mainLog(`PING: ${msgPing.data.message}`);
         break;
+      }
       default:
         this.ipcUiService.mainLog(`Unhandled Worker message: ${message}`);
         assertUnreachable(messageType);

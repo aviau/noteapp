@@ -7,16 +7,22 @@ export enum IpcWorkerMessageType {
   WINDOWS_QUIT = 'windows:quit',
 }
 
+export interface IpcWorkerMessageUtilsPing {
+  type: IpcWorkerMessageType.UTILS_PING;
+  data: {
+    message: string;
+  };
+}
+
+export interface IpcWorkerMessageWindowsMinimize {
+  type: IpcWorkerMessageType.WINDOWS_MINIMIZE;
+}
+
+export interface IpcWorkerMessageWindowsQuit {
+  type: IpcWorkerMessageType.WINDOWS_QUIT;
+}
+
 export type IpcWorkerMessage =
-  | {
-      type: IpcWorkerMessageType.UTILS_PING;
-      data: {
-        message: string;
-      };
-    }
-  | {
-      type: IpcWorkerMessageType.WINDOWS_MINIMIZE;
-    }
-  | {
-      type: IpcWorkerMessageType.WINDOWS_QUIT;
-    };
+  | IpcWorkerMessageUtilsPing
+  | IpcWorkerMessageWindowsMinimize
+  | IpcWorkerMessageWindowsQuit;

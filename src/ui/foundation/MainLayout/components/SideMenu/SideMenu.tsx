@@ -11,7 +11,7 @@ import {
 import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 
-import { TabItem, TabsPanel } from './components';
+import { TabsPanel, TabItem } from '@/ui/components';
 
 const ListDynamicColor = styled(List, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -80,7 +80,7 @@ export function SideMenu({
         sx={{ backgroundColor: theme.palette.secondary.main }}
       >
         <Box sx={{ minWidth: 400 }}>
-          <TabsPanel tabItems={tabItems} />
+          <TabsPanel items={tabItems} />
         </Box>
       </Collapse>
       <Divider orientation="vertical" flexItem />

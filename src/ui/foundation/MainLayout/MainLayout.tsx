@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Outlet } from 'react-router-dom';
 
-import { BottomBar, SideMenu, TopBar } from './components';
+import { BottomBar, SideMenu, TopBar, SettingsIconButton } from './components';
 import { leftTabItems, menuItems, rightTabItems } from './data';
 
 const AppContainer = styled(Box)(() => ({
@@ -19,12 +19,20 @@ const MainContainer = styled(Box)(() => ({
 }));
 
 export function MainLayout() {
+  const leftMenuItems = [
+    ...menuItems,
+    {
+      id: 'Settings',
+      icon: <SettingsIconButton />,
+    },
+  ];
+
   return (
     <AppContainer>
       <TopBar />
       <MainContainer>
         <SideMenu
-          menuItems={menuItems}
+          menuItems={leftMenuItems}
           tabItems={leftTabItems}
           anchor="left"
           defaultOpen

@@ -5,9 +5,11 @@ export enum IpcUiMessageType {
   UTILS_PING = 'utils:ping',
 }
 
-export type IpcUiMessage = {
+export interface IpcUiMessageUtilsPing {
   type: IpcUiMessageType.UTILS_PING;
   data: {
     message: string;
   };
-};
+}
+
+export type IpcUiMessage = IpcUiMessageUtilsPing;

@@ -65,6 +65,7 @@ export class NoteMain {
      *************
      */
     this.ipcMainService.onWindowsMinimize(() => this.windowsService.minimize());
+    this.ipcMainService.onWindowsMaximize(() => this.windowsService.maximize());
     this.ipcMainService.onWindowsQuit(() => this.windowsService.quit());
 
     // Create windows

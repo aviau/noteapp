@@ -1,36 +1,69 @@
 import { createTheme } from '@mui/material/styles';
 
+type CustomColor = {
+  accent: string;
+  primary: { light: string; medium: string; dark: string };
+};
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    custom: CustomColor;
+  }
+  interface PaletteOptions {
+    custom: CustomColor;
+  }
+}
+
+const themeColors = {
+  light: {
+    accent: '#8273e6',
+    primary: {
+      light: '#ffffff',
+      medium: '#f2f3f5',
+      dark: '#e3e5e8',
+    },
+  },
+  dark: {
+    accent: '#4d3ca6',
+    primary: {
+      light: '#202020',
+      medium: '#161616',
+      dark: '#060606',
+    },
+  },
+};
+
 const lightTheme = {
   primary: {
-    main: '#8273e6',
+    main: themeColors.light.accent,
   },
   secondary: {
-    main: '#f2f3f5',
-    dark: '#e3e5e8',
+    main: themeColors.light.primary.medium,
+    dark: themeColors.light.primary.dark,
   },
   text: {
     primary: '#2e3338',
-    secondary: '#3b4045',
+    secondary: '#d9d9d9',
   },
   background: {
-    default: '#ffffff',
+    default: themeColors.light.primary.light,
   },
 };
 
 const darkTheme = {
   primary: {
-    main: '#4d3ca6',
+    main: themeColors.dark.accent,
   },
   secondary: {
-    main: '#161616',
-    dark: '#060606',
+    main: themeColors.dark.primary.medium,
+    dark: themeColors.dark.primary.dark,
   },
   text: {
     primary: '#dcddde',
     secondary: '#8e8e8e',
   },
   background: {
-    default: '#202020',
+    default: themeColors.dark.primary.light,
   },
 };
 
@@ -39,6 +72,7 @@ const theme = (mode: 'light' | 'dark') => {
     palette: {
       mode,
       ...(mode === 'light' ? lightTheme : darkTheme),
+      custom: { ...(mode === 'light' ? themeColors.light : themeColors.dark) },
     },
     components: {
       MuiToolbar: {

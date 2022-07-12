@@ -1,7 +1,7 @@
 import {
   IpcMainChannel,
-  IpcMainChannelMessage,
-  IpcMainChannelResponse,
+  IpcMainChannelMessageOf,
+  IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
 import { IpcUiMessage } from '@/lib/ipc/ipcUi';
 import { IpcWorkerMessage, IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
@@ -41,15 +41,15 @@ export class IpcUiService {
 
   private mainSendMessage<T extends IpcMainChannel>(
     channel: T,
-    message: IpcMainChannelMessage<T>
+    message: IpcMainChannelMessageOf<T>
   ): void {
     window.electron.ipcRenderer.sendMessage(channel, message);
   }
 
   private async mainInvoke<T extends IpcMainChannel>(
     channel: T,
-    message: IpcMainChannelMessage<T>
-  ): Promise<IpcMainChannelResponse<T>> {
+    message: IpcMainChannelMessageOf<T>
+  ): Promise<IpcMainChannelResponseOf<T>> {
     return window.electron.ipcRenderer.invoke(channel, message);
   }
 

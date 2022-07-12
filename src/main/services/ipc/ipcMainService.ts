@@ -2,21 +2,21 @@ import Electron from 'electron';
 
 import {
   IpcMainChannel,
-  IpcMainChannelMessage,
-  IpcMainChannelResponse,
+  IpcMainChannelMessageOf,
+  IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
 import { IpcMainConnectionEvent } from './ipcMainConnectionEvent';
 import { IpcMainConnectionInvokeEvent } from './ipcMainConnectionInvokeEvent';
 
 export type IpcMainServiceCallback<T extends IpcMainChannel> = (
   event: IpcMainConnectionEvent,
-  message: IpcMainChannelMessage<T>
+  message: IpcMainChannelMessageOf<T>
 ) => void;
 
 export type IpcMainServiceHandler<T extends IpcMainChannel> = (
   event: IpcMainConnectionInvokeEvent,
-  message: IpcMainChannelMessage<T>
-) => Promise<IpcMainChannelResponse<T>>;
+  message: IpcMainChannelMessageOf<T>
+) => Promise<IpcMainChannelResponseOf<T>>;
 
 /*
  * The IPC connection running in the main process. Responsible for
@@ -35,11 +35,11 @@ export class IpcMainService {
     channel: T,
     callback: (
       event: IpcMainConnectionEvent,
-      message: IpcMainChannelMessage<T>
+      message: IpcMainChannelMessageOf<T>
     ) => void
   ) {
     const subscription = (event: Electron.IpcMainEvent, arg: unknown) => {
-      const message = arg as IpcMainChannelMessage<T>;
+      const message = arg as IpcMainChannelMessageOf<T>;
       const ipcMainConnectionEvent = new IpcMainConnectionEvent(event);
       callback(ipcMainConnectionEvent, message);
     };
@@ -50,14 +50,14 @@ export class IpcMainService {
     channel: T,
     callback: (
       event: IpcMainConnectionInvokeEvent,
-      message: IpcMainChannelMessage<T>
-    ) => Promise<IpcMainChannelResponse<T>>
+      message: IpcMainChannelMessageOf<T>
+    ) => Promise<IpcMainChannelResponseOf<T>>
   ) {
     const subscription = async (
       event: Electron.IpcMainInvokeEvent,
       arg: unknown
-    ): Promise<IpcMainChannelResponse<T>> => {
-      const message = arg as IpcMainChannelMessage<T>;
+    ): Promise<IpcMainChannelResponseOf<T>> => {
+      const message = arg as IpcMainChannelMessageOf<T>;
       const ipcMainConnectionInvokeEvent = new IpcMainConnectionInvokeEvent(
         event
       );

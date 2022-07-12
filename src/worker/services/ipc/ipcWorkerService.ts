@@ -1,8 +1,8 @@
 import Electron, { IpcRendererEvent } from 'electron';
 import {
   IpcMainChannel,
-  IpcMainChannelMessage,
-  IpcMainChannelResponse,
+  IpcMainChannelMessageOf,
+  IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
 import { IpcWorkerMessage } from '@/lib/ipc/ipcWorker';
 import { IpcUiMessage, IpcUiMessageType } from '@/lib/ipc/ipcUi';
@@ -36,7 +36,7 @@ export class IpcWorkerService {
 
   private mainSendMessage<T extends IpcMainChannel>(
     channel: T,
-    message: IpcMainChannelMessage<T>
+    message: IpcMainChannelMessageOf<T>
   ): void {
     this.ipcRenderer.send(channel, message);
   }
@@ -45,11 +45,11 @@ export class IpcWorkerService {
     channel: T,
     callback: (
       event: IpcRendererEvent,
-      message: IpcMainChannelMessage<T>
+      message: IpcMainChannelMessageOf<T>
     ) => void
   ): void {
     const subscription = (event: IpcRendererEvent, arg: unknown) => {
-      const message = arg as IpcMainChannelMessage<T>;
+      const message = arg as IpcMainChannelMessageOf<T>;
       callback(event, message);
     };
     this.ipcRenderer.on(channel, subscription);
@@ -57,8 +57,8 @@ export class IpcWorkerService {
 
   private async mainInvoke<T extends IpcMainChannel>(
     channel: T,
-    message: IpcMainChannelMessage<T>
-  ): Promise<IpcMainChannelResponse<T>> {
+    message: IpcMainChannelMessageOf<T>
+  ): Promise<IpcMainChannelResponseOf<T>> {
     return this.ipcRenderer.invoke(channel, message);
   }
 

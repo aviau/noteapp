@@ -2,8 +2,8 @@ import Electron, { MessageChannelMain } from 'electron';
 
 import {
   IpcMainChannel,
-  IpcMainChannelMessage,
-  IpcMainChannelResponse,
+  IpcMainChannelMessageOf,
+  IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
 import {
   IpcMainService,
@@ -75,10 +75,10 @@ export class NoteMain {
 
   private async handlePing(
     _event: IpcMainConnectionInvokeEvent,
-    message: IpcMainChannelMessage<IpcMainChannel.MAIN_UTILS_PING>
-  ): Promise<IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_PING>> {
+    message: IpcMainChannelMessageOf<IpcMainChannel.MAIN_UTILS_PING>
+  ): Promise<IpcMainChannelResponseOf<IpcMainChannel.MAIN_UTILS_PING>> {
     console.log(`[NoteMain] got Pinged: ${message.data.message}`);
-    const replyMessage: IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_PING> =
+    const replyMessage: IpcMainChannelResponseOf<IpcMainChannel.MAIN_UTILS_PING> =
       {
         data: {
           reply: `pong!`,
@@ -89,7 +89,7 @@ export class NoteMain {
 
   private async onLog(
     event: IpcMainConnectionEvent,
-    message: IpcMainChannelMessage<IpcMainChannel.MAIN_UTILS_LOG>
+    message: IpcMainChannelMessageOf<IpcMainChannel.MAIN_UTILS_LOG>
   ): Promise<void> {
     const { workerWindow, uiWindow } = this.windowsService.getWindows();
     let source = 'UNKNOWN';
@@ -137,7 +137,7 @@ export class NoteMain {
   }
 
   private async handleGetUserDataPath(): Promise<
-    IpcMainChannelResponse<IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH>
+    IpcMainChannelResponseOf<IpcMainChannel.MAIN_UTILS_GET_USER_DATA_PATH>
   > {
     return { data: { path: this.electronApp.getPath('userData') } };
   }

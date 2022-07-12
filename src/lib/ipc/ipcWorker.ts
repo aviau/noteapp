@@ -4,6 +4,7 @@
 export enum IpcWorkerMessageType {
   UTILS_PING = 'utils:ping',
   WINDOWS_MINIMIZE = 'windows:minimize',
+  WINDOWS_MAXIMIZE = 'windows:maximize',
   WINDOWS_QUIT = 'windows:quit',
 }
 
@@ -18,6 +19,10 @@ export interface IpcWorkerMessageWindowsMinimize {
   type: IpcWorkerMessageType.WINDOWS_MINIMIZE;
 }
 
+export interface IpcWorkerMessageWindowsMaximize {
+  type: IpcWorkerMessageType.WINDOWS_MAXIMIZE;
+}
+
 export interface IpcWorkerMessageWindowsQuit {
   type: IpcWorkerMessageType.WINDOWS_QUIT;
 }
@@ -25,4 +30,5 @@ export interface IpcWorkerMessageWindowsQuit {
 export type IpcWorkerMessage =
   | IpcWorkerMessageUtilsPing
   | IpcWorkerMessageWindowsMinimize
+  | IpcWorkerMessageWindowsMaximize
   | IpcWorkerMessageWindowsQuit;

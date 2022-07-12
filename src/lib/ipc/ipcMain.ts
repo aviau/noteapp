@@ -46,6 +46,7 @@ export enum IpcMainChannel {
    */
 
   MAIN_WINDOWS_MINIMIZE = 'main:windows:minimize',
+  MAIN_WINDOWS_MAXIMIZE = 'main:windows:maximize',
   MAIN_WINDOWS_QUIT = 'main:windows:quit',
 }
 

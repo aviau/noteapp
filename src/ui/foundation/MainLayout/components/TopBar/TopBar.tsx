@@ -19,11 +19,22 @@ export function TopBar() {
   };
 
   return (
-    <Toolbar sx={{ background: theme.palette.secondary.dark, minHeight: 30 }}>
+    <Toolbar
+      sx={{
+        background: theme.palette.secondary.dark,
+        minHeight: 30,
+        WebkitAppRegion: 'drag',
+        '& > button': {
+          WebkitAppRegion: 'no-drag',
+        },
+      }}
+    >
       <IconButton onClick={handleBack}>
         <ArrowBack
           fontSize="small"
-          sx={{ color: theme.palette.text.secondary }}
+          sx={{
+            color: theme.palette.text.secondary,
+          }}
         />
       </IconButton>
       <IconButton onClick={handleForward}>

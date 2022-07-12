@@ -69,6 +69,7 @@ export class WindowsService {
       icon: getAssetPath('icon.png'),
       width: 1280,
       height: 720,
+      frame: false,
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: false,

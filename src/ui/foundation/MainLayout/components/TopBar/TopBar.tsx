@@ -1,6 +1,13 @@
-import { ArrowBack, ArrowForward, Close, Minimize } from '@mui/icons-material';
+import {
+  ArrowBack,
+  ArrowForward,
+  Close,
+  CropSquare,
+  HorizontalRule,
+} from '@mui/icons-material';
 import { IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
 import { uiMain } from '@/ui/index';
 
 export function TopBar() {
@@ -13,6 +20,9 @@ export function TopBar() {
   const handleForward = () => navigate(1);
   const handleMinimize = () => {
     uiMain.workerMinimize();
+  };
+  const handleMaximize = () => {
+    uiMain.workerMaximize();
   };
   const handleQuit = () => {
     uiMain.workerQuit();
@@ -52,16 +62,19 @@ export function TopBar() {
         Note App
       </Typography>
       <IconButton onClick={handleMinimize}>
-        <Minimize
+        <HorizontalRule
           fontSize="small"
-          sx={{ flex: 1, color: theme.palette.text.secondary }}
+          sx={{ color: theme.palette.text.secondary }}
+        />
+      </IconButton>
+      <IconButton onClick={handleMaximize}>
+        <CropSquare
+          fontSize="small"
+          sx={{ color: theme.palette.text.secondary }}
         />
       </IconButton>
       <IconButton onClick={handleQuit}>
-        <Close
-          fontSize="small"
-          sx={{ flex: 1, color: theme.palette.text.secondary }}
-        />
+        <Close fontSize="small" sx={{ color: theme.palette.text.secondary }} />
       </IconButton>
     </Toolbar>
   );

@@ -45,6 +45,9 @@ export class WorkerMain {
       case IpcWorkerMessageType.WINDOWS_MINIMIZE:
         this.ipcWorkerService.mainWindowsMinimize();
         break;
+      case IpcWorkerMessageType.WINDOWS_MAXIMIZE:
+        this.ipcWorkerService.mainWindowsMaximize();
+        break;
       case IpcWorkerMessageType.WINDOWS_QUIT:
         this.ipcWorkerService.mainWindowsQuit();
         break;

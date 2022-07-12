@@ -115,6 +115,10 @@ export class WindowsService {
     this.uiWindow?.minimize();
   }
 
+  maximize(): void {
+    this.uiWindow?.maximize();
+  }
+
   quit(): void {
     this.app.quit();
   }

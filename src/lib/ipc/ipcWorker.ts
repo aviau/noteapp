@@ -8,27 +8,57 @@ export enum IpcWorkerMessageType {
   WINDOWS_QUIT = 'windows:quit',
 }
 
-export interface IpcWorkerMessageUtilsPing {
-  type: IpcWorkerMessageType.UTILS_PING;
-  data: {
-    message: string;
-  };
-}
+export type IpcWorkerMessage = IpcWorkerMessages['request'];
+export type IpcWorkerResponse = IpcWorkerMessages['response'];
 
-export interface IpcWorkerMessageWindowsMinimize {
-  type: IpcWorkerMessageType.WINDOWS_MINIMIZE;
-}
+export type IpcWorkerResponseFor<T extends IpcWorkerMessage> = Extract<
+  IpcWorkerMessages,
+  { request: T }
+>['response'];
 
-export interface IpcWorkerMessageWindowsMaximize {
-  type: IpcWorkerMessageType.WINDOWS_MAXIMIZE;
-}
+export type IpcWorkerMessageOf<T extends IpcWorkerMessageType> = Extract<
+  IpcWorkerMessages,
+  { request: { type: T } }
+>['request'];
 
-export interface IpcWorkerMessageWindowsQuit {
-  type: IpcWorkerMessageType.WINDOWS_QUIT;
-}
+export type IpcWorkerResponseOf<T extends IpcWorkerMessageType> = Extract<
+  IpcWorkerMessages,
+  { request: { type: T } }
+>['response'];
 
-export type IpcWorkerMessage =
-  | IpcWorkerMessageUtilsPing
-  | IpcWorkerMessageWindowsMinimize
-  | IpcWorkerMessageWindowsMaximize
-  | IpcWorkerMessageWindowsQuit;
+type IpcWorkerMessages =
+  // ***********
+  // ** UTILS **
+  // ***********
+  | {
+      request: {
+        type: IpcWorkerMessageType.UTILS_PING;
+        data: {
+          message: string;
+        };
+      };
+      response: {
+        message: string;
+      };
+    }
+  // *************
+  // ** WINDOWS **
+  // *************
+  | {
+      request: {
+        type: IpcWorkerMessageType.WINDOWS_MINIMIZE;
+      };
+      response: null;
+    }
+  | {
+      request: {
+        type: IpcWorkerMessageType.WINDOWS_MAXIMIZE;
+      };
+      response: null;
+    }
+  | {
+      request: {
+        type: IpcWorkerMessageType.WINDOWS_QUIT;
+      };
+      response: null;
+    };

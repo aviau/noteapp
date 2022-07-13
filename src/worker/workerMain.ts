@@ -1,5 +1,10 @@
 import Electron from 'electron';
-import { IpcWorkerMessage, IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
+import {
+  IpcWorkerMessageType,
+  IpcWorkerMessage,
+  IpcWorkerResponse,
+  IpcWorkerResponseOf,
+} from '@/lib/ipc/ipcWorker';
 import { assertUnreachable } from '@/lib/asserts';
 import { IpcWorkerService } from './services/ipc';
 import { ConfigurationService } from './services/configuration';
@@ -21,8 +26,8 @@ export class WorkerMain {
 
   private async startup(): Promise<void> {
     this.ipcWorkerService.mainLog('Started.');
-    this.ipcWorkerService.onUiMessage = (m) => {
-      this.onUiMessage(m);
+    this.ipcWorkerService.onWorkerMessage = (m) => {
+      return this.onWorkerMessage(m);
     };
     this.ipcWorkerService.start();
 
@@ -36,24 +41,37 @@ export class WorkerMain {
     );
   }
 
-  private async onUiMessage(message: IpcWorkerMessage): Promise<void> {
+  private async onWorkerMessage(
+    message: IpcWorkerMessage
+  ): Promise<IpcWorkerResponse> {
     const messageType = message.type;
     switch (messageType) {
-      case IpcWorkerMessageType.UTILS_PING:
+      case IpcWorkerMessageType.UTILS_PING: {
         this.ipcWorkerService.mainLog(`PING: ${message.data.message}`);
-        break;
-      case IpcWorkerMessageType.WINDOWS_MINIMIZE:
+        const resp: IpcWorkerResponseOf<typeof messageType> = {
+          message: 'workerpong',
+        };
+        return resp;
+      }
+      case IpcWorkerMessageType.WINDOWS_MINIMIZE: {
         this.ipcWorkerService.mainWindowsMinimize();
-        break;
-      case IpcWorkerMessageType.WINDOWS_MAXIMIZE:
+        const resp: IpcWorkerResponseOf<typeof messageType> = null;
+        return resp;
+      }
+      case IpcWorkerMessageType.WINDOWS_MAXIMIZE: {
         this.ipcWorkerService.mainWindowsMaximize();
-        break;
-      case IpcWorkerMessageType.WINDOWS_QUIT:
+        const resp: IpcWorkerResponseOf<typeof messageType> = null;
+        return resp;
+      }
+      case IpcWorkerMessageType.WINDOWS_QUIT: {
         this.ipcWorkerService.mainWindowsQuit();
-        break;
-      default:
-        this.ipcWorkerService.mainLog(`Unhandled UI message: ${message}`);
-        assertUnreachable(messageType);
+        const resp: IpcWorkerResponseOf<typeof messageType> = null;
+        return resp;
+      }
+      default: {
+        this.ipcWorkerService.mainLog(`Unhandled worker message: ${message}`);
+        return assertUnreachable(messageType);
+      }
     }
   }
 }

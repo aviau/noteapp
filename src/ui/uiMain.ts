@@ -1,8 +1,9 @@
 import { assertUnreachable } from '@/lib/asserts';
 import {
-  IpcUiMessage,
+  IpcUiMessageOf,
   IpcUiMessageType,
-  IpcUiMessageUtilsPing,
+  IpcUiMessage,
+  IpcUiResponse,
 } from '@/lib/ipc/ipcUi';
 import { IpcUiService } from './services/ipc/ipcUiService';
 
@@ -24,24 +25,24 @@ export class UiMain {
   private async startup(): Promise<void> {
     // Say hi and ask the main process for new channels.
     this.ipcUiService.mainLog('Started.');
-    this.ipcUiService.onWorkerMessage = (m) => {
-      this.onWorkerMessage(m);
+    this.ipcUiService.onUiMessage = async (m) => {
+      return this.onUiMessage(m);
     };
     this.ipcUiService.mainPing();
     this.ipcUiService.start();
   }
 
-  private async onWorkerMessage(message: IpcUiMessage): Promise<void> {
+  private async onUiMessage(message: IpcUiMessage): Promise<IpcUiResponse> {
     const messageType = message.type;
     switch (messageType) {
       case IpcUiMessageType.UTILS_PING: {
-        const msgPing: IpcUiMessageUtilsPing = message;
+        const msgPing: IpcUiMessageOf<IpcUiMessageType.UTILS_PING> = message;
         this.ipcUiService.mainLog(`PING: ${msgPing.data.message}`);
-        break;
+        return null;
       }
       default:
-        this.ipcUiService.mainLog(`Unhandled Worker message: ${message}`);
-        assertUnreachable(messageType);
+        this.ipcUiService.mainLog(`Unhandled ui message: ${message}`);
+        return assertUnreachable(messageType);
     }
   }
 

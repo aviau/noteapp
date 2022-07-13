@@ -46,12 +46,16 @@ export enum IpcMainChannel {
 export type IpcMainChannelMessage = IpcMainMessages['request'];
 export type IpcMainChannelResponse = IpcMainMessages['response'];
 
-export type IpcMainChannelMessageOf<T extends IpcMainMessages['type']> =
-  Extract<IpcMainMessages, { type: T }>['request'];
-export type IpcMainChannelResponseOf<T extends IpcMainMessages['type']> =
-  Extract<IpcMainMessages, { type: T }>['response'];
+export type IpcMainChannelMessageOf<T extends IpcMainChannel> = Extract<
+  IpcMainMessages,
+  { type: T }
+>['request'];
+export type IpcMainChannelResponseOf<T extends IpcMainChannel> = Extract<
+  IpcMainMessages,
+  { type: T }
+>['response'];
 
-export type IpcMainMessages =
+type IpcMainMessages =
   // *********
   // ** IPC **
   // *********

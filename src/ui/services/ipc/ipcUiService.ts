@@ -3,10 +3,15 @@ import {
   IpcMainChannelMessageOf,
   IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
-import { IpcUiMessage } from '@/lib/ipc/ipcUi';
-import { IpcWorkerMessage, IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
+import { IpcUiMessage, IpcUiResponse } from '@/lib/ipc/ipcUi';
+import {
+  IpcWorkerMessage,
+  IpcWorkerResponseFor,
+  IpcWorkerMessageType,
+  IpcWorkerResponseOf,
+} from '@/lib/ipc/ipcWorker';
 
-type WorkerMessageCallback = (message: IpcUiMessage) => void;
+type UiMessageCallback = (message: IpcUiMessage) => Promise<IpcUiResponse>;
 
 /*
  * Responsible for all communications with:
@@ -16,11 +21,11 @@ type WorkerMessageCallback = (message: IpcUiMessage) => void;
 export class IpcUiService {
   private workerChannel: MessagePort | null;
 
-  onWorkerMessage: WorkerMessageCallback | null;
+  onUiMessage: UiMessageCallback | null;
 
   constructor() {
     this.workerChannel = null;
-    this.onWorkerMessage = null;
+    this.onUiMessage = null;
   }
 
   start(): void {
@@ -63,10 +68,11 @@ export class IpcUiService {
     this.workerChannel = workerChannel;
 
     // Listen for messages
-    workerChannel.onmessage = (workerChannelEvent) => {
+    workerChannel.onmessage = async (workerChannelEvent) => {
       const workerMessage = workerChannelEvent.data as IpcUiMessage;
-      if (this.onWorkerMessage !== null) {
-        this.onWorkerMessage(workerMessage);
+      if (this.onUiMessage !== null) {
+        const resp = await this.onUiMessage(workerMessage);
+        this.mainLog(`[TODO] Unsent response: ${JSON.stringify(resp)}`);
         return;
       }
       this.mainLog(`Got unhandled worker message: ${workerMessage}`);
@@ -76,21 +82,46 @@ export class IpcUiService {
     workerChannel.start();
 
     // Say hi.
-    this.workerSendMessage({
-      type: IpcWorkerMessageType.UTILS_PING,
-      data: {
-        message: 'Hello from UI',
-      },
-    });
+    const resp: IpcWorkerResponseOf<IpcWorkerMessageType.UTILS_PING> =
+      await this.workerInvoke({
+        type: IpcWorkerMessageType.UTILS_PING,
+        data: {
+          message: 'Hello from UI',
+        },
+      });
+    this.mainLog(`Said hi to worker, he replied ${resp.message}.`);
   }
 
-  private workerSendMessage(message: IpcWorkerMessage): void {
+  private workerSendMessage(
+    message: IpcWorkerMessage,
+    transferables?: Transferable[]
+  ): void {
     if (this.workerChannel === null) {
       throw new Error(
         'Tried to send message before the workerChannel was initiated'
       );
     }
-    this.workerChannel.postMessage(message);
+    this.workerChannel.postMessage(message, transferables ?? []);
+  }
+
+  private async workerInvoke<T extends IpcWorkerMessage>(
+    message: T
+  ): Promise<IpcWorkerResponseFor<T>> {
+    // - Send a request to the worker.
+    // - Include a channel for the response.
+    // - Resolve the promise when the response is returned.
+    return new Promise((resolve, reject) => {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = ({ data }) => {
+        channel.port1.close();
+        if (data.error) {
+          reject(data.error);
+        } else {
+          resolve(data.result);
+        }
+      };
+      this.workerSendMessage(message, [channel.port2]);
+    });
   }
 
   async mainPing(): Promise<void> {

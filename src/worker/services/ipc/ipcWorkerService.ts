@@ -4,10 +4,12 @@ import {
   IpcMainChannelMessageOf,
   IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
-import { IpcWorkerMessage } from '@/lib/ipc/ipcWorker';
+import { IpcWorkerMessage, IpcWorkerResponse } from '@/lib/ipc/ipcWorker';
 import { IpcUiMessage, IpcUiMessageType } from '@/lib/ipc/ipcUi';
 
-type UiMessageCallback = (message: IpcWorkerMessage) => void;
+type WorkerMessageCallback = (
+  message: IpcWorkerMessage
+) => Promise<IpcWorkerResponse>;
 
 /*
  * Responsible for all communications with:
@@ -19,12 +21,12 @@ export class IpcWorkerService {
 
   private uiChannel: MessagePort | null;
 
-  onUiMessage: UiMessageCallback | null;
+  onWorkerMessage: WorkerMessageCallback | null;
 
   constructor(ipcRenderer: Electron.IpcRenderer) {
     this.ipcRenderer = ipcRenderer;
     this.uiChannel = null;
-    this.onUiMessage = null;
+    this.onWorkerMessage = null;
   }
 
   start() {
@@ -89,10 +91,16 @@ export class IpcWorkerService {
     this.uiChannel = uiChannel;
 
     // Listen for messages
-    uiChannel.onmessage = (uiChannelEvent) => {
+    uiChannel.onmessage = async (uiChannelEvent) => {
       const uiMessage = uiChannelEvent.data as IpcWorkerMessage;
-      if (this.onUiMessage !== null) {
-        this.onUiMessage(uiMessage);
+      const responseChannel = uiChannelEvent.ports[0];
+      if (this.onWorkerMessage !== null) {
+        try {
+          const resp = await this.onWorkerMessage(uiMessage);
+          responseChannel.postMessage({ result: resp });
+        } catch (e) {
+          responseChannel.postMessage({ error: e });
+        }
         return;
       }
       this.mainLog(`Got unhandled UI message: ${uiMessage}`);

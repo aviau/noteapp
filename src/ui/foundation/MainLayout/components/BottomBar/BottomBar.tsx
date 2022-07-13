@@ -1,6 +1,6 @@
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
-import useWindowDimensions from '@/ui/utilities/useWindowDimensions';
+import { useWindowDimensions } from '@/ui/hooks';
 
 export function BottomBar() {
   const theme = useTheme();

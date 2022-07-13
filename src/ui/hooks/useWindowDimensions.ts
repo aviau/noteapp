@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 
 /** Returns information about the window size */
-export default function useWindowDimensions() {
+export function useWindowDimensions() {
   const theme = useTheme();
   const hasWindow = typeof window !== 'undefined';
 

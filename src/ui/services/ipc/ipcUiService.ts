@@ -3,15 +3,13 @@ import {
   IpcMainChannelMessageOf,
   IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
-import { IpcUiMessage, IpcUiResponse } from '@/lib/ipc/ipcUi';
 import {
   IpcWorkerMessage,
   IpcWorkerResponseFor,
   IpcWorkerMessageType,
-  IpcWorkerResponseOf,
 } from '@/lib/ipc/ipcWorker';
 
-type UiMessageCallback = (message: IpcUiMessage) => Promise<IpcUiResponse>;
+import { SignalEmitter } from '@/lib/events/signalEmitter';
 
 /*
  * Responsible for all communications with:
@@ -21,11 +19,11 @@ type UiMessageCallback = (message: IpcUiMessage) => Promise<IpcUiResponse>;
 export class IpcUiService {
   private workerChannel: MessagePort | null;
 
-  onUiMessage: UiMessageCallback | null;
+  private readonly onNewWorkerChannel: SignalEmitter;
 
   constructor() {
     this.workerChannel = null;
-    this.onUiMessage = null;
+    this.onNewWorkerChannel = new SignalEmitter();
   }
 
   start(): void {
@@ -36,12 +34,12 @@ export class IpcUiService {
         event.data === IpcMainChannel.RENDERER_IPC_SET_CHANNEL
       ) {
         const [channel] = event.ports;
-        this.onSetWorkerChannel(channel);
+        this.setNewWorkerChannel(channel);
       }
     };
 
     // Ask for new channels.
-    this.refreshChannels();
+    this.mainRefreshChannels();
   }
 
   private mainSendMessage<T extends IpcMainChannel>(
@@ -58,38 +56,15 @@ export class IpcUiService {
     return window.electron.ipcRenderer.invoke(channel, message);
   }
 
-  private refreshChannels(): void {
+  private mainRefreshChannels(): void {
     this.mainSendMessage(IpcMainChannel.MAIN_IPC_REQUEST_CHANNEL_REFRESH, null);
   }
 
-  private async onSetWorkerChannel(workerChannel: MessagePort): Promise<void> {
+  private async setNewWorkerChannel(workerChannel: MessagePort): Promise<void> {
     // Save the new channel.
     this.mainLog('Got new worker channel.');
     this.workerChannel = workerChannel;
-
-    // Listen for messages
-    workerChannel.onmessage = async (workerChannelEvent) => {
-      const workerMessage = workerChannelEvent.data as IpcUiMessage;
-      if (this.onUiMessage !== null) {
-        const resp = await this.onUiMessage(workerMessage);
-        this.mainLog(`[TODO] Unsent response: ${JSON.stringify(resp)}`);
-        return;
-      }
-      this.mainLog(`Got unhandled worker message: ${workerMessage}`);
-    };
-
-    // Start the port
-    workerChannel.start();
-
-    // Say hi.
-    const resp: IpcWorkerResponseOf<IpcWorkerMessageType.UTILS_PING> =
-      await this.workerInvoke({
-        type: IpcWorkerMessageType.UTILS_PING,
-        data: {
-          message: 'Hello from UI',
-        },
-      });
-    this.mainLog(`Said hi to worker, he replied ${resp.message}.`);
+    this.onNewWorkerChannel.emit();
   }
 
   private workerSendMessage(
@@ -97,14 +72,15 @@ export class IpcUiService {
     transferables?: Transferable[]
   ): void {
     if (this.workerChannel === null) {
-      throw new Error(
-        'Tried to send message before the workerChannel was initiated'
-      );
+      this.onNewWorkerChannel.once(() => {
+        this.workerSendMessage(message, transferables);
+      });
+      return;
     }
     this.workerChannel.postMessage(message, transferables ?? []);
   }
 
-  private async workerInvoke<T extends IpcWorkerMessage>(
+  async workerInvoke<T extends IpcWorkerMessage>(
     message: T
   ): Promise<IpcWorkerResponseFor<T>> {
     // - Send a request to the worker.

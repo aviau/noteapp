@@ -5,7 +5,6 @@ import {
   IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
 import { IpcWorkerMessage, IpcWorkerResponse } from '@/lib/ipc/ipcWorker';
-import { IpcUiMessage, IpcUiMessageType } from '@/lib/ipc/ipcUi';
 
 type WorkerMessageCallback = (
   message: IpcWorkerMessage
@@ -19,13 +18,10 @@ type WorkerMessageCallback = (
 export class IpcWorkerService {
   private readonly ipcRenderer: Electron.IpcRenderer;
 
-  private uiChannel: MessagePort | null;
-
   onWorkerMessage: WorkerMessageCallback | null;
 
   constructor(ipcRenderer: Electron.IpcRenderer) {
     this.ipcRenderer = ipcRenderer;
-    this.uiChannel = null;
     this.onWorkerMessage = null;
   }
 
@@ -88,7 +84,6 @@ export class IpcWorkerService {
     // Save the new channel.
     this.mainLog('Got new UI channel.');
     const [uiChannel] = event.ports;
-    this.uiChannel = uiChannel;
 
     // Listen for messages
     uiChannel.onmessage = async (uiChannelEvent) => {
@@ -108,23 +103,6 @@ export class IpcWorkerService {
 
     // Start the port
     uiChannel.start();
-
-    // Say hi.
-    this.uiSendMessage({
-      type: IpcUiMessageType.UTILS_PING,
-      data: {
-        message: 'Hello from worker',
-      },
-    });
-  }
-
-  private uiSendMessage(message: IpcUiMessage): void {
-    if (this.uiChannel === null) {
-      throw new Error(
-        'Tried to send message before the uiChannel was initiated'
-      );
-    }
-    this.uiChannel.postMessage(message);
   }
 
   async mainUtilsGetUserDataPath(): Promise<string> {

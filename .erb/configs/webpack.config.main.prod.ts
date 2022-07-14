@@ -5,7 +5,6 @@
 import path from 'path';
 import webpack from 'webpack';
 import { merge } from 'webpack-merge';
-import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import baseConfig from './webpack.config.base';
 import webpackVars from './webpack.vars';
@@ -33,11 +32,7 @@ const configuration: webpack.Configuration = {
   },
 
   optimization: {
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-      }),
-    ],
+    minimize: true,
   },
 
   plugins: [

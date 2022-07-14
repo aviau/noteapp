@@ -9,6 +9,7 @@ import { IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { uiMain } from '@/ui/index';
+import { IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
 
 export function TopBar() {
   const theme = useTheme();
@@ -19,13 +20,13 @@ export function TopBar() {
   const handleBack = () => navigate(-1);
   const handleForward = () => navigate(1);
   const handleMinimize = () => {
-    uiMain.workerMinimize();
+    uiMain.workerInvoke({ type: IpcWorkerMessageType.WINDOWS_MINIMIZE });
   };
   const handleMaximize = () => {
-    uiMain.workerMaximize();
+    uiMain.workerInvoke({ type: IpcWorkerMessageType.WINDOWS_MAXIMIZE });
   };
   const handleQuit = () => {
-    uiMain.workerQuit();
+    uiMain.workerInvoke({ type: IpcWorkerMessageType.WINDOWS_QUIT });
   };
 
   return (

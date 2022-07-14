@@ -1,4 +1,9 @@
-import { IpcWorkerMessageType, IpcWorkerResponseOf } from '@/lib/ipc/ipcWorker';
+import {
+  IpcWorkerMessageType,
+  IpcWorkerMessage,
+  IpcWorkerResponseOf,
+  IpcWorkerResponseFor,
+} from '@/lib/ipc/ipcWorker';
 import { IpcUiService } from './services/ipc/ipcUiService';
 
 export class UiMain {
@@ -33,15 +38,9 @@ export class UiMain {
     this.ipcUiService.mainLog(`Said hi to worker, he replied ${resp.message}.`);
   }
 
-  workerMinimize(): void {
-    this.ipcUiService.workerWindowsMinimize();
-  }
-
-  workerMaximize(): void {
-    this.ipcUiService.workerWindowsMaximize();
-  }
-
-  workerQuit(): void {
-    this.ipcUiService.workerWindowsQuit();
+  async workerInvoke<T extends IpcWorkerMessage>(
+    message: T
+  ): Promise<IpcWorkerResponseFor<T>> {
+    return this.ipcUiService.workerInvoke(message);
   }
 }

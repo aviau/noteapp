@@ -3,11 +3,7 @@ import {
   IpcMainChannelMessageOf,
   IpcMainChannelResponseOf,
 } from '@/lib/ipc/ipcMain';
-import {
-  IpcWorkerMessage,
-  IpcWorkerResponseFor,
-  IpcWorkerMessageType,
-} from '@/lib/ipc/ipcWorker';
+import { IpcWorkerMessage, IpcWorkerResponseFor } from '@/lib/ipc/ipcWorker';
 
 import { SignalEmitter } from '@/lib/events/signalEmitter';
 
@@ -109,17 +105,5 @@ export class IpcUiService {
 
   mainLog(message: string): void {
     this.mainSendMessage(IpcMainChannel.MAIN_UTILS_LOG, { data: { message } });
-  }
-
-  workerWindowsMinimize(): void {
-    this.workerSendMessage({ type: IpcWorkerMessageType.WINDOWS_MINIMIZE });
-  }
-
-  workerWindowsMaximize(): void {
-    this.workerSendMessage({ type: IpcWorkerMessageType.WINDOWS_MAXIMIZE });
-  }
-
-  workerWindowsQuit(): void {
-    this.workerSendMessage({ type: IpcWorkerMessageType.WINDOWS_QUIT });
   }
 }

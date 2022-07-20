@@ -4,10 +4,12 @@ import { useCallback, useContext } from 'react';
 
 import {
   AppearanceSettings,
+  CommandsSettings,
   SettingsContext,
 } from '@/ui/foundation/SettingsProvider';
 import { TabsPanel } from '../TabsPanel';
 import { AppearanceTab } from './components';
+import { HotkeysTab } from './components/HotkeysTab';
 
 interface Props {
   open: boolean;
@@ -30,6 +32,16 @@ export function SettingsModal({ open, onClose }: Props) {
     [setSettings, settings]
   );
 
+  const handleCommandsChange = useCallback(
+    (values: CommandsSettings) => {
+      setSettings({
+        ...settings,
+        commands: values,
+      });
+    },
+    [setSettings, settings]
+  );
+
   const tabItems = [
     {
       id: 'appearance',
@@ -38,6 +50,16 @@ export function SettingsModal({ open, onClose }: Props) {
         <AppearanceTab
           settings={settings.appearance}
           onChange={handleAppearanceChange}
+        />
+      ),
+    },
+    {
+      id: 'hotkeys',
+      label: 'Hotkeys',
+      children: (
+        <HotkeysTab
+          settings={settings.commands}
+          onChange={handleCommandsChange}
         />
       ),
     },

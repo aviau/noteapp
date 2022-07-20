@@ -1,3 +1,4 @@
-export { useKeyListener } from './useKeyListener';
-export { useKeyPress } from './useKeyPressed';
+export { useCommands } from './useCommands';
+export { useHotkeyListener } from './useHotkeyListener';
+export { useToggle } from './useToggle';
 export { useWindowDimensions } from './useWindowDimensions';

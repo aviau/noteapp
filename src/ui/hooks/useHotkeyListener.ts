@@ -14,7 +14,9 @@ export function useHotkeyListener(): Hotkey | null {
   const [key, setKey] = useState<string | undefined>();
 
   useEffect(() => {
-    const downHandler = ({ key: eventKey }: KeyboardEvent) => {
+    const downHandler = (event: KeyboardEvent) => {
+      event.stopPropagation();
+      const eventKey = event.key;
       if (isModifier(eventKey) && !modifiers.includes(eventKey)) {
         setModifiers([...modifiers, eventKey]);
       }
@@ -27,11 +29,11 @@ export function useHotkeyListener(): Hotkey | null {
       setKey(undefined);
     };
 
-    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keydown', downHandler, { capture: true });
     window.addEventListener('keyup', upHandler);
 
     return () => {
-      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keydown', downHandler, { capture: true });
       window.removeEventListener('keyup', upHandler);
     };
   }, [modifiers]);

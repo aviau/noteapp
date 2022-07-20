@@ -11,7 +11,6 @@ interface AddHotkeyProps {
   onChange: (hotkey: Hotkey) => void;
 }
 
-// TODO: Bug - Don't trigger global hotkeys while listening to hotkey
 function AddHotkey({ onChange }: AddHotkeyProps) {
   const hotkey = useHotkeyListener();
 

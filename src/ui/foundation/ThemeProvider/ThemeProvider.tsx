@@ -1,7 +1,7 @@
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import React, { useContext, useEffect, useState } from 'react';
-import { SettingsContext } from '../SettingsProvider/context';
 
+import { SettingsContext } from '@/ui/foundation/SettingsProvider/context';
 import theme from './theme';
 
 interface Props {

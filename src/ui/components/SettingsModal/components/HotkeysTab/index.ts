@@ -1,0 +1,1 @@
+export { HotkeysTab } from './HotkeysTab';

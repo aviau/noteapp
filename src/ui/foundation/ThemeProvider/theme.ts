@@ -43,7 +43,7 @@ const lightTheme = {
   },
   text: {
     primary: '#2e3338',
-    secondary: '#d9d9d9',
+    secondary: '#8d9193',
   },
   background: {
     default: themeColors.light.primary.light,

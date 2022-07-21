@@ -1,7 +1,17 @@
-import { modifierKeys, Hotkey } from '@/ui/foundation/SettingsProvider';
+import {
+  Hotkey,
+  Modifier,
+  modifierKeys,
+} from '@/ui/foundation/SettingsProvider';
+
+export const sortModifiers = (modifiers: Modifier[]): Modifier[] => {
+  return modifiers.sort(
+    (a, b) => modifierKeys.indexOf(a) - modifierKeys.indexOf(b)
+  );
+};
 
 export const hotkeyToString = (hotkey: Hotkey): string =>
-  `${hotkey.modifiers.join('+')}+${hotkey.key.toUpperCase()}`;
+  `${sortModifiers(hotkey.modifiers).join('+')}+${hotkey.key.toUpperCase()}`;
 
 export const isModifier = (key: string) => modifierKeys.includes(key);
 

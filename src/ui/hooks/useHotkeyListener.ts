@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { Hotkey } from '@/ui/foundation/SettingsProvider';
-import { isKey, isModifier } from '@/ui/utilities';
+import { isKey, isModifier, sortModifiers } from '@/ui/utilities';
 
 /**
  * Listen for a hotkey pressed.
@@ -38,5 +38,7 @@ export function useHotkeyListener(): Hotkey | null {
     };
   }, [modifiers]);
 
-  return !isEmpty(modifiers) && key ? { modifiers, key } : null;
+  return !isEmpty(modifiers) && key
+    ? { modifiers: sortModifiers(modifiers), key }
+    : null;
 }

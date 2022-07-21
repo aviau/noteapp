@@ -5,7 +5,8 @@ export interface AppearanceSettings {
 }
 
 // TODO: map modifiers to alternative keys (eg. Control to CTRL)
-export const modifierKeys = ['Control', 'Alt', 'Meta', 'Shift'];
+// NOTE: The order of the modifiers below also determines the order we store them
+export const modifierKeys = ['Control', 'Meta', 'Shift', 'Alt'];
 
 export type Modifier = typeof modifierKeys[number];
 

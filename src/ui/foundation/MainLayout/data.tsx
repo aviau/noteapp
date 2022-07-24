@@ -6,14 +6,49 @@ import {
   Search,
   Umbrella,
 } from '@mui/icons-material';
-import { TreeItem, TreeView } from '@mui/lab';
+import { TreeItem as MuiTreeItem, TreeView } from '@mui/lab';
 import { IconButton, TextField, Typography } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import { pathFor, PathName } from '@/ui/utilities/paths';
+import { useVaultPages } from '@/ui/hooks/query';
+import { parsePathListToTree, TreeNode } from '@/lib/path/pathListToTree';
+
+interface TreeItemProps {
+  node: TreeNode;
+}
+
+function TreeItem({ node }: TreeItemProps) {
+  const navigate = useNavigate();
+  const handleOnClick = () => {
+    if (node.children.length !== 0) {
+      return;
+    }
+    navigate(
+      pathFor({
+        path: PathName.PAGES,
+        params: { filepath: node.fullName },
+      })
+    );
+  };
+
+  return (
+    <MuiTreeItem
+      nodeId={node.fullName}
+      key={node.fullName}
+      label={node.name}
+      onClick={handleOnClick}
+    >
+      {node.children.map((nodeItem) => (
+        <TreeItem key={nodeItem.fullName} node={nodeItem} />
+      ))}
+    </MuiTreeItem>
+  );
+}
 
 function FolderView() {
-  const navigate = useNavigate();
+  const { data } = useVaultPages('testvault');
+  const tree: TreeNode[] = parsePathListToTree(data || []);
 
   return (
     <TreeView
@@ -21,60 +56,9 @@ function FolderView() {
       defaultExpandIcon={<ChevronRight />}
       sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
-      <TreeItem nodeId="1" label="journals">
-        <TreeItem
-          nodeId="2"
-          label="day1"
-          onClick={() =>
-            navigate(
-              pathFor({
-                path: PathName.PAGES,
-                params: { filepath: 'journals/day1.md' },
-              })
-            )
-          }
-        />
-      </TreeItem>
-      <TreeItem nodeId="5" label="pages">
-        <TreeItem nodeId="6" label="meetings">
-          <TreeItem
-            nodeId="8"
-            label="Alex"
-            onClick={() =>
-              navigate(
-                pathFor({
-                  path: PathName.PAGES,
-                  params: { filepath: 'pages/meetings/alex.md' },
-                })
-              )
-            }
-          />
-          <TreeItem
-            nodeId="9"
-            label="Fidji"
-            onClick={() =>
-              navigate(
-                pathFor({
-                  path: PathName.PAGES,
-                  params: { filepath: 'pages/meetings/fidji.md' },
-                })
-              )
-            }
-          />
-        </TreeItem>
-        <TreeItem
-          nodeId="10"
-          label="How to take notes"
-          onClick={() =>
-            navigate(
-              pathFor({
-                path: PathName.PAGES,
-                params: { filepath: 'pages/how-to-take-notes.md' },
-              })
-            )
-          }
-        />
-      </TreeItem>
+      {tree.map((treeNode) => (
+        <TreeItem key={treeNode.fullName} node={treeNode} />
+      ))}
     </TreeView>
   );
 }

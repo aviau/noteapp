@@ -10,7 +10,7 @@ import React from 'react';
 
 export interface FormItemProps {
   title: string;
-  description: string;
+  description?: string;
   children: React.ReactNode;
 }
 
@@ -19,9 +19,11 @@ function FormItem({ title, description, children }: FormItemProps) {
     <Grid container>
       <Grid item xs={12} sm>
         <Typography variant="h6">{title}</Typography>
-        <Typography variant="body2" color="GrayText">
-          {description}
-        </Typography>
+        {description && (
+          <Typography variant="body2" color="GrayText">
+            {description}
+          </Typography>
+        )}
       </Grid>
       <Grid item xs={12} sm={3}>
         {children}

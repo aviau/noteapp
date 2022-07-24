@@ -54,8 +54,8 @@ export function useCommands(commands: Command[]) {
   }, [keyPressed, modifiersPressed, registerCommandsHotkeys]);
 
   useEffect(() => {
-    // Set activeCommand if modifiers and key are pressed
-    if (!isEmpty(modifiersPressed) && keyPressed) {
+    const isHotkeyPressed = !isEmpty(modifiersPressed) && keyPressed;
+    if (!activeCommand && isHotkeyPressed) {
       const command = registerCommandsHotkeys.get(
         hotkeyToString({
           modifiers: modifiersPressed,
@@ -63,10 +63,6 @@ export function useCommands(commands: Command[]) {
         })
       );
 
-      // TODO: Don't trigger another command unless we release the keys.
-      //  Example:
-      //    Given the hotkeys: [Command A == Ctrl+L] and [Command B == Ctrl+Alt+L]
-      //    Press and hold Ctrl+L triggers command A, then press Alt shouldn't trigger command B while still holding
       setActiveCommand(command);
     }
   }, [modifiersPressed, keyPressed, activeCommand, registerCommandsHotkeys]);

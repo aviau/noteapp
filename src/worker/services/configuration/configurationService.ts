@@ -63,7 +63,7 @@ export class ConfigurationService {
         return {
           key: ConfigurationKey.VAULT,
           data: {
-            current: '',
+            lastActiveVaultId: null,
           },
         };
       case ConfigurationKey.DEBUG:

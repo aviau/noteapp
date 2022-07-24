@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { uiMain } from '@/ui/index';
 import { IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
+import { useSettingsLastActiveVaultId } from '@/ui/hooks/query';
 
 export function TopBar() {
   const theme = useTheme();
@@ -28,6 +29,11 @@ export function TopBar() {
   const handleQuit = () => {
     uiMain.workerInvoke({ type: IpcWorkerMessageType.WINDOWS_QUIT });
   };
+
+  const lastVaultIdQuery = useSettingsLastActiveVaultId();
+  const appTitlePrefix = lastVaultIdQuery.data
+    ? `${lastVaultIdQuery.data} -`
+    : '';
 
   return (
     <Toolbar
@@ -60,7 +66,7 @@ export function TopBar() {
         component="p"
         sx={{ flex: 1, color: theme.palette.text.secondary }}
       >
-        Note App
+        {appTitlePrefix} Note App
       </Typography>
       <IconButton onClick={handleMinimize}>
         <HorizontalRule

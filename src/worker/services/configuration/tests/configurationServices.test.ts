@@ -9,7 +9,7 @@ test('vault has a default config', async () => {
   expect(loadedItem).toEqual({
     key: ConfigurationKey.VAULT,
     data: {
-      current: '',
+      lastActiveVaultId: null,
     },
   });
 });
@@ -20,14 +20,14 @@ test('save and load a config object', async () => {
   await service.setConfiguration({
     key: ConfigurationKey.VAULT,
     data: {
-      current: 'copina',
+      lastActiveVaultId: 'copina',
     },
   });
   const loadedItem = await service.getVaultConfiguration();
   expect(loadedItem).toEqual({
     key: ConfigurationKey.VAULT,
     data: {
-      current: 'copina',
+      lastActiveVaultId: 'copina',
     },
   });
 });

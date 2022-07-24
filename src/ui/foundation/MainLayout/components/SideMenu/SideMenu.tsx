@@ -17,6 +17,8 @@ const ListDynamicColor = styled(List, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<{ open: boolean }>(({ theme, open }) => ({
   height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
   backgroundColor: open
     ? theme.palette.secondary.dark
     : theme.palette.secondary.main,
@@ -31,14 +33,16 @@ export type MenuItem = {
 };
 
 interface Props {
-  menuItems: MenuItem[];
+  topItems?: MenuItem[];
+  bottomItems?: MenuItem[];
   tabItems: TabItem[];
   anchor: 'left' | 'right';
   defaultOpen?: boolean;
 }
 
 export function SideMenu({
-  menuItems,
+  topItems,
+  bottomItems,
   tabItems,
   anchor,
   defaultOpen = false,
@@ -64,11 +68,17 @@ export function SideMenu({
         flexDirection: anchor === 'left' ? 'row' : 'row-reverse',
       }}
     >
-      <ListDynamicColor open={open}>
-        <ListItem disablePadding>
+      <ListDynamicColor open={open} sx={{ pb: theme.spacing(10) }}>
+        <ListItem disablePadding sx={{ mb: theme.spacing(2) }}>
           <IconButton onClick={toggleDrawer}>{renderChevron()}</IconButton>
         </ListItem>
-        {menuItems.map(({ id, icon }) => (
+        {topItems?.map(({ id, icon }) => (
+          <ListItem key={id} disablePadding>
+            {icon}
+          </ListItem>
+        ))}
+        <Box sx={{ flex: 1 }} />
+        {bottomItems?.map(({ id, icon }) => (
           <ListItem key={id} disablePadding>
             {icon}
           </ListItem>

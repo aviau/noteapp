@@ -19,8 +19,7 @@ const MainContainer = styled(Box)(() => ({
 }));
 
 export function MainLayout() {
-  const leftMenuItems = [
-    ...menuItems,
+  const leftBottomItems = [
     {
       id: 'Settings',
       icon: <SettingsIconButton />,
@@ -32,7 +31,8 @@ export function MainLayout() {
       <TopBar />
       <MainContainer>
         <SideMenu
-          menuItems={leftMenuItems}
+          topItems={menuItems}
+          bottomItems={leftBottomItems}
           tabItems={leftTabItems}
           anchor="left"
           defaultOpen
@@ -41,7 +41,7 @@ export function MainLayout() {
           <Outlet />
         </Box>
         <SideMenu
-          menuItems={menuItems}
+          topItems={menuItems}
           tabItems={rightTabItems}
           anchor="right"
         />

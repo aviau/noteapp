@@ -1,8 +1,9 @@
 import { isEmpty } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 
 import { Command, Modifier } from '@/ui/foundation/SettingsProvider';
 import { hotkeyToString, isKey, isModifier } from '@/ui/utilities';
+import { GlobalStateContext } from '../foundation/GlobalStateProvider';
 
 /**
  * Bind commands hotkeys to keyboard event listener.
@@ -10,6 +11,7 @@ import { hotkeyToString, isKey, isModifier } from '@/ui/utilities';
  * @param commands
  */
 export function useCommands(commands: Command[]) {
+  const { commandEventTarget } = useContext(GlobalStateContext);
   const [modifiersPressed, setModifiersPressed] = useState<Modifier[]>([]);
   const [keyPressed, setKeyPressed] = useState<string | undefined>();
   const [activeCommand, setActiveCommand] = useState<Command>();
@@ -68,9 +70,13 @@ export function useCommands(commands: Command[]) {
   }, [modifiersPressed, keyPressed, activeCommand, registerCommandsHotkeys]);
 
   useEffect(() => {
-    // Trigger activeCommand callback if exists
-    if (activeCommand && activeCommand.callback) {
-      activeCommand.callback();
+    if (activeCommand) {
+      // Trigger activeCommand callback if exists
+      if (activeCommand.callback) {
+        activeCommand.callback();
+      }
+      // Dispatch command event
+      commandEventTarget.dispatchEvent(new CustomEvent(activeCommand.id));
     }
-  }, [activeCommand]);
+  }, [activeCommand, commandEventTarget]);
 }

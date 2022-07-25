@@ -1,11 +1,12 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { useRoutes } from 'react-router-dom';
 
+import { CommandPalette } from './CommandPalette';
 import { GlobalCommands } from './GlobalCommands';
-import { SettingsProvider } from './SettingsProvider';
 import { GlobalStateProvider } from './GlobalStateProvider';
-import { ThemeProvider } from './ThemeProvider';
 import { QueryClientProvider } from './QueryClientProvider';
+import { SettingsProvider } from './SettingsProvider';
+import { ThemeProvider } from './ThemeProvider';
 
 import routes from './routes';
 
@@ -20,6 +21,7 @@ export default function App() {
             <GlobalCommands />
             <CssBaseline />
             {routing}
+            <CommandPalette />
           </ThemeProvider>
         </SettingsProvider>
       </GlobalStateProvider>

@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 
 import { useSettingsLastActiveVaultId } from '@/ui/hooks/query';
-import { UiMain } from '@/ui/uiMain';
 import { IpcUiService } from '@/ui/services/ipc/ipcUiService';
-import { GlobalStateContext } from './context';
+import { UiMain } from '@/ui/uiMain';
+import { CommandEventTarget, GlobalStateContext } from './context';
 
 interface Props {
   children: React.ReactNode;
@@ -18,11 +18,16 @@ function createUiMain() {
 // GlobalStateProvider provies the minimum context that is
 // required for the app to render.
 export function GlobalStateProvider({ children }: Props) {
-  const box = useRef<UiMain>();
-  if (!box.current) {
-    box.current = createUiMain();
-  }
-  const { data: activeVaultId } = useSettingsLastActiveVaultId(box.current);
+  const uiMainRef = useRef<UiMain>();
+  uiMainRef.current ??= createUiMain();
+
+  const commandEventTargetRef = useRef<CommandEventTarget>();
+  commandEventTargetRef.current ??= new CommandEventTarget();
+
+  const { data: activeVaultId } = useSettingsLastActiveVaultId(
+    uiMainRef.current
+  );
+
   if (!activeVaultId) {
     return <></>;
   }
@@ -31,7 +36,8 @@ export function GlobalStateProvider({ children }: Props) {
     <GlobalStateContext.Provider
       value={{
         activeVaultId,
-        uiMain: box.current,
+        commandEventTarget: commandEventTargetRef.current,
+        uiMain: uiMainRef.current,
       }}
     >
       {children}

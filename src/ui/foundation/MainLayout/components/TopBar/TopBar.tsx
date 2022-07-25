@@ -9,14 +9,13 @@ import { IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import { IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
-import { useSettingsLastActiveVaultId } from '@/ui/hooks/query';
 import { GlobalStateContext } from '@/ui/foundation/GlobalStateProvider';
 import { useContext } from 'react';
 
 export function TopBar() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { uiMain } = useContext(GlobalStateContext);
+  const { uiMain, activeVaultId } = useContext(GlobalStateContext);
 
   // TODO: Improve navigation
   // Find if there's a previous or next path in the stack, so we can disable the button when unavailable
@@ -32,10 +31,7 @@ export function TopBar() {
     uiMain.workerInvoke({ type: IpcWorkerMessageType.WINDOWS_QUIT });
   };
 
-  const lastVaultIdQuery = useSettingsLastActiveVaultId();
-  const appTitlePrefix = lastVaultIdQuery.data
-    ? `${lastVaultIdQuery.data} -`
-    : '';
+  const appTitlePrefix = activeVaultId ? `${activeVaultId} -` : '';
 
   return (
     <Toolbar

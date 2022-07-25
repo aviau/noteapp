@@ -44,3 +44,6 @@ export class UiMain {
     return this.ipcUiService.workerInvoke(message);
   }
 }
+
+export const uiMainInstance = new UiMain(new IpcUiService());
+uiMainInstance.main();

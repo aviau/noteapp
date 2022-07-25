@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useSettingsLastActiveVaultId } from '@/ui/hooks/query';
+import { uiMainInstance } from '@/ui/uiMain';
 import { GlobalStateContext } from './context';
 
 interface Props {
@@ -16,7 +17,12 @@ export function GlobalStateProvider({ children }: Props) {
   }
 
   return (
-    <GlobalStateContext.Provider value={{ activeVaultId }}>
+    <GlobalStateContext.Provider
+      value={{
+        activeVaultId,
+        uiMain: uiMainInstance,
+      }}
+    >
       {children}
     </GlobalStateContext.Provider>
   );

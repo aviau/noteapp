@@ -6,7 +6,7 @@ export enum ConfigurationKey {
 export interface VaultConfiguration {
   key: ConfigurationKey.VAULT;
   data: {
-    current: string;
+    lastActiveVaultId: string | null;
   };
 }
 

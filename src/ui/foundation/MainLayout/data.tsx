@@ -10,9 +10,12 @@ import { TreeItem as MuiTreeItem, TreeView } from '@mui/lab';
 import { IconButton, TextField, Typography } from '@mui/material';
 import { NavLink, useNavigate } from 'react-router-dom';
 
+import { useContext } from 'react';
+
 import { pathFor, PathName } from '@/ui/utilities/paths';
 import { useVaultPages } from '@/ui/hooks/query';
 import { parsePathListToTree, TreeNode } from '@/lib/path/pathListToTree';
+import { GlobalStateContext } from '../GlobalStateProvider';
 
 interface TreeItemProps {
   node: TreeNode;
@@ -47,8 +50,9 @@ function TreeItem({ node }: TreeItemProps) {
 }
 
 function FolderView() {
-  const { data } = useVaultPages('testvault');
-  const tree: TreeNode[] = parsePathListToTree(data || []);
+  const { activeVaultId } = useContext(GlobalStateContext);
+  const { data: pages = [] } = useVaultPages(activeVaultId);
+  const tree: TreeNode[] = parsePathListToTree(pages);
 
   return (
     <TreeView

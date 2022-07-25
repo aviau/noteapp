@@ -2,10 +2,24 @@
 // It is mostly invoked by the UI.
 
 export enum IpcWorkerMessageType {
+  // ***********
+  // ** UTILS **
+  // ***********
   UTILS_PING = 'utils:ping',
+  // *************
+  // ** WINDOWS **
+  // *************
   WINDOWS_MINIMIZE = 'windows:minimize',
   WINDOWS_MAXIMIZE = 'windows:maximize',
   WINDOWS_QUIT = 'windows:quit',
+  // **************
+  // ** SETTINGS **
+  // **************
+  SETTINGS_GET_LAST_ACTIVE_VAULT_ID = 'settings:getLastActiveVaultId',
+  // ***********
+  // ** VAULT **
+  // ***********
+  VAULT_GET_FILES = 'vault:getFiles',
 }
 
 export type IpcWorkerMessage = IpcWorkerMessages['request'];
@@ -61,4 +75,27 @@ type IpcWorkerMessages =
         type: IpcWorkerMessageType.WINDOWS_QUIT;
       };
       response: null;
+    }
+  // **************
+  // ** SETTINGS **
+  // **************
+  | {
+      request: {
+        type: IpcWorkerMessageType.SETTINGS_GET_LAST_ACTIVE_VAULT_ID;
+      };
+      response: {
+        vaultId: string | null;
+      };
+    }
+  // ***********
+  // ** VAULT **
+  // ***********
+  | {
+      request: {
+        type: IpcWorkerMessageType.VAULT_GET_FILES;
+        vaultId: string;
+      };
+      response: {
+        files: string[];
+      };
     };

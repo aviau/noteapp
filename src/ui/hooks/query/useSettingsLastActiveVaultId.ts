@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
-import { useContext } from 'react';
-import { GlobalStateContext } from '@/ui/foundation/GlobalStateProvider';
 import { UiMain } from '@/ui/uiMain';
 import { QueryKey } from './keys';
 
@@ -14,8 +12,10 @@ const getSettingsLastActiveVaultId = async (
   return resp.vaultId;
 };
 
-export function useSettingsLastActiveVaultId() {
-  const { uiMain } = useContext(GlobalStateContext);
+export function useSettingsLastActiveVaultId(uiMain: UiMain) {
+  // Unlike other queries, this hook requires specifying uiMain.
+  // This is because it is used by the GlobalStateProvider, which can't
+  // use his own context.
   return useQuery([QueryKey.VAULT_PAGES], () =>
     getSettingsLastActiveVaultId(uiMain)
   );

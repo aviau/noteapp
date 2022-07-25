@@ -8,13 +8,15 @@ import {
 import { IconButton, Toolbar, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { uiMain } from '@/ui/index';
 import { IpcWorkerMessageType } from '@/lib/ipc/ipcWorker';
 import { useSettingsLastActiveVaultId } from '@/ui/hooks/query';
+import { GlobalStateContext } from '@/ui/foundation/GlobalStateProvider';
+import { useContext } from 'react';
 
 export function TopBar() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { uiMain } = useContext(GlobalStateContext);
 
   // TODO: Improve navigation
   // Find if there's a previous or next path in the stack, so we can disable the button when unavailable

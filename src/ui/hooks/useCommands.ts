@@ -71,12 +71,7 @@ export function useCommands(commands: Command[]) {
 
   useEffect(() => {
     if (activeCommand) {
-      // Trigger activeCommand callback if exists
-      if (activeCommand.callback) {
-        activeCommand.callback();
-      }
-      // Dispatch command event
-      commandEventTarget.dispatchEvent(new CustomEvent(activeCommand.id));
+      commandEventTarget.execute(activeCommand.id);
     }
   }, [activeCommand, commandEventTarget]);
 }

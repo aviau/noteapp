@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { UiMain } from '@/ui/uiMain';
 
-export class CommandEventTarget extends EventTarget {}
+import { UiMain } from '@/ui/uiMain';
+import { CommandEventTarget } from '../types';
 
 export interface GlobalState {
   activeVaultId: string;

@@ -3,7 +3,8 @@ import React, { useRef } from 'react';
 import { useSettingsLastActiveVaultId } from '@/ui/hooks/query';
 import { IpcUiService } from '@/ui/services/ipc/ipcUiService';
 import { UiMain } from '@/ui/uiMain';
-import { CommandEventTarget, GlobalStateContext } from './context';
+import { CommandEventTarget } from '../types';
+import { GlobalStateContext } from './context';
 
 interface Props {
   children: React.ReactNode;

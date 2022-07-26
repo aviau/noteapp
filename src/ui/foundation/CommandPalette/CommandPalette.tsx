@@ -13,14 +13,15 @@ import { first, isEmpty, last } from 'lodash';
 import React, { useContext, useRef, useState } from 'react';
 import { useEvent } from 'react-use';
 
-import { Command, SettingsContext } from '@/ui/foundation/SettingsProvider';
+import { Command } from '@/ui/foundation/SettingsProvider';
 import { useCommandListener } from '@/ui/hooks';
 import { hotkeyToString } from '@/ui/utilities';
+import { GlobalStateContext } from '../GlobalStateProvider/context';
 
 // TODO: Transform this component into a plugin
 export function CommandPalette() {
   const theme = useTheme();
-  const { settings } = useContext(SettingsContext);
+  const { commandEventTarget } = useContext(GlobalStateContext);
   const [open, setOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
 
@@ -58,13 +59,12 @@ export function CommandPalette() {
   };
 
   const handleCommandClick = (command: Command) => {
-    if (command.callback) {
-      command.callback();
-    }
+    commandEventTarget.execute(command.id);
     setOpen(false);
   };
 
-  const commands = settings.commands.filter((command) =>
+  const commands = Array.from(commandEventTarget.commands.values());
+  const filteredCommands = commands.filter((command) =>
     command.name.toLowerCase().includes(filterValue.toLowerCase())
   );
 
@@ -92,7 +92,7 @@ export function CommandPalette() {
           sx={{ mb: 2 }}
         />
         <MenuList ref={menuListRef}>
-          {commands.map((command) => (
+          {filteredCommands.map((command) => (
             <MenuItem
               key={command.id}
               onClick={() => handleCommandClick(command)}
@@ -107,7 +107,7 @@ export function CommandPalette() {
               ))}
             </MenuItem>
           ))}
-          {isEmpty(commands) && (
+          {isEmpty(filteredCommands) && (
             <Typography variant="body2" color="text.secondary" align="center">
               No commands found.
             </Typography>

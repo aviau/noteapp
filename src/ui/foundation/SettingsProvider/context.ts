@@ -25,6 +25,14 @@ export const defaultSettings: Settings = {
         console.log('HelloWorld');
       },
     },
+    {
+      id: 'command_palette',
+      name: 'Command Palette',
+      hotkeys: [
+        { modifiers: ['Control'], key: 'p' },
+        { modifiers: ['Meta'], key: 'p' },
+      ],
+    },
   ],
 };
 

@@ -9,26 +9,49 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { isEmpty } from 'lodash';
-import React, { useContext, useState } from 'react';
+import { first, isEmpty, last } from 'lodash';
+import React, { useContext, useRef, useState } from 'react';
+import { useEvent } from 'react-use';
 
 import { Command, SettingsContext } from '@/ui/foundation/SettingsProvider';
 import { useCommandListener } from '@/ui/hooks';
 import { hotkeyToString } from '@/ui/utilities';
 
 // TODO: Transform this component into a plugin
-// TODO: Fix keyboard accessibility
 export function CommandPalette() {
   const theme = useTheme();
   const { settings } = useContext(SettingsContext);
   const [open, setOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
 
+  const filterRef = useRef<HTMLInputElement>(null);
+  const menuListRef = useRef<HTMLUListElement>(null);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   // TODO: define command id somewhere
   useCommandListener('command_palette', handleOpen, handleClose);
+
+  const handleKeyboardNavigation = ({ key }: KeyboardEvent) => {
+    if (!open) return;
+
+    const isFilterActive = document.activeElement === filterRef.current;
+    if (isFilterActive) {
+      if (key === 'ArrowDown') {
+        (first(menuListRef.current?.children) as HTMLAnchorElement).focus();
+      } else if (key === 'ArrowUp') {
+        (last(menuListRef.current?.children) as HTMLAnchorElement).focus();
+      }
+    } else {
+      const isChar = /^.$/u.test(key);
+      if (isChar || key === 'Backspace') {
+        filterRef.current?.focus();
+      }
+    }
+  };
+
+  useEvent('keydown', handleKeyboardNavigation);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterValue(event.target.value);
@@ -59,14 +82,16 @@ export function CommandPalette() {
         }}
       >
         <TextField
+          inputRef={filterRef}
           placeholder="Filter..."
           variant="outlined"
           size="small"
           fullWidth
+          autoFocus
           onChange={handleFilterChange}
           sx={{ mb: 2 }}
         />
-        <MenuList>
+        <MenuList ref={menuListRef}>
           {commands.map((command) => (
             <MenuItem
               key={command.id}

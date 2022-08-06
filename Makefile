@@ -25,11 +25,12 @@ build-ui: node_modules
 build-worker: node_modules
 	npm run build:worker
 
+.PHONY: build
+build: build-main build-ui build-worker
+
 .PHONY: test
 test: node_modules \
-		build-main \
-		build-worker \
-		build-ui
+		build \
 	npm run test
 
 .PHONY: package

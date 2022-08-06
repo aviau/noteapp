@@ -80,10 +80,10 @@ export class WorkerMain {
           const resp: IpcWorkerResponseOf<typeof messageType> = null;
           return resp;
         }
-        // **************
-        // ** SETTINGS **
-        // **************
-        case IpcWorkerMessageType.SETTINGS_GET_LAST_ACTIVE_VAULT_ID: {
+        // *******************
+        // ** CONFIGURATION **
+        // *******************
+        case IpcWorkerMessageType.CONFIGURATION_GET_LAST_ACTIVE_VAULT_ID: {
           const vaultConfig =
             await configurationService.getVaultConfiguration();
           const resp: IpcWorkerResponseOf<typeof messageType> = {

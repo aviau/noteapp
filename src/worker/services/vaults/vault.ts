@@ -1,3 +1,5 @@
+import { getFilesAndDirectories } from '@/lib/fs';
+
 export class Vault {
   private readonly path: string;
 
@@ -6,11 +8,8 @@ export class Vault {
   }
 
   async getFiles(): Promise<string[]> {
-    return [
-      'journals/day1.md',
-      'pages/meetings/alex.md',
-      'pages/meetings/fidji.md',
-      'pages/how-to-take-nodes.md',
-    ];
+    return (await getFilesAndDirectories(this.path))
+      .filter((e) => !e.isDirectory)
+      .map((e) => e.name);
   }
 }

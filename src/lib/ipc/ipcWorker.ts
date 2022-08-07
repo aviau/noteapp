@@ -12,10 +12,10 @@ export enum IpcWorkerMessageType {
   WINDOWS_MINIMIZE = 'windows:minimize',
   WINDOWS_MAXIMIZE = 'windows:maximize',
   WINDOWS_QUIT = 'windows:quit',
-  // **************
-  // ** SETTINGS **
-  // **************
-  SETTINGS_GET_LAST_ACTIVE_VAULT_ID = 'settings:getLastActiveVaultId',
+  // *******************
+  // ** CONFIGURATION **
+  // *******************
+  CONFIGURATION_GET_LAST_ACTIVE_VAULT_ID = 'configuration:getLastActiveVaultId',
   // ***********
   // ** VAULT **
   // ***********
@@ -76,12 +76,12 @@ type IpcWorkerMessages =
       };
       response: null;
     }
-  // **************
-  // ** SETTINGS **
-  // **************
+  // *******************
+  // ** CONFIGURATION **
+  // *******************
   | {
       request: {
-        type: IpcWorkerMessageType.SETTINGS_GET_LAST_ACTIVE_VAULT_ID;
+        type: IpcWorkerMessageType.CONFIGURATION_GET_LAST_ACTIVE_VAULT_ID;
       };
       response: {
         vaultId: string | null;

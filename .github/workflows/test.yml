@@ -11,9 +11,14 @@ jobs:
         os:
           - "macos-12"
           - "ubuntu-20.04"
-#          - windows-2022
 
     steps:
+      - name: install dependencies (ubuntu only)
+        if: matrix.os == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+
       - name: Check out Git repository
         uses: actions/checkout@v1
 
@@ -22,18 +27,13 @@ jobs:
         with:
           node-version: 16
 
-      - name: npm install
-        run: |
-          npm install
+      - name: npm ci
+        run: npm ci
 
-      - name: npm test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npm run package
-          npm run lint
-          npm run test
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
-# Failing beacuse virtual framebuffer not installed
-#          npm run build-e2e
-#          npm test-e2e
+      - name: Build
+        run: make build

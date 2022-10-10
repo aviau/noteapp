@@ -2,6 +2,10 @@
 run: node_modules
 	npm run tauri dev
 
+.PHONY: build
+build: node_modules
+	npm run tauri build
+
 node_modules:
 	npm ci
 
@@ -13,3 +17,4 @@ format: node_modules
 .PHONY: clean
 clean:
 	rm -rf node_modules
+	rm -rf dist

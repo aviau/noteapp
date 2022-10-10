@@ -1,17 +1,5 @@
 # noteapp
 
-## `settings.json`
-
-The app currently does not have a UI to set the active vault.
-
-You can set it using:
-- `~/.config/Electron/settings.json` on Linux.
-- `~/Library/Application Support/Electron/settings.json` on macOS.
-
-```json
-{
-    "vault": {
-        "lastActiveVaultId": "/home/aviau/vaultname"
-    }
-}
-```
+## History
+1. This app used to be written using [Electron](https://www.electronjs.org/). The remains are in `electron/`.
+2. The app was rewritten using [Tauri](https://tauri.app/).

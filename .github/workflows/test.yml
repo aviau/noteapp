@@ -35,5 +35,8 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Lint
+        run: make lint
+
       - name: Build
         run: make build

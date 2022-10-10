@@ -9,6 +9,11 @@ build: node_modules
 node_modules:
 	npm ci
 
+.PHONY: lint
+lint: node_modules
+	cd src-tauri && cargo fmt --check
+	npm run lint
+
 .PHONY: format
 format: node_modules
 	cd src-tauri && cargo fmt
@@ -18,3 +23,4 @@ format: node_modules
 clean:
 	rm -rf node_modules
 	rm -rf dist
+	rm -rf src-tauri/target

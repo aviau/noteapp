@@ -1,7 +1,16 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
+import { Ui2MainMessageType, Ui2MainRequest, Ui2MainResponseFor } from "./ipc/ui2Main";
 import "./App.css";
+
+
+async function invokeUi2Main<T extends Ui2MainRequest>(
+  request: T
+): Promise<Ui2MainResponseFor<T>> {
+  return await invoke(request.type, request);
+};
+
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -9,7 +18,11 @@ function App() {
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+    const resp = await invokeUi2Main({
+      type: Ui2MainMessageType.UTILS_PING,
+      message: name,
+    });
+    setGreetMsg(resp.message);
   }
 
   return (

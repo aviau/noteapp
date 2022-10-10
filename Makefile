@@ -1,5 +1,5 @@
 .PHONY: run
-run:
+run: node_modules
 	npm run tauri dev
 
 node_modules:

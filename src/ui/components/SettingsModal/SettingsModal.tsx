@@ -10,6 +10,7 @@ import {
 import { TabsPanel } from "../TabsPanel";
 import { AppearanceTab } from "./components";
 import { HotkeysTab } from "./components/HotkeysTab";
+import { AboutTab } from "./components/AboutTab";
 
 interface Props {
   open: boolean;
@@ -63,6 +64,13 @@ export function SettingsModal({ open, onClose }: Props) {
                 />
             ),
         },
+        {
+            id: "about",
+            label: "About",
+            children: (
+                <AboutTab />
+            ),
+        }
     ];
 
     return (

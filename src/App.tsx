@@ -1,7 +1,11 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
-import { Ui2MainMessageType, Ui2MainRequest, Ui2MainResponseFor } from "./ipc/ui2Main";
+import {
+    Ui2MainMessageType,
+    Ui2MainRequest,
+    Ui2MainResponseFor,
+} from "@/ipc/ui2Main";
 import "./App.css";
 
 

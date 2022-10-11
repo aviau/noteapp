@@ -6,6 +6,10 @@ run: node_modules
 build: node_modules
 	npm run tauri build
 
+.PHONY: frontend-build
+frontend-build: node_modules
+	npm run build
+
 node_modules:
 	npm ci
 

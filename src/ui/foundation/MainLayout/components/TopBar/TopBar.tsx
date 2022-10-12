@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 import { GlobalStateContext } from "@/ui/foundation/GlobalStateProvider";
 import { useContext } from "react";
+import { Ui2MainMessageType } from "@/lib/ipc/ui2Main";
 
 export function TopBar() {
     const theme = useTheme();
@@ -20,14 +21,14 @@ export function TopBar() {
     // Find if there's a previous or next path in the stack, so we can disable the button when unavailable
     const handleBack = () => navigate(-1);
     const handleForward = () => navigate(1);
-    const handleMinimize = () => {
-        // uiMain.invokeUi2Main({ type: IpcWorkerMessageType.WINDOWS_MINIMIZE });
+    const handleMinimize = async () => {
+        console.log( await uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MINIMIZE }));
     };
     const handleMaximize = () => {
-        // uiMain.invokeUi2Main({ type: IpcWorkerMessageType.WINDOWS_MAXIMIZE });
+        uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MAXIMIZE });
     };
     const handleQuit = () => {
-        // uiMain.invokeUi2Main({ type: IpcWorkerMessageType.WINDOWS_QUIT });
+        uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_QUIT });
     };
 
     const appTitlePrefix = activeVaultId ? `${activeVaultId} -` : "";

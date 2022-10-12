@@ -3,9 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-//////////////
-// COMMANDS //
-//////////////
+/////////////////////
+// COMMANDS: UTILS //
+/////////////////////
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -20,13 +20,48 @@ struct UtilsPingResponse {
     message: String,
 }
 
+///////////////////////
+// COMMANDS: WINDOWS //
+///////////////////////
+
+#[tauri::command]
+async fn windows_minimize(window: tauri::Window) -> Result<(), String> {
+    match window.minimize() {
+        Ok(_) => Ok(()),
+        Err(error) => Err(error.to_string()),
+    }
+}
+
+#[tauri::command]
+async fn windows_maximize(window: tauri::Window) -> Result<(), String> {
+    match window.maximize() {
+        Ok(_) => Ok(()),
+        Err(error) => Err(error.to_string()),
+    }
+}
+
+#[tauri::command]
+async fn windows_quit(window: tauri::Window) -> Result<(), String> {
+    match window.close() {
+        Ok(_) => Ok(()),
+        Err(error) => Err(error.to_string()),
+    }
+}
+
 //////////
 // MAIN //
 //////////
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![utils_ping])
+        .invoke_handler(tauri::generate_handler![
+            // UTILS
+            utils_ping,
+            // WINDOWS
+            windows_minimize,
+            windows_maximize,
+            windows_quit,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

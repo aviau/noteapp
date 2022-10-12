@@ -1,48 +1,40 @@
+import { Ui2MainMessageType } from "@/lib/ipc/ui2Main";
+import { IpcUiService } from "./services/ipc/ipcUiService";
 import {
-  IpcWorkerMessageType,
-  IpcWorkerMessage,
-  IpcWorkerResponseOf,
-  IpcWorkerResponseFor,
-} from '@/lib/ipc/ipcWorker';
-import { IpcUiService } from './services/ipc/ipcUiService';
+    Ui2MainRequest,
+    Ui2MainResponseFor,
+} from "@/lib/ipc/ui2Main";
 
 export class UiMain {
-  private readonly ipcUiService: IpcUiService;
+    private readonly ipcUiService: IpcUiService;
 
-  constructor(ipcUiService: IpcUiService) {
-    this.ipcUiService = ipcUiService;
-  }
-
-  main(): void {
-    try {
-      this.startup();
-    } catch (error) {
-      console.log((error as any).message);
+    constructor(ipcUiService: IpcUiService) {
+        this.ipcUiService = ipcUiService;
     }
-  }
 
-  private async startup(): Promise<void> {
-    // Init communications.
-    this.ipcUiService.mainLog('Started.');
-    this.ipcUiService.mainPing();
-    this.ipcUiService.start();
+    main(): void {
+        try {
+            this.startup();
+        } catch (error) {
+            console.log((error as any).message);
+        }
+    }
 
-    // Say Hi.
-    const resp: IpcWorkerResponseOf<IpcWorkerMessageType.UTILS_PING> =
-      await this.ipcUiService.workerInvoke({
-        type: IpcWorkerMessageType.UTILS_PING,
-        data: {
-          message: 'Hello from UI',
-        },
-      });
-    this.ipcUiService.mainLog(`Said hi to worker, he replied ${resp.message}.`);
-  }
+    private async startup(): Promise<void> {
+        const resp = await this.invokeUi2Main({
+            type: Ui2MainMessageType.UTILS_PING,
+            message: "UI Started",
+        });
+        console.log(`Main ping response: ${resp.message}`);
+    }
 
-  async workerInvoke<T extends IpcWorkerMessage>(
-    message: T
-  ): Promise<IpcWorkerResponseFor<T>> {
-    return this.ipcUiService.workerInvoke(message);
-  }
+    async invokeUi2Main<T extends Ui2MainRequest>(
+        request: T
+    ): Promise<Ui2MainResponseFor<T>> {
+        return this.ipcUiService.invokeUi2Main(request);
+    }
+
+
 }
 
 export const uiMainInstance = new UiMain(new IpcUiService());

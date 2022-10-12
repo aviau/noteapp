@@ -1,1 +1,2 @@
-export { FormList, FormItemProps } from './FormList';
+export { FormList } from "./FormList";
+export type { FormItemProps } from "./FormList";

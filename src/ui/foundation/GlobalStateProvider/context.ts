@@ -1,5 +1,5 @@
-import { createContext } from 'react';
-import { UiMain } from '@/ui/uiMain';
+import { createContext } from "react";
+import { UiMain } from "@/ui/uiMain";
 
 export class CommandEventTarget extends EventTarget {}
 

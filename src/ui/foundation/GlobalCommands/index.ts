@@ -1,1 +1,1 @@
-export { GlobalCommands } from './GlobalCommands';
+export { GlobalCommands } from "./GlobalCommands";

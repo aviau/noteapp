@@ -1,2 +1,2 @@
-export { pathFor, PathName } from './paths';
-export * from './hotkeys';
+export { pathFor, PathName } from "./paths";
+export * from "./hotkeys";

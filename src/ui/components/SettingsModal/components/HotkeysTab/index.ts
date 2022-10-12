@@ -1,1 +1,1 @@
-export { HotkeysTab } from './HotkeysTab';
+export { HotkeysTab } from "./HotkeysTab";

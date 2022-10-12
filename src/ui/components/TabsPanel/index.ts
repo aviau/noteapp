@@ -1,1 +1,2 @@
-export { TabsPanel, TabItem } from './TabsPanel';
+export { TabsPanel } from "./TabsPanel";
+export type { TabItem } from "./TabsPanel";

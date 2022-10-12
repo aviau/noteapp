@@ -1,2 +1,2 @@
-export { GlobalStateProvider } from './GlobalStateProvider';
-export { GlobalStateContext } from './context';
+export { GlobalStateProvider } from "./GlobalStateProvider";
+export { GlobalStateContext } from "./context";

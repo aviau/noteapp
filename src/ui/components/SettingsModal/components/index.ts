@@ -1,1 +1,1 @@
-export { AppearanceTab } from './AppearanceTab';
+export { AppearanceTab } from "./AppearanceTab";

@@ -3,6 +3,11 @@
     windows_subsystem = "windows"
 )]
 
+mod app_state;
+mod services;
+
+use services::configuration::ConfigurationService;
+
 /////////////////////
 // COMMANDS: UTILS //
 /////////////////////
@@ -53,11 +58,11 @@ async fn windows_quit(window: tauri::Window) -> Result<(), String> {
 /////////////////////////////
 
 #[tauri::command]
-async fn configuration_get(key: String) -> Result<String, String> {
-    match key.as_str() {
-        "vault.last_active" => Ok("mock-vault".to_string()),
-        _ => Err(format!("Unknown configuration key: {}", key,).to_string()),
-    }
+async fn configuration_get(
+    state: tauri::State<'_, app_state::AppState<'_>>,
+    key: String,
+) -> Result<String, String> {
+    state.get_configuration_service().get(key)
 }
 
 //////////
@@ -65,7 +70,15 @@ async fn configuration_get(key: String) -> Result<String, String> {
 //////////
 
 fn main() {
+    // Services
+    let configuration_service = &ConfigurationService {};
+
+    // Application State
+    let app_state = app_state::AppState::new(configuration_service);
+
+    // Tauri Init
     tauri::Builder::default()
+        .manage(app_state)
         .invoke_handler(tauri::generate_handler![
             // UTILS
             utils_ping,

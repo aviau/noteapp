@@ -1,17 +1,17 @@
 use crate::services::configuration::ConfigurationService;
 
-pub struct AppState<'a> {
-    configuration_service: &'a ConfigurationService,
+pub struct AppState {
+    configuration_service: ConfigurationService,
 }
 
-impl<'a> AppState<'a> {
-    pub fn new(configuration_service: &'a ConfigurationService) -> Self {
+impl AppState {
+    pub fn new(configuration_service: ConfigurationService) -> Self {
         Self {
             configuration_service: configuration_service,
         }
     }
 
     pub fn get_configuration_service(self: &Self) -> &ConfigurationService {
-        self.configuration_service
+        &self.configuration_service
     }
 }

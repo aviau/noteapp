@@ -59,7 +59,7 @@ async fn windows_quit(window: tauri::Window) -> Result<(), String> {
 
 #[tauri::command]
 async fn configuration_get(
-    state: tauri::State<'_, app_state::AppState<'_>>,
+    state: tauri::State<'_, app_state::AppState>,
     key: String,
 ) -> Result<String, String> {
     state.get_configuration_service().get(key)
@@ -71,7 +71,7 @@ async fn configuration_get(
 
 fn main() {
     // Services
-    let configuration_service = &ConfigurationService {};
+    let configuration_service = ConfigurationService {};
 
     // Application State
     let app_state = app_state::AppState::new(configuration_service);

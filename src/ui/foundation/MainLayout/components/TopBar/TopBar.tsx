@@ -21,8 +21,8 @@ export function TopBar() {
     // Find if there's a previous or next path in the stack, so we can disable the button when unavailable
     const handleBack = () => navigate(-1);
     const handleForward = () => navigate(1);
-    const handleMinimize = async () => {
-        await uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MINIMIZE });
+    const handleMinimize = () => {
+        uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MINIMIZE });
     };
     const handleMaximize = () => {
         uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MAXIMIZE });

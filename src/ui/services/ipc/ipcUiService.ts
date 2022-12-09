@@ -10,7 +10,13 @@ import { invoke } from "@tauri-apps/api/tauri";
 export class IpcUiService {
 
     async invokeUi2Main<T extends Ui2MainRequest>(request: T): Promise<Ui2MainResponseFor<T>> {
-        return await invoke(request.type, request);
+        try {
+            return await invoke(request.type, request);
+        }
+        catch (err) {
+            console.log("[IpcUiService error]", err);
+            throw err;
+        }
     }
 
 }

@@ -7,6 +7,8 @@ export enum Ui2MainMessageType {
     WINDOWS_MINIMIZE = "windows_minimize",
     WINDOWS_MAXIMIZE = "windows_maximize",
     WINDOWS_QUIT = "windows_quit",
+    // CONFIGURATION
+    CONFIGURATION_GET = "configuration_get",
 }
 
 export type Ui2MainRequest = Ui2MainMessage["request"];
@@ -48,6 +50,16 @@ export type Ui2MainMessage =
     | {
         request: {
             type: Ui2MainMessageType.WINDOWS_QUIT,
+        },
+        response: null,
+    }
+    // *******************
+    // ** CONFIGURATION **
+    // *******************
+    | {
+        request: {
+            type: Ui2MainMessageType.CONFIGURATION_GET,
+            key: string,
         },
         response: null,
     }

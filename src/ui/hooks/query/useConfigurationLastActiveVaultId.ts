@@ -1,17 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { UiMain } from "@/ui/uiMain";
 import { QueryKey } from "./keys";
+import { Ui2MainMessageType } from "@/lib/ipc/ui2Main";
+import { ConfigurationKey } from "@/lib/configuration";
 
 const getConfigurationLastActiveVaultId = async (
     uiMain: UiMain
 ): Promise<string | null> => {
-    /*
-    const resp = await uiMain.workerInvoke({
-        type: IpcWorkerMessageType.CONFIGURATION_GET_LAST_ACTIVE_VAULT_ID,
+    const resp = await uiMain.invokeUi2Main({
+        type: Ui2MainMessageType.CONFIGURATION_GET,
+        key: ConfigurationKey.VAULT_LAST_ACTIVE,
     });
-    return resp.vaultId;
-    */
-    return "mockvaultid";
+    return resp;
 };
 
 export function useSettingsLastActiveVaultId(uiMain: UiMain) {

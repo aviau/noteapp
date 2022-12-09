@@ -48,6 +48,18 @@ async fn windows_quit(window: tauri::Window) -> Result<(), String> {
     }
 }
 
+/////////////////////////////
+// COMMANDS: CONFIGURATION //
+/////////////////////////////
+
+#[tauri::command]
+async fn configuration_get(key: String) -> Result<String, String> {
+    match key.as_str() {
+        "vault.last_active" => Ok("mock-vault".to_string()),
+        _ => Err(format!("Unknown configuration key: {}", key,).to_string()),
+    }
+}
+
 //////////
 // MAIN //
 //////////
@@ -61,6 +73,8 @@ fn main() {
             windows_minimize,
             windows_maximize,
             windows_quit,
+            // CONFIGURATION
+            configuration_get,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

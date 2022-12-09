@@ -22,7 +22,7 @@ export function TopBar() {
     const handleBack = () => navigate(-1);
     const handleForward = () => navigate(1);
     const handleMinimize = async () => {
-        console.log( await uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MINIMIZE }));
+        await uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MINIMIZE });
     };
     const handleMaximize = () => {
         uiMain.invokeUi2Main({ type: Ui2MainMessageType.WINDOWS_MAXIMIZE });

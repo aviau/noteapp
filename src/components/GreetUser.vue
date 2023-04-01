@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { invoke } from '@tauri-apps/api/tauri';
+import { useGreetMutation } from '@/composables/queries/demo';
+
+const { mutateAsync } = useGreetMutation();
 
 const greetMsg = ref('');
 const name = ref('');
 
-async function greet() {
+async function greet(): Promise<void> {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    greetMsg.value = await invoke('greet', { name: name.value });
+    greetMsg.value = await mutateAsync(name.value);
 }
 </script>
 

@@ -12,6 +12,7 @@
     "lint:fix": "eslint --fix --ext .js,.ts,.vue,.cjs ."
   },
   "dependencies": {
+    "@tanstack/vue-query": "^4.27.0",
     "@tauri-apps/api": "^1.2.0",
     "vue": "^3.2.45"
   },

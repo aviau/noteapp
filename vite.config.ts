@@ -33,7 +33,8 @@ export default defineConfig(async () => ({
     // Import aliases
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './src')
+            '@': path.resolve(__dirname, 'src'),
+            '@bindings': path.resolve(__dirname, 'src-tauri', 'bindings')
         },
     },
 

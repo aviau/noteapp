@@ -19,6 +19,10 @@ format: node_modules
 	cd src-tauri && cargo fmt
 	npm run lint:fix
 
+.PHONY: test
+test: node_modules
+	cd src-tauri && cargo test
+
 .PHONY: clean
 clean:
 	rm -rf node_modules

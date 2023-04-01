@@ -5,14 +5,12 @@ mod services;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(
-            tauri::generate_handler![
-                // ###################
-                // ## SERVICE: DEMO ##
-                // ###################
-                services::demo::commands::greet
-            ]
-        )
+        .invoke_handler(tauri::generate_handler![
+            // ###################
+            // ## SERVICE: DEMO ##
+            // ###################
+            services::demo::commands::greet
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

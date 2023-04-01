@@ -1,15 +1,18 @@
 import { useMutation } from '@tanstack/vue-query';
 import { invoke } from '@tauri-apps/api/tauri';
+import { DemoGreetPayload } from '@bindings/DemoGreetPayload';
+import { DemoGreetResponse } from '@bindings/DemoGreetResponse';
 
 export const useGreetMutation = () => {
 
     return useMutation({
         mutationFn: async (name: string): Promise<string> => {
-            const greetMsg: string = await invoke(
+            const payload: DemoGreetPayload = { name: name };
+            const response: DemoGreetResponse = await invoke(
                 'greet',
-                { name: name },
+                { payload: payload },
             );
-            return greetMsg;
+            return response.greeting;
         },
     });
 

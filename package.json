@@ -8,8 +8,8 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "lint": "eslint --ext .js,.ts,.vue src *.ts",
-    "lint:fix": "eslint --fix --ext .js,.ts,.vue src *.ts"
+    "lint": "eslint --ext .js,.ts,.vue,.cjs .",
+    "lint:fix": "eslint --fix --ext .js,.ts,.vue,.cjs ."
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",

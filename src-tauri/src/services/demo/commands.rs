@@ -19,9 +19,15 @@ pub async fn demo_greet(
 ) -> Result<DemoGreetResponse, String> {
     let demo_service = state.get_demo_service();
 
-    demo_service.incr_greeting_invocations()?;
+    match demo_service.incr_greeting_invocations() {
+        Err(err) => return Err(err.to_string()),
+        Ok(_) => {}
+    };
 
-    let total_greeting_invocations = demo_service.get_greeting_invocations()?;
+    let total_greeting_invocations = match demo_service.get_greeting_invocations() {
+        Err(err) => return Err(err.to_string()),
+        Ok(count) => count,
+    };
 
     let response = DemoGreetResponse {
         greeting: format!(

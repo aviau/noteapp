@@ -1,9 +1,10 @@
 use crate::services::app_config;
 use crate::services::app_config::config::{AppConfig, VaultConfig};
+use std::error::Error;
 use std::collections::HashMap;
 
 #[test]
-fn test_deserialize_app_config() -> Result<(), serde_json::Error> {
+fn test_deserialize_app_config() -> Result<(), Box<dyn Error>> {
     let config_string = r#"
 {
     "vaults": {

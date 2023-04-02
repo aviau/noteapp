@@ -3,7 +3,7 @@
 
 use std::error::Error;
 
-use crate::services::app_config::config::AppConfig;
+use super::config::AppConfig;
 
 pub fn deserialize_config(config_string: &str) -> Result<AppConfig, Box<dyn Error>> {
     let app_config: AppConfig = serde_json::from_str(config_string)?;
@@ -11,6 +11,6 @@ pub fn deserialize_config(config_string: &str) -> Result<AppConfig, Box<dyn Erro
 }
 
 pub fn serialize_config(config: &AppConfig) -> Result<String, Box<dyn Error>> {
-    let serialized_config = serde_json::to_string(config)?;
+    let serialized_config = serde_json::to_string_pretty(config)?;
     Ok(serialized_config)
 }

@@ -13,7 +13,7 @@ fn main() {
         // ###############
         // ## APP SETUP ##
         // ###############
-        .setup(|app| do_setup(app))
+        .setup(do_setup)
         // ##############
         // ## COMMANDS ##
         // ##############

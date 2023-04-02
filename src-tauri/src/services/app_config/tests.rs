@@ -34,8 +34,7 @@ fn test_deserialize_app_config() -> Result<(), Box<dyn Error>> {
     // Re-Serialize
     let serialized_config = parser::serialize_config(&deserialized_config)?;
     print!("{}", serialized_config);
-    let expected_serialized =
-        r#"{
+    let expected_serialized = r#"{
   "vaults": {
     "k3kvj4jfj2j5nfn2": {
       "path": "/Users/hello/vault",

@@ -1,19 +1,29 @@
+use std::sync::RwLock;
+
 pub struct DemoService {
-    greeting_invocations: i32,
+    greeting_invocations: RwLock<i32>,
 }
 
 impl DemoService {
     pub fn new() -> Self {
         Self {
-            greeting_invocations: 0,
+            greeting_invocations: RwLock::new(0),
         }
     }
 
-    pub fn incr_greeting_invocations(&mut self) {
-        self.greeting_invocations += 1;
+    pub fn incr_greeting_invocations(&self) -> Result<(), String> {
+        let mut counter = self
+            .greeting_invocations
+            .write()
+            .map_err(|err| err.to_string())?;
+        *counter = *counter + 1;
+        Ok(())
     }
 
-    pub fn get_greeting_invocations(&self) -> i32 {
-        return self.greeting_invocations;
+    pub fn get_greeting_invocations(&self) -> Result<i32, String> {
+        match self.greeting_invocations.read() {
+            Ok(counter) => Ok(*counter),
+            Err(err) => Err(err.to_string()),
+        }
     }
 }

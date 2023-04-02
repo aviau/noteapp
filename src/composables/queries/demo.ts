@@ -9,7 +9,7 @@ export const useGreetMutation = () => {
         mutationFn: async (name: string): Promise<string> => {
             const payload: DemoGreetPayload = { name: name };
             const response: DemoGreetResponse = await invoke(
-                'greet',
+                'demo_greet',
                 { payload: payload },
             );
             return response.greeting;

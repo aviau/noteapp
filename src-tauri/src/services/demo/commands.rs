@@ -13,14 +13,15 @@ pub struct DemoGreetResponse {
 }
 
 #[tauri::command]
-pub async fn greet(
+pub async fn demo_greet(
     state: tauri::State<'_, AppState>,
     payload: DemoGreetPayload,
 ) -> Result<DemoGreetResponse, String> {
-    let mut demo_service = state.demo_service.lock().map_err(|err| err.to_string())?;
+    let demo_service = state.get_demo_service();
 
-    demo_service.incr_greeting_invocations();
-    let total_greeting_invocations = demo_service.get_greeting_invocations();
+    demo_service.incr_greeting_invocations()?;
+
+    let total_greeting_invocations = demo_service.get_greeting_invocations()?;
 
     let response = DemoGreetResponse {
         greeting: format!(

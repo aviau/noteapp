@@ -29,3 +29,7 @@ clean:
 	rm -rf node_modules
 	rm -rf dist
 	rm -rf src-tauri/target
+
+.PHONY: mrproper
+mrproper: clean
+	rm -rf src-tauri/bindings

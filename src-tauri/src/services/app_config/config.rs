@@ -6,8 +6,8 @@ pub struct AppConfig {
     pub vaults: HashMap<String, VaultConfig>,
 }
 
-impl AppConfig {
-    pub fn default() -> Self {
+impl Default for AppConfig {
+    fn default() -> Self {
         Self {
             vaults: HashMap::default(),
         }

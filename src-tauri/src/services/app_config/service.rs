@@ -1,7 +1,7 @@
 use super::config::AppConfig;
 use super::parser;
 use anyhow::anyhow;
-use std::{error::Error, path::PathBuf};
+use std::path::PathBuf;
 
 const CONFIG_JSON_FILENAME: &str = "config.json";
 

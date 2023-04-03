@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::error::Error;
-use tauri::{api::path::app_config_dir, Manager};
+use tauri::Manager;
 
 mod app_state;
 mod services;

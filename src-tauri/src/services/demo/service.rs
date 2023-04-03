@@ -23,7 +23,7 @@ impl DemoService {
     pub fn get_greeting_invocations(&self) -> Result<i32, anyhow::Error> {
         match self.greeting_invocations.read() {
             Ok(counter) => Ok(*counter),
-            Err(err) => Err(anyhow::anyhow!("Failed to get the greetings lock")),
+            Err(_err) => Err(anyhow::anyhow!("Failed to get the greetings lock")),
         }
     }
 }

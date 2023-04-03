@@ -16,6 +16,7 @@ lint: node_modules
 
 .PHONY: format
 format: node_modules
+	cd src-tauri && cargo fix --allow-staged --allow-dirty
 	cd src-tauri && cargo fmt
 	npm run lint:fix
 

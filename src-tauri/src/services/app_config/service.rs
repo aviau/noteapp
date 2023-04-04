@@ -57,8 +57,10 @@ fn read_config_file(config_file_path: &PathBuf) -> Result<Option<AppConfig>, any
         }
     }
 
-    let config_string = std::fs::read_to_string(config_file_path)?;
-    let app_config = parser::deserialize_config(&config_string)?;
+    let app_config = std::fs::read_to_string(config_file_path)
+        .map_err(|err| anyhow::Error::from(err))
+        .and_then(|config_string| parser::deserialize_config(&config_string))?;
+
     Ok(Some(app_config))
 }
 
